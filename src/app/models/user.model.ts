@@ -9,4 +9,5 @@ export interface User {
     username: string;
     role: Role;
     permissions: Array<Permission>;
+    token: string;
 }
