@@ -1,10 +1,20 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+const DOMAIN = 'shatteredrealmsonline.com';
+const ACCOUNT_API_VERSION = 'v1';
+const ACCOUNT_API_BASE_URL = `https://account.${DOMAIN}`;
+const ACCOUNT_API_URL = `${ACCOUNT_API_BASE_URL}/${ACCOUNT_API_VERSION}`
 
 export const environment = {
-  production: false
+  production: false,
+  DOMAIN: DOMAIN,
+  ACCOUNT_API_VERSION: ACCOUNT_API_VERSION,
+  ACCOUNT_API_BASE_URL: ACCOUNT_API_BASE_URL,
+  ACCOUNT_API_URL: ACCOUNT_API_URL,
 };
+
+
 
 /*
  * For easier debugging in development mode, you can import the following file
