@@ -56,7 +56,7 @@ describe('AlertService', () => {
       expect(alert.cssClass).toContain('alert-info');
       count++;
     }));
-    service.error(message, false);
+    service.info(message, false);
 
     expect(count).toEqual(1);
   })
