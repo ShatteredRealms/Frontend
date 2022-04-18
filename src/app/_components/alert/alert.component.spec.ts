@@ -1,4 +1,3 @@
-import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -35,19 +34,33 @@ describe('AlertComponent', () => {
     expect(compiled.textContent).toEqual('');
   });
 
-  // it('should render if there is a success message', () => {
-  //   const message = 'success message';
-  //   service.success(message);
-  //   fixture.detectChanges();
-  //   const compiled = fixture.debugElement;
-  //   expect(compiled.query(By.css('alert')).nativeElement?.textContent).toEqual(message);
-  // });
+  describe('rendering message', () => {
+    const alerts = [
+      {
+        message: 'success message',
+        func: () => service.success('success message'),
+        css: '.alert-success'
+      },
+      {
+        message: 'error message',
+        func: () => service.error('error message'),
+        css: '.alert-danger'
+      },
+      {
+        message: 'info message',
+        func: () => service.info('info message'),
+        css: '.alert-info'
+      }
+    ];
 
-  // it('should render if there is an error message', () => {
-  //   const message = 'error message';
-  //   service.success(message);
-  //   fixture.detectChanges();
-  //   const compiled = fixture.debugElement;
-  //   expect(compiled.query(By.css('alert')).nativeElement?.textContent).toEqual(message);
-  // });
+    for(const alert of alerts) {
+      it(`should render if there is a ${alert.message}`, () => {
+        alert.func();
+        fixture.detectChanges();
+        const compiled = fixture.debugElement;
+        expect(compiled.query(By.css('.alert')).nativeElement?.textContent).toEqual(alert.message);
+        expect(compiled.query(By.css(alert.css)).nativeElement?.textContent).toEqual(alert.message);
+      });
+    }
+  });
 });
