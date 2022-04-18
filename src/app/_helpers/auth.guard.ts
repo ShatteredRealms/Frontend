@@ -3,7 +3,6 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 import { AuthenticationService } from '../_services/authentication.service';
 import { AlertService } from '../_services/alert.service';
 import { Permission } from '../models/permission.model';
-import { Role } from '../models/role.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,15 +16,12 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const currentUser = this.authenticationService.currentUserValue;
+    console.log('data:', route.data);
+    console.log('user:', currentUser);
     if (currentUser) {
-      if (route.data['permissions']
-        && (!route.data['permissions'].some(
-          (permission: Permission) => currentUser.permissions.some(
-            (userPerm: Permission) => userPerm === permission
-          )
-        )
-        || route.data['role'] && route.data['role'] != currentUser.role)
-      ) {
+      if (!this.userHasPermission(route.data['permissions'], currentUser.permissions)
+        || (route.data['role'] != null && route.data['role'] != currentUser.role)) {
+
         this.router.navigate(['/']).then(() =>
           this.alertService.error('ERROR: Access denied!')
         );
@@ -39,5 +35,16 @@ export class AuthGuard implements CanActivate {
     this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     this.alertService.info('Please login to view this page');
     return false;
+  }
+
+  private userHasPermission(requiredPermissions: Permission[] | null, userPermissions: Permission[] | null): boolean {
+    if (requiredPermissions == null || requiredPermissions.length == 0) return true;
+    if (userPermissions == null || userPermissions.length == 0) return false;
+
+    return requiredPermissions.every((requiredPermission) => {
+      return userPermissions.some((userPermission) =>
+        userPermission == requiredPermission
+      )
+    });
   }
 }

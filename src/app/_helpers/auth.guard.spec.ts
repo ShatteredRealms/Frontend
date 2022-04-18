@@ -1,23 +1,156 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { AuthGuard } from './auth.guard';
+import {AuthGuard} from './auth.guard';
 import {RouterTestingModule} from "@angular/router/testing";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from "@angular/router";
+import {AuthenticationService} from "../_services/authentication.service";
+import {AlertService} from "../_services/alert.service";
+import {Role} from "../models/role.model";
+import {Permission} from "../models/permission.model";
+import Spy = jasmine.Spy;
+import {User} from "../models/user.model";
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
+  let router = {
+    navigate: jasmine.createSpy('navigate'),
+  };
+  let alertService = {
+    info: jasmine.createSpy('info'),
+    error: jasmine.createSpy('error'),
+  };
+  let authenticationService: AuthenticationService;
+  let routerStateSnapshot = jasmine.createSpyObj<RouterStateSnapshot>('RouterStateSnapshot', [], {url: 'https://test.com/'});
+  let activatedRouteSnapshot = jasmine.createSpyObj<ActivatedRouteSnapshot>(
+    'ActivatedRouterSnapshot',
+    [],
+    {data: {['permissions']: [Permission.TEST_PERMISSION], ['role']: Role.ADMIN}},
+  );
 
-  beforeEach(() => {
+  const promise = Promise.resolve();
+
+  describe('user having permission', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          RouterTestingModule,
+          HttpClientTestingModule,
+        ],
+      }).compileComponents();
+      guard = TestBed.inject(AuthGuard);
+    });
+
+    it('should succeed if there are no permissions required', () => {
+      expect(guard['userHasPermission']([], [])).toBeTruthy();
+      expect(guard['userHasPermission'](null, [])).toBeTruthy();
+      expect(guard['userHasPermission'](null, null)).toBeTruthy();
+    });
+
+    it('should fail if there are permissions required but no user permissions', () => {
+      expect(guard['userHasPermission']([Permission.TEST_PERMISSION], [])).toBeFalsy();
+    })
+
+    it('should succeed if there are permissions required and the user has the permissions', () => {
+      expect(guard['userHasPermission']([Permission.TEST_PERMISSION], [Permission.TEST_PERMISSION])).toBeTruthy();
+    })
+  });
+
+  it('should fail with no authenticated user', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
       ],
-    });
+      providers: [
+        {provide: Router, useValue: router},
+        {provide: AlertService, useValue: alertService},
+        {provide: RouterStateSnapshot, useValue: routerStateSnapshot},
+        {provide: ActivatedRouteSnapshot, useValue: activatedRouteSnapshot},
+      ],
+    }).compileComponents();
     guard = TestBed.inject(AuthGuard);
+    expect(guard.canActivate(activatedRouteSnapshot, routerStateSnapshot)).toBeFalsy();
+    expect(alertService.info).toHaveBeenCalledOnceWith('Please login to view this page');
+    expect(router.navigate).toHaveBeenCalledWith(['/login'], {queryParams: {returnUrl: routerStateSnapshot.url}});
   });
 
-  it('should be created', () => {
-    expect(guard).toBeTruthy();
+  describe('when a user is authenticated', () => {
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          RouterTestingModule,
+          HttpClientTestingModule,
+        ],
+        providers: [
+          {provide: Router, useValue: router},
+          {provide: AlertService, useValue: alertService},
+          {provide: RouterStateSnapshot, useValue: routerStateSnapshot},
+          {provide: ActivatedRouteSnapshot, useValue: activatedRouteSnapshot},
+        ],
+      }).compileComponents();
+      guard = TestBed.inject(AuthGuard);
+      authenticationService = TestBed.inject(AuthenticationService);
+    });
+
+    it('should be created', () => {
+      expect(guard).toBeTruthy();
+    });
+
+    it('fail if they do not have the correct permissions', () => {
+      spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
+        email: "",
+        first_name: "",
+        id: 0,
+        last_name: "",
+        token: "",
+        username: "",
+        permissions: [],
+        role: Role.USER
+      });
+
+      router.navigate.and.returnValue(promise);
+      expect(guard.canActivate(activatedRouteSnapshot, routerStateSnapshot)).toBeFalsy();
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
+      promise.then(() => {
+        expect(alertService.error).toHaveBeenCalledWith('ERROR: Access denied!');
+      })
+    });
+
+    it('fail if they do not have the correct role', () => {
+      spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
+        email: "",
+        first_name: "",
+        id: 0,
+        last_name: "",
+        token: "",
+        username: "",
+        permissions: [],
+        role: Role.USER
+      });
+
+      router.navigate.and.returnValue(promise);
+      expect(guard.canActivate(activatedRouteSnapshot, routerStateSnapshot)).toBeFalsy();
+      expect(router.navigate).toHaveBeenCalledWith(['/']);
+      promise.then(() => {
+        expect(alertService.error).toHaveBeenCalledWith('ERROR: Access denied!');
+      })
+    });
+
+    it('succeed if they do not have the correct role and permissions', () => {
+      spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
+        email: "",
+        first_name: "",
+        id: 0,
+        last_name: "",
+        token: "",
+        username: "",
+        permissions: [Permission.TEST_PERMISSION],
+        role: Role.ADMIN
+      });
+
+      router.navigate.and.returnValue(promise);
+      expect(guard.canActivate(activatedRouteSnapshot, routerStateSnapshot)).toBeTruthy();
+    });
   });
 });
