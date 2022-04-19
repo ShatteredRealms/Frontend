@@ -1,0 +1,30 @@
+@import "~src/styles";
+
+.hero {
+  max-height: 100%;
+}
+
+@include media-breakpoint-up(md) {
+  .hero > img {
+    width: 100%;
+    height: auto;
+    float: right;
+    max-width: none;
+    transform: translateX(15%);
+  }
+
+  .hero-content {
+    transform: translateX(-15%);
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .hero > img {
+    width: auto;
+    height: 500px;
+    margin: auto;
+    overflow: hidden;
+    max-width: 100%;
+    object-fit: cover;
+  }
+}
