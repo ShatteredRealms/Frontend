@@ -4,7 +4,7 @@
 @import '~node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/mixins';
 
 @include media-breakpoint-up(md) {
-  .hero > img {
+  .hero-image > img {
     width: 100%;
     height: auto;
     float: right;
@@ -19,7 +19,7 @@
 
 
 @include media-breakpoint-down(sm) {
-  .hero > img {
+  .hero-image > img {
     width: auto;
     height: 500px;
     margin: auto;
