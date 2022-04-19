@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavComponent } from './nav.component';
 import {ActivatedRoute} from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
+import {MdbCollapseModule} from "mdb-angular-ui-kit/collapse";
 
 describe('NavComponent', () => {
   let component: NavComponent;
@@ -11,7 +12,7 @@ describe('NavComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ NavComponent ],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, MdbCollapseModule],
     }).compileComponents();
     route = TestBed.inject(ActivatedRoute);
   });
@@ -25,11 +26,4 @@ describe('NavComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should be collapseable', () => {
-    component.isMenuCollapsed = false;
-    expect(component.isMenuCollapsed).toBeFalsy();
-    component.collapseNav();
-    expect(component.isMenuCollapsed).toBeTruthy();
-  })
 });

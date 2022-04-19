@@ -7,7 +7,6 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
-  isMenuCollapsed: boolean = true;
   links = [
     {title: 'Home', link: '/'},
     {title: 'Login', link: '/login'},
@@ -17,9 +16,4 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  collapseNav(): void {
-    this.isMenuCollapsed = true;
-  }
-
 }
