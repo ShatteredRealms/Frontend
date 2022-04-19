@@ -66,6 +66,7 @@ describe('AuthGuard', () => {
   })
 
   it('should fail with no authenticated user', () => {
+    spyOnProperty(authenticationService, 'currentUserValue').and.returnValue(undefined);
     expect(guard.canActivate(activatedRouteSnapshot, routerStateSnapshot)).toBeFalsy();
     expect(alertService.info).toHaveBeenCalledOnceWith('Please login to view this page');
     expect(router.navigate).toHaveBeenCalledWith(['/login'], {queryParams: {returnUrl: routerStateSnapshot.url}});
