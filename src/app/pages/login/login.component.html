@@ -2,29 +2,31 @@
   <div class="card card-login col-lg-6 col-md-8 col-sm-11 bg-semi-dark text-light">
     <img src="/assets/logos/WhiteLogo.svg" class="card-img-top p-3" alt="Shattered Realms Logo" />
     <div class="card-body">
-      <mdb-form-control class="form-white mb-4">
-        <input mdbInput type="email" id="email" class="form-control" />
-        <label mdbLabel class="form-label" for="email">Email</label>
-      </mdb-form-control>
+      <form [formGroup]="loginForm">
+        <mdb-form-control class="form-white mb-4">
+          <input mdbInput mdbValidate [validateSuccess]="false" type="email" id="email" formControlName="email" class="form-control" />
+          <label mdbLabel class="form-label" for="email">Email</label>
+        </mdb-form-control>
 
-      <mdb-form-control class="form-white mb-4">
-        <input mdbInput type="password" id="password" class="form-control" />
-        <label mdbLabel class="form-label" for="password">Password</label>
-      </mdb-form-control>
+        <mdb-form-control class="form-white mb-4">
+          <input mdbInput mdbValidate [validateSuccess]="false" type="password" id="password" formControlName="password" class="form-control" />
+          <label mdbLabel class="form-label" for="password">Password</label>
+        </mdb-form-control>
 
-      <div class="row mb-4">
-        <div class="col">
-          <mdb-form-control class="form-white mb-4">
-            <input mdbInput type="checkbox" id="remember" class="form-check-input" checked />
-            <label mdbLabel class="form-check-label text-light" for="remember">Remember me</label>
-          </mdb-form-control>
+        <div class="row mb-4">
+          <div class="col">
+            <mdb-form-control class="form-white mb-4">
+              <input mdbInput type="checkbox" id="remember" class="form-check-input" checked />
+              <label mdbLabel class="form-check-label text-light" for="remember">Remember me</label>
+            </mdb-form-control>
+          </div>
+          <div class="col">
+            <a href="/login#">Forgot password?</a>
+          </div>
         </div>
-        <div class="col">
-          <a href="/login#">Forgot password?</a>
-        </div>
-      </div>
 
-      <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button type="submit" class="btn btn-primary btn-block" (click)="onLogin()">Login</button>
+      </form>
     </div>
   </div>
 </section>
