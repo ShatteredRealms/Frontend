@@ -1,14 +1,42 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {AlertService} from "../../_services/alert.service";
+import {AuthenticationService} from "../../_services/authentication.service";
+import {Observable, of, throwError} from "rxjs";
+import {RouterTestingModule} from "@angular/router/testing";
+import {User} from "../../models/user.model";
+import {Role} from "../../models/role.model";
+import {Router} from "@angular/router";
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let alertService: AlertService;
+  let authService: AuthenticationService;
+  let router: Router;
+
+  const user: User = {
+    email: "",
+    first_name: "",
+    id: 0,
+    last_name: "",
+    token: "",
+    username: "",
+    permissions: [],
+    role: Role.USER
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginComponent ]
+      declarations: [
+        LoginComponent
+      ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+      ]
     })
     .compileComponents();
   });
@@ -17,6 +45,9 @@ describe('LoginComponent', () => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    alertService = TestBed.inject(AlertService);
+    authService = TestBed.inject(AuthenticationService);
+    router = TestBed.inject(Router);
   });
 
   it('should create', () => {
@@ -32,24 +63,64 @@ describe('LoginComponent', () => {
         email: 'email@email.com',
         password: 'password',
       };
+      component.loginForm.setValue(validUser);
     })
 
-    it('should work with valid credentials', () => {
-      component.loginForm.setValue(validUser);
-      expect(component.onLogin()).toBeTruthy();
+    describe('valid input', () => {
+      it('should be truthy', () => {
+        expect(component.onLogin()).toBeTruthy();
+      });
+
+      it('should make a request to login', () => {
+        spyOn(authService, 'login').and.returnValue(of(user));
+        component.onLogin();
+        expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
+        expect(authService.login).toHaveBeenCalledTimes(1);
+      });
+
+      it('should login the user on success', () => {
+        spyOn(authService, 'login').and.returnValue(of(user));
+        const promise = Promise.resolve(true);
+        spyOn(router, 'navigate').and.returnValue(promise);
+        spyOn(alertService, 'success');
+
+        component.onLogin();
+
+        expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
+        expect(authService.login).toHaveBeenCalledTimes(1);
+
+        expect(router.navigate).toHaveBeenCalledOnceWith(['/']);
+        expect(router.navigate).toHaveBeenCalledTimes(1);
+
+        waitForAsync(() => expect(alertService.success).toHaveBeenCalledTimes(1));
+      });
+
+      it('should show an error on failure', () => {
+        const errorMessage = 'error';
+        spyOn(authService, 'login').and.returnValue(throwError({message: errorMessage}));
+        spyOn(router, 'navigate');
+        spyOn(alertService, 'error');
+
+        component.onLogin();
+
+        expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
+        expect(authService.login).toHaveBeenCalledTimes(1);
+
+        expect(router.navigate).toHaveBeenCalledTimes(0);
+
+        expect(alertService.error).toHaveBeenCalledOnceWith(errorMessage);
+        expect(alertService.error).toHaveBeenCalledTimes(1);
+      });
     });
 
+
     it('should validate the email', () => {
-      component.loginForm.setValue(validUser);
-      expect(component.onLogin()).toBeTruthy();
       validUser.email = "asdf";
       component.loginForm.setValue(validUser);
       expect(component.onLogin()).toBeFalsy();
     });
 
     it('should validate the password', () => {
-      component.loginForm.setValue(validUser);
-      expect(component.onLogin()).toBeTruthy();
       validUser.password = "";
       component.loginForm.setValue(validUser);
       expect(component.onLogin()).toBeFalsy();
