@@ -10,6 +10,7 @@ import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavComponent } from './_components/nav/nav.component';
+import { FooterComponent } from './_components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { NavComponent } from './_components/nav/nav.component';
     HomeComponent,
     LoginComponent,
     NavComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
