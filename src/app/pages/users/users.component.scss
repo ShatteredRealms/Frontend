@@ -6,7 +6,6 @@
   background-color: $semi-dark;
   text-align: center;
   padding-top: 1rem;
-  border-radius: 0.5rem;
   > i {
     font-size: 10rem;
   }
@@ -23,13 +22,13 @@
 }
 
 .profile-stats {
-  padding: 0.5rem 2rem;
-
-  > .row {
+  //padding: 0.5rem 2rem;
+  > .profile-stats-wrapper {
     padding: 4rem 0;
     width: 100%;
     background-color: $semi-dark;
-    border-radius: 2rem;
+    border-radius: 1.5rem;
+    position: relative;
   }
 
   > h6, h5 {
