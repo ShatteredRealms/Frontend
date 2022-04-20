@@ -19,8 +19,8 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
-  login(username: string, password: string): Observable<User> {
-    return this.http.post<any>(`${environment.ACCOUNT_API_URL}/login`, { username, password })
+  login(email: string, password: string): Observable<User> {
+    return this.http.post<any>(`${environment.ACCOUNT_API_URL}/login`, { email, password })
       .pipe(map(user => {
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);

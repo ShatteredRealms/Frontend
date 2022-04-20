@@ -44,21 +44,21 @@ describe('AuthenticationService', () => {
   });
 
   it('should allow login', () => {
-    const username = 'asdf';
+    const email = 'asdf';
     const password = 'jkl';
     const spy = spyOn(http, 'post').and.returnValue(new Observable((subscriber) => {
       subscriber.next(user);
       subscriber.complete();
     }));
 
-    service.login(username,password).subscribe((returnedUser) => {
+    service.login(email,password).subscribe((returnedUser) => {
       expect(user).toEqual(returnedUser);
       expect(localStorage.getItem('currentUser')).toEqual(JSON.stringify(user));
       expect(service.currentUserValue).toEqual(user);
     });
 
     expect(spy).toHaveBeenCalledTimes(1);
-    expect(spy).toHaveBeenCalledOnceWith(`${environment.ACCOUNT_API_URL}/login`, {username, password});
+    expect(spy).toHaveBeenCalledOnceWith(`${environment.ACCOUNT_API_URL}/login`, {email, password});
   });
 
   it('should allow registration', () => {
