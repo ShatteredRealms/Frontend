@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  loading: boolean = false;
 
   constructor(protected authService: AuthenticationService,
               public alertService: AlertService,
@@ -30,8 +31,10 @@ export class LoginComponent implements OnInit {
    */
   onLogin(): boolean {
     if (!this.loginForm.valid) {
+      this.alertService.warn('Invalid email or password fields', {id: 'login-alert', autoClose: true})
       return false;
     }
+    this.loading = true;
 
     this.authService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe((success) => {
       this.router.navigate(['/']).then(() => {
@@ -39,6 +42,8 @@ export class LoginComponent implements OnInit {
       });
     }, (error) => {
       this.alertService.error(error.message);
+    }).add(() => {
+      this.loading = false;
     });
 
     return true;
