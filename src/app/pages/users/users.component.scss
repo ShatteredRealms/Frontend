@@ -21,3 +21,19 @@
 .profile-status {
   margin-bottom: 1rem;
 }
+
+.profile-stats {
+  padding: 0.5rem 2rem;
+
+  > .row {
+    padding: 4rem 0;
+    width: 100%;
+    background-color: $semi-dark;
+    border-radius: 2rem;
+  }
+
+  > h6, h5 {
+    margin: 0;
+    padding: 0;
+  }
+}
