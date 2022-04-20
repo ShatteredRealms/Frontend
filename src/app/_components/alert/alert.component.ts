@@ -17,7 +17,10 @@ export class AlertComponent implements OnInit, OnDestroy {
   alertSubscription: Subscription;
   routeSubscription: Subscription;
 
-  constructor(private router: Router, private alertService: AlertService) {
+  constructor(private router: Router,
+              private alertService: AlertService) { }
+
+  ngOnInit(): void {
     this.alertSubscription = this.alertService.onAlert(this.id)
       .subscribe(alert => {
         if (!alert.message) {
@@ -40,8 +43,6 @@ export class AlertComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     this.alertSubscription.unsubscribe();
