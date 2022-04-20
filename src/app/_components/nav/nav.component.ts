@@ -15,9 +15,10 @@ export class NavComponent implements OnInit {
 
   constructor(protected route: ActivatedRoute,
               protected router: Router,
-              protected authService: AuthenticationService) { }
+              public authService: AuthenticationService) { }
 
   ngOnInit(): void {
+    console.log('user:', this.authService.currentUserValue);
   }
 
   isUserSignedIn(): boolean {
