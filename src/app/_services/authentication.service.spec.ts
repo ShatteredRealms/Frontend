@@ -47,7 +47,7 @@ describe('AuthenticationService', () => {
     const email = 'asdf';
     const password = 'jkl';
     const spy = spyOn(http, 'post').and.returnValue(new Observable((subscriber) => {
-      subscriber.next(user);
+      subscriber.next({data: user});
       subscriber.complete();
     }));
 
