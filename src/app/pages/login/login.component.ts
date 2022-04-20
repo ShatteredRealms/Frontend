@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe((success) => {
       this.router.navigate(['/']).then(() => {
-        this.alertService.success('Successfully logged in');
+        this.alertService.success('Successfully logged in', {autoClose: true});
       });
     }, (error) => {
       if(error.status == 401) {

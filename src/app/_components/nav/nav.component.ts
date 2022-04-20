@@ -21,7 +21,6 @@ export class NavComponent implements OnInit {
   }
 
   isUserSignedIn(): boolean {
-    console.log('user:', this.authService.currentUserValue);
     return this.authService.currentUserValue != undefined;
   }
 
