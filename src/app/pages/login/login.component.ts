@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
-  constructor(public authService: AuthenticationService,
+  constructor(protected authService: AuthenticationService,
               public alertService: AlertService,
               public router: Router) {
     this.loginForm = new FormGroup({
@@ -22,6 +22,10 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.alertService.success('SUCCESS');
+    this.alertService.warn('warning');
+    this.alertService.error('error');
+    this.alertService.info('info');
   }
 
   /**

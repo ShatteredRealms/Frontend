@@ -1,1 +1,6 @@
-<div *ngIf="message" [ngClass]="message.cssClass">{{message.text}}</div>
+<div class="mt-4 px-4">
+  <div role="alert" *ngFor="let alert of alerts" class="{{cssClass(alert)}}" style="position: relative">
+    <a type="button" class="close" aria-label="Close" (click)="removeAlert(alert)"><span aria-hidden="true">&times;</span></a>
+    {{alert.message}}
+  </div>
+</div>

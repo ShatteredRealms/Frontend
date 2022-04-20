@@ -58,8 +58,8 @@ describe('AlertComponent', () => {
         alert.func();
         fixture.detectChanges();
         const compiled = fixture.debugElement;
-        expect(compiled.query(By.css('.alert')).nativeElement?.textContent).toEqual(alert.message);
-        expect(compiled.query(By.css(alert.css)).nativeElement?.textContent).toEqual(alert.message);
+        expect(compiled.query(By.css('.alert')).nativeElement?.textContent).toContain(alert.message);
+        expect(compiled.query(By.css(alert.css)).nativeElement?.textContent).toContain(alert.message);
       });
     }
   });
