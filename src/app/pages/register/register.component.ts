@@ -18,6 +18,14 @@ export class RegisterComponent implements OnInit {
               protected alertService: AlertService) { }
 
   ngOnInit(): void {
+    if (this.authService.currentUserValue) {
+      this.router.navigate(['/']).then(() => {
+        this.alertService.warn('You are already signed in.')
+      });
+
+      return;
+    }
+
     this.registerForm = new FormGroup({
       firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),

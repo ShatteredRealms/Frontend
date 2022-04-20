@@ -41,101 +41,117 @@ describe('LoginComponent', () => {
     .compileComponents();
   });
 
-  beforeEach(() => {
+  it('should redirect if a user is logged in', () => {
+    authService = TestBed.inject(AuthenticationService);
+    router = TestBed.inject(Router);
+
+    spyOnProperty(authService, 'currentUserValue').and.returnValue({});
+    spyOn(router, 'navigate').and.returnValue(Promise.resolve(true));
+
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    alertService = TestBed.inject(AlertService);
-    authService = TestBed.inject(AuthenticationService);
-    router = TestBed.inject(Router);
+
+    expect(router.navigate).toHaveBeenCalled();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-    expect(component.loginForm).toBeTruthy();
-  });
-
-  describe('login', () => {
-    let validUser: any;
-
+  describe('when a user is not signed in', () => {
     beforeEach(() => {
-      validUser = {
-        email: 'email@email.com',
-        password: 'password',
-      };
-      component.loginForm.setValue(validUser);
-    })
-
-    describe('valid input', () => {
-      it('should be truthy', () => {
-        expect(component.onLogin()).toBeTruthy();
-      });
-
-      it('should make a request to login', () => {
-        spyOn(authService, 'login').and.returnValue(of(user));
-        component.onLogin();
-        expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
-        expect(authService.login).toHaveBeenCalledTimes(1);
-      });
-
-      it('should login the user on success', () => {
-        spyOn(authService, 'login').and.returnValue(of(user));
-        const promise = Promise.resolve(true);
-        spyOn(router, 'navigate').and.returnValue(promise);
-        spyOn(alertService, 'success');
-
-        component.onLogin();
-
-        expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
-        expect(authService.login).toHaveBeenCalledTimes(1);
-
-        expect(router.navigate).toHaveBeenCalledOnceWith(['/']);
-        expect(router.navigate).toHaveBeenCalledTimes(1);
-
-        waitForAsync(() => expect(alertService.success).toHaveBeenCalledTimes(1));
-      });
-
-      it('should show an error on server failure', () => {
-        const errorMessage = 'error';
-        spyOn(authService, 'login').and.returnValue(throwError({message: errorMessage}));
-        spyOn(router, 'navigate');
-        spyOn(alertService, 'error');
-
-        component.onLogin();
-
-        expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
-        expect(authService.login).toHaveBeenCalledTimes(1);
-
-        expect(router.navigate).toHaveBeenCalledTimes(0);
-        expect(alertService.error).toHaveBeenCalledTimes(1);
-      });
-
-      it('should show an error on invalid credentials', () => {
-        spyOn(authService, 'login').and.returnValue(throwError({status: 401}));
-        spyOn(router, 'navigate');
-        spyOn(alertService, 'warn');
-
-        component.onLogin();
-
-        expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
-        expect(authService.login).toHaveBeenCalledTimes(1);
-
-        expect(router.navigate).toHaveBeenCalledTimes(0);
-        expect(alertService.warn).toHaveBeenCalledTimes(1);
-      });
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      alertService = TestBed.inject(AlertService);
+      authService = TestBed.inject(AuthenticationService);
+      router = TestBed.inject(Router);
     });
 
-
-    it('should validate the email', () => {
-      validUser.email = "asdf";
-      component.loginForm.setValue(validUser);
-      expect(component.onLogin()).toBeFalsy();
+    it('should create', () => {
+      expect(component).toBeTruthy();
+      expect(component.loginForm).toBeTruthy();
     });
 
-    it('should validate the password', () => {
-      validUser.password = "";
-      component.loginForm.setValue(validUser);
-      expect(component.onLogin()).toBeFalsy();
+    describe('login', () => {
+      let validUser: any;
+
+      beforeEach(() => {
+        validUser = {
+          email: 'email@email.com',
+          password: 'password',
+        };
+        component.loginForm.setValue(validUser);
+      })
+
+      describe('valid input', () => {
+        it('should be truthy', () => {
+          expect(component.onLogin()).toBeTruthy();
+        });
+
+        it('should make a request to login', () => {
+          spyOn(authService, 'login').and.returnValue(of(user));
+          component.onLogin();
+          expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
+          expect(authService.login).toHaveBeenCalledTimes(1);
+        });
+
+        it('should login the user on success', () => {
+          spyOn(authService, 'login').and.returnValue(of(user));
+          const promise = Promise.resolve(true);
+          spyOn(router, 'navigate').and.returnValue(promise);
+          spyOn(alertService, 'success');
+
+          component.onLogin();
+
+          expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
+          expect(authService.login).toHaveBeenCalledTimes(1);
+
+          expect(router.navigate).toHaveBeenCalledOnceWith(['/']);
+          expect(router.navigate).toHaveBeenCalledTimes(1);
+
+          waitForAsync(() => expect(alertService.success).toHaveBeenCalledTimes(1));
+        });
+
+        it('should show an error on server failure', () => {
+          const errorMessage = 'error';
+          spyOn(authService, 'login').and.returnValue(throwError({message: errorMessage}));
+          spyOn(router, 'navigate');
+          spyOn(alertService, 'error');
+
+          component.onLogin();
+
+          expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
+          expect(authService.login).toHaveBeenCalledTimes(1);
+
+          expect(router.navigate).toHaveBeenCalledTimes(0);
+          expect(alertService.error).toHaveBeenCalledTimes(1);
+        });
+
+        it('should show an error on invalid credentials', () => {
+          spyOn(authService, 'login').and.returnValue(throwError({status: 401}));
+          spyOn(router, 'navigate');
+          spyOn(alertService, 'warn');
+
+          component.onLogin();
+
+          expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
+          expect(authService.login).toHaveBeenCalledTimes(1);
+
+          expect(router.navigate).toHaveBeenCalledTimes(0);
+          expect(alertService.warn).toHaveBeenCalledTimes(1);
+        });
+      });
+
+
+      it('should validate the email', () => {
+        validUser.email = "asdf";
+        component.loginForm.setValue(validUser);
+        expect(component.onLogin()).toBeFalsy();
+      });
+
+      it('should validate the password', () => {
+        validUser.password = "";
+        component.loginForm.setValue(validUser);
+        expect(component.onLogin()).toBeFalsy();
+      });
     });
   });
 });
