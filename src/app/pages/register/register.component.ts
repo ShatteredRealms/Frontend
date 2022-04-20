@@ -15,7 +15,15 @@ export class RegisterComponent implements OnInit {
 
   constructor(protected router: Router,
               protected authService: AuthenticationService,
-              protected alertService: AlertService) { }
+              protected alertService: AlertService) {
+    this.registerForm = new FormGroup({
+      firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(100)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]),
+    });
+  }
 
   ngOnInit(): void {
     if (this.authService.currentUserValue) {
@@ -25,14 +33,6 @@ export class RegisterComponent implements OnInit {
 
       return;
     }
-
-    this.registerForm = new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(100)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]),
-      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]),
-    });
   }
 
   onRegister(): void {

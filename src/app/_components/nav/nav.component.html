@@ -23,11 +23,14 @@
         </li>
       </ul>
       <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-        <li class="nav-item text-center">
+        <li *ngIf="!isUserSignedIn()" class="nav-item text-center">
           <a class="nav-link" [routerLink]="['/login']">Login</a>
         </li>
-        <li class="nav-item text-center">
+        <li *ngIf="!isUserSignedIn()" class="nav-item text-center">
           <a class="nav-link" [routerLink]="['/register']">Register</a>
+        </li>
+        <li *ngIf="isUserSignedIn()" class="nav-item text-center">
+          <a class="nav-link" (click)="signOutUser()">Logout</a>
         </li>
         <li class="nav-item">
           <a class="nav-link btn btn-primary text-dark" [routerLink]="['/']">Download</a>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {AuthenticationService} from "../../_services/authentication.service";
 
 @Component({
   selector: 'app-nav',
@@ -12,8 +13,20 @@ export class NavComponent implements OnInit {
     {title: 'Login', link: '/login'},
   ];
 
-  constructor(public route: ActivatedRoute) { }
+  constructor(protected route: ActivatedRoute,
+              protected router: Router,
+              protected authService: AuthenticationService) { }
 
   ngOnInit(): void {
+  }
+
+  isUserSignedIn(): boolean {
+    console.log('user:', this.authService.currentUserValue);
+    return this.authService.currentUserValue != undefined;
+  }
+
+  signOutUser(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']).then();
   }
 }
