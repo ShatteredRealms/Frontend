@@ -26,6 +26,7 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from "@angular/forms";
+import { RegisterComponent } from './pages/register/register.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     LoginComponent,
     NavComponent,
     FooterComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
