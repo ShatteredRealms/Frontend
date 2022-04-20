@@ -21,12 +21,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.alertService.success('SUCCESS');
-    this.alertService.warn('warning');
-    this.alertService.error('error');
-    this.alertService.info('info');
-  }
+  ngOnInit(): void { }
 
   /**
    * Attempt to sign in the user with the given credentials.
