@@ -29,8 +29,11 @@
         <li *ngIf="!isUserSignedIn()" class="nav-item text-center">
           <a class="nav-link" [routerLink]="['/register']">Register</a>
         </li>
-        <li *ngIf="isUserSignedIn()" class="nav-item text-center">
-          <a class="nav-link" (click)="signOutUser()">Logout</a>
+        <li *ngIf="isUserSignedIn()" class="nav-item dropdown" mdbDropdown>
+          <a mdbDropdownToggle class="nav-link dropdown-toggle"><i class="far fa-user-circle fa-lg"></i></a>
+          <div mdbDropdownMenu class="dropdown-menu dropdown-menu-dark dropdown" role="menu">
+            <a class="dropdown-item" style="cursor: pointer" (click)="signOutUser()">Logout</a>
+          </div>
         </li>
         <li class="nav-item">
           <a class="nav-link btn btn-primary text-dark" [routerLink]="['/']">Download</a>
