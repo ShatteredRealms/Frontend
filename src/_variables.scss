@@ -1,12 +1,13 @@
 $primary: #66D0FF;
 $secondary: #F43838;
-$success: #2EC4B6;
+$success: #2ec46f;
 $info: #8afff2;
 $warning: #da0a3b;
 $danger: #910d2e;
 $light: #F6F7F8;
-$dark: #0F0F0F;
-$light-dark: #011627;
+$semi-dark: #3F3F3F;
+$dark: #282828;
+$dark-highlight: #011627;
 
 $theme-colors: (
   "primary": $primary,
@@ -16,6 +17,8 @@ $theme-colors: (
   "warning": $warning,
   "danger": $danger,
   "light": $light,
+  "semi-dark": $semi-dark,
   "dark": $dark,
-  "light-dark": $light-dark,
-)
+  "dark-highlight": $dark-highlight,
+);
+

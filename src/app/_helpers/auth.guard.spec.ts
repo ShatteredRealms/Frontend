@@ -8,8 +8,6 @@ import {AuthenticationService} from "../_services/authentication.service";
 import {AlertService} from "../_services/alert.service";
 import {Role} from "../models/role.model";
 import {Permission} from "../models/permission.model";
-import Spy = jasmine.Spy;
-import {User} from "../models/user.model";
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;

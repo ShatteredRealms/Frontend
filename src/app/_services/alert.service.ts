@@ -1,46 +1,46 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { NavigationStart, Router } from '@angular/router';
+import {filter} from "rxjs/operators";
+import {Alert, AlertType} from "../models/alert.model";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AlertService {
-    private subject = new Subject<any>();
-    private keepAfterRouteChange = false;
+  private subject = new Subject<Alert>();
+  private defaultId = 'default-alert';
 
-    constructor(private router: Router) {
-        this.router.events.subscribe(event => {
-            if (event instanceof NavigationStart) {
-                if (this.keepAfterRouteChange) {
-                    this.keepAfterRouteChange = false;
-                } else {
-                    this.clear();
-                }
-            }
-        });
-    }
+  // enable subscribing to alerts observable
+  onAlert(id = this.defaultId): Observable<Alert> {
+    return this.subject.asObservable().pipe(filter(x => x && x.id === id));
+  }
 
-    getAlert(): Observable<any> {
-        return this.subject.asObservable();
-    }
+  // convenience methods
+  success(message: string, options?: any) {
+    this.alert(new Alert({ ...options, type: AlertType.Success, message }));
+  }
 
-    success(message: string, keepAfterRouteChange = false): void {
-        this.keepAfterRouteChange = keepAfterRouteChange;
-        this.subject.next({ cssClass: 'alert alert-success', text: message });
-    }
+  error(message: string, options?: any) {
+    this.alert(new Alert({ ...options, type: AlertType.Error, message }));
+  }
 
-    error(message: string, keepAfterRouteChange = false): void {
-        this.keepAfterRouteChange = keepAfterRouteChange;
-        this.subject.next({ cssClass: 'alert alert-danger', text: message });
-    }
+  info(message: string, options?: any) {
+    this.alert(new Alert({ ...options, type: AlertType.Info, message }));
+  }
 
-    info(message: string, keepAfterRouteChange = false): void {
-        this.keepAfterRouteChange = keepAfterRouteChange;
-        this.subject.next({ cssClass: 'alert alert-info', text: message });
-    }
+  warn(message: string, options?: any) {
+    this.alert(new Alert({ ...options, type: AlertType.Warning, message }));
+  }
 
-    clear(): void {
-        this.subject.next({});
-    }
+  // main alert method
+  alert(alert: Alert) {
+    alert.id = alert.id || this.defaultId;
+    this.subject.next(alert);
+  }
+
+  // clear alerts
+  clear(id = this.defaultId) {
+    this.subject.next(new Alert({ id }));
+  }
 }
