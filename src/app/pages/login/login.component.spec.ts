@@ -95,7 +95,7 @@ describe('LoginComponent', () => {
         waitForAsync(() => expect(alertService.success).toHaveBeenCalledTimes(1));
       });
 
-      it('should show an error on failure', () => {
+      it('should show an error on server failure', () => {
         const errorMessage = 'error';
         spyOn(authService, 'login').and.returnValue(throwError({message: errorMessage}));
         spyOn(router, 'navigate');
@@ -107,9 +107,21 @@ describe('LoginComponent', () => {
         expect(authService.login).toHaveBeenCalledTimes(1);
 
         expect(router.navigate).toHaveBeenCalledTimes(0);
-
-        expect(alertService.error).toHaveBeenCalledOnceWith(errorMessage);
         expect(alertService.error).toHaveBeenCalledTimes(1);
+      });
+
+      it('should show an error on invalid credentials', () => {
+        spyOn(authService, 'login').and.returnValue(throwError({status: 401}));
+        spyOn(router, 'navigate');
+        spyOn(alertService, 'warn');
+
+        component.onLogin();
+
+        expect(authService.login).toHaveBeenCalledOnceWith(validUser.email, validUser.password);
+        expect(authService.login).toHaveBeenCalledTimes(1);
+
+        expect(router.navigate).toHaveBeenCalledTimes(0);
+        expect(alertService.warn).toHaveBeenCalledTimes(1);
       });
     });
 
