@@ -41,7 +41,11 @@ export class LoginComponent implements OnInit {
         this.alertService.success('Successfully logged in');
       });
     }, (error) => {
-      this.alertService.error(error.message);
+      if(error.status == 401) {
+        this.alertService.warn('Invalid email or password', {id: 'login-alert', autoClose: true})
+      } else {
+        this.alertService.error('Error communicating with the server. Please try again later.');
+      }
     }).add(() => {
       this.loading = false;
     });
