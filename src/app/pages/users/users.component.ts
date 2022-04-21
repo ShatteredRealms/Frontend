@@ -3,6 +3,7 @@ import {User} from "../../models/user.model";
 import {Permission} from "../../models/permission.model";
 import {Role} from "../../models/role.model";
 import {ActivatedRoute} from "@angular/router";
+import {AuthenticationService} from "../../_services/authentication.service";
 
 @Component({
   selector: 'app-users',
@@ -12,7 +13,8 @@ import {ActivatedRoute} from "@angular/router";
 export class UsersComponent implements OnInit {
   user: User;
 
-  constructor(protected route: ActivatedRoute) { }
+  constructor(protected route: ActivatedRoute,
+              protected authService: AuthenticationService) { }
 
   ngOnInit(): void {
     this.user = {
@@ -28,6 +30,7 @@ export class UsersComponent implements OnInit {
 
     this.route.params.subscribe((params) => {
       this.user.id = params['user'];
+      this.user.email
     });
   }
 }
