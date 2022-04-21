@@ -22,8 +22,6 @@ export class NavComponent implements OnInit {
               public authService: AuthenticationService) { }
 
   ngOnInit(): void {
-    console.log('user:', this.authService.currentUserValue);
-
     // Checks if screen size is less than 1024 pixels
     const checkScreenSize = () => document.body.offsetWidth < 992;
 
