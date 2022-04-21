@@ -1,6 +1,5 @@
 import { Permission } from "./permission.model";
 import { Role } from "./role.model";
-import {Timestamp} from "rxjs";
 
 export interface User {
     id: number;

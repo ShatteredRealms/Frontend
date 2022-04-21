@@ -7,20 +7,12 @@ import {Observable} from "rxjs";
 import {User} from "../models/user.model";
 import {Role} from "../models/role.model";
 import {environment} from "../../environments/environment";
+import {NewUser} from "../_helpers/dummy.data";
 
 describe('AuthenticationService', () => {
   let service: AuthenticationService;
   let http: HttpClient;
-  const user: User = {
-    email: "",
-    first_name: "",
-    last_name: "",
-    permissions: [],
-    role: Role.USER,
-    token: "",
-    username: "",
-    id: 1
-  };
+  let user: User;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -28,6 +20,7 @@ describe('AuthenticationService', () => {
     }).compileComponents();
     service = TestBed.inject(AuthenticationService);
     http = TestBed.inject(HttpClient);
+    user = NewUser();
   });
 
   it('should be created', () => {

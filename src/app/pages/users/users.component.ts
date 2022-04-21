@@ -33,25 +33,21 @@ export class UsersComponent implements OnInit {
               protected usersService: UsersService) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      const id = params['user'];
-      if (this.authService.currentUserValue?.id == this.user.id) {
-        this.user = this.authService.currentUserValue
-      } else {
-        this.usersService.getUser(id).subscribe((success) => {
-          this.user = success.data;
-        }, (error) => {
-          this.router.navigate(['/']).then(() => {
-            if (error.status == 404) {
-              this.alertService.error('User not found');
-            } else {
-              this.alertService.error('Unknown server error. Please try again later.')
-            }
-          })
+    const id = Number(this.route.snapshot.paramMap.get('user'));
+    if (this.authService.currentUserValue != null && this.authService.currentUserValue.id == id) {
+      this.user = this.authService.currentUserValue;
+    } else {
+      this.usersService.getUser(id).subscribe((success) => {
+        this.user = success.data;
+      }, (error) => {
+        this.router.navigate(['/']).then(() => {
+          if (error.status == 404) {
+            this.alertService.error('User not found');
+          } else {
+            this.alertService.error('Unknown server error. Please try again later.')
+          }
         })
-      }
-    }).add(() => {
-      this.loading = false;
-    });
+      })
+    }
   }
 }

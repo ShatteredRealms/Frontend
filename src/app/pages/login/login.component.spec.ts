@@ -9,6 +9,7 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {User} from "../../models/user.model";
 import {Role} from "../../models/role.model";
 import {Router} from "@angular/router";
+import {NewUser} from "../../_helpers/dummy.data";
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -16,17 +17,7 @@ describe('LoginComponent', () => {
   let alertService: AlertService;
   let authService: AuthenticationService;
   let router: Router;
-
-  const user: User = {
-    email: "",
-    first_name: "",
-    id: 0,
-    last_name: "",
-    token: "",
-    username: "",
-    permissions: [],
-    role: Role.USER
-  };
+  let user: User;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,6 +30,7 @@ describe('LoginComponent', () => {
       ]
     })
     .compileComponents();
+    user = NewUser();
   });
 
   it('should redirect if a user is logged in', () => {
