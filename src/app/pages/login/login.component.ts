@@ -15,14 +15,20 @@ export class LoginComponent implements OnInit {
 
   constructor(protected authService: AuthenticationService,
               public alertService: AlertService,
-              public router: Router) {
+              public router: Router) { }
+
+  ngOnInit(): void {
+    if (this.authService.currentUserValue) {
+      this.router.navigate(['/']).then(() => {
+        this.alertService.warn('You are already signed in.')
+      });
+    }
+
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
     });
   }
-
-  ngOnInit(): void { }
 
   /**
    * Attempt to sign in the user with the given credentials.
@@ -38,7 +44,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe((success) => {
       this.router.navigate(['/']).then(() => {
-        this.alertService.success('Successfully logged in');
+        this.alertService.success('Successfully logged in', {autoClose: true});
       });
     }, (error) => {
       if(error.status == 401) {

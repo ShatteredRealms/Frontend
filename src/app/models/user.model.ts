@@ -10,4 +10,5 @@ export interface User {
     role: Role;
     permissions: Array<Permission>;
     token: string;
+    created_at: Date;
 }

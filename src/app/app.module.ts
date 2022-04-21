@@ -27,6 +27,7 @@ import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from "@angular/forms";
 import { RegisterComponent } from './pages/register/register.component';
+import { UsersComponent } from './pages/users/users.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { RegisterComponent } from './pages/register/register.component';
     NavComponent,
     FooterComponent,
     RegisterComponent,
+    UsersComponent,
   ],
   imports: [
     BrowserModule,

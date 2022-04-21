@@ -15,9 +15,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(protected router: Router,
               protected authService: AuthenticationService,
-              protected alertService: AlertService) { }
-
-  ngOnInit(): void {
+              protected alertService: AlertService) {
     this.registerForm = new FormGroup({
       firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
       lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
@@ -25,6 +23,16 @@ export class RegisterComponent implements OnInit {
       password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]),
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]),
     });
+  }
+
+  ngOnInit(): void {
+    if (this.authService.currentUserValue) {
+      this.router.navigate(['/']).then(() => {
+        this.alertService.warn('You are already signed in.')
+      });
+
+      return;
+    }
   }
 
   onRegister(): void {
