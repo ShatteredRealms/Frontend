@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/user.model";
 import {Permission} from "../../models/permission.model";
-import {Role} from "../../models/role.model";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../_services/authentication.service";
+import {UsersService} from "../../_services/users.service";
+import {AlertService} from "../../_services/alert.service";
+import {Role} from "../../models/role.model";
 
 @Component({
   selector: 'app-users',
@@ -11,26 +13,45 @@ import {AuthenticationService} from "../../_services/authentication.service";
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  user: User;
+  user: User = {
+    created_at: new Date(Date.now()),
+    email: "a",
+    first_name: "",
+    id: 0,
+    last_name: "",
+    permissions: [Permission.TEST_PERMISSION],
+    role: Role.USER,
+    token: "",
+    username: ""
+  };
+  loading: boolean = true;
 
   constructor(protected route: ActivatedRoute,
-              protected authService: AuthenticationService) { }
+              protected router: Router,
+              protected alertService: AlertService,
+              protected authService: AuthenticationService,
+              protected usersService: UsersService) {}
 
   ngOnInit(): void {
-    this.user = {
-      email: "user@example.com",
-      first_name: "Furstlee",
-      id: 9001,
-      last_name: "Lastinson",
-      permissions: [Permission.TEST_PERMISSION],
-      role: Role.USER,
-      token: "",
-      username: "username"
-    };
-
     this.route.params.subscribe((params) => {
-      this.user.id = params['user'];
-      this.user.email
+      const id = params['user'];
+      if (this.authService.currentUserValue?.id == this.user.id) {
+        this.user = this.authService.currentUserValue
+      } else {
+        this.usersService.getUser(id).subscribe((success) => {
+          this.user = success.data;
+        }, (error) => {
+          this.router.navigate(['/']).then(() => {
+            if (error.status == 404) {
+              this.alertService.error('User not found');
+            } else {
+              this.alertService.error('Unknown server error. Please try again later.')
+            }
+          })
+        })
+      }
+    }).add(() => {
+      this.loading = false;
     });
   }
 }
