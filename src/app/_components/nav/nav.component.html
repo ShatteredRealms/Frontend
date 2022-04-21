@@ -40,14 +40,16 @@
           </li>
         </ng-template>
         <ng-template #smallScreen>
-          <hr class="text-light"/>
-          <div class="d-flex">
-            <li class="nav-item text-center col-6">
-              <a class="nav-link" [routerLink]="['/register']">Profile</a>
-            </li>
-            <li class="nav-item text-center col-6">
-              <a class="nav-link" [routerLink]="['/register']">Logout</a>
-            </li>
+          <div *ngIf="isUserSignedIn()">
+            <hr class="text-light"/>
+            <div class="d-flex">
+              <li class="nav-item text-center col-6">
+                <a class="nav-link" [routerLink]="['/users', this.authService.currentUserValue?.id]">Profile</a>
+              </li>
+              <li class="nav-item text-center col-6">
+                <a class="nav-link" style="cursor: pointer" (click)="signOutUser()">Logout</a>
+              </li>
+            </div>
           </div>
         </ng-template>
         <li class="nav-item">
