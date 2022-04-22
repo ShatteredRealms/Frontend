@@ -24,6 +24,11 @@
         </mdb-form-control>
 
         <mdb-form-control class="form-white mb-4">
+          <input mdbInput mdbValidate [validateSuccess]="false" type="username" id="username" formControlName="username" class="form-control" />
+          <label mdbLabel class="form-label" for="username">Username</label>
+        </mdb-form-control>
+
+        <mdb-form-control class="form-white mb-4">
           <input mdbInput mdbValidate [validateSuccess]="false" type="password" id="password" formControlName="password" class="form-control" />
           <label mdbLabel class="form-label" for="password">Password</label>
         </mdb-form-control>

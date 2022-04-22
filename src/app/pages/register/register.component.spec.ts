@@ -69,6 +69,7 @@ describe('RegisterComponent', () => {
           email: 'email@email.com',
           password: 'password',
           confirmPassword: 'password',
+          username: 'username',
         });
       });
 

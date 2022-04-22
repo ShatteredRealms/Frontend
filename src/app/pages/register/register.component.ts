@@ -17,11 +17,12 @@ export class RegisterComponent implements OnInit {
               protected authService: AuthenticationService,
               protected alertService: AlertService) {
     this.registerForm = new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      lastName: new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+      lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(100)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]),
-      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]),
+      username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.max(25)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
     });
   }
 
@@ -51,6 +52,7 @@ export class RegisterComponent implements OnInit {
       password: this.registerForm.value.password,
       first_name: this.registerForm.value.firstName,
       last_name: this.registerForm.value.lastName,
+      username: this.registerForm.value.username,
     }).subscribe((success) => {
       if (success.errors) {
         for (const e of success.errors) {
