@@ -1,4 +1,4 @@
-name: Build CI
+name: Build CI/CD
 
 on:
   push:
@@ -77,3 +77,22 @@ jobs:
       if: github.ref == 'refs/heads/main'
       id: build-image
       run: make push-prod
+
+    - name: Deploy dev to cluster
+      uses: kodermax/kubectl-aws-eks@master
+      if: github.ref == 'refs/heads/dev'
+      with:
+        args: rollout restart deployment/frontend -n sro-dev      
+    
+    - name: Deploy qa to cluster
+      uses: kodermax/kubectl-aws-eks@master
+      if: github.ref == 'refs/heads/qa'
+      with:
+        args: rollout restart deployment/frontend -n sro-qa
+        
+    
+    - name: Deploy prod to cluster
+      uses: kodermax/kubectl-aws-eks@master
+      if: github.ref == 'refs/heads/main'
+      with:
+        args: rollout restart deployment/frontend -n sro
