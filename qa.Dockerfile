@@ -5,7 +5,7 @@ COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
 
-RUN ng build --configuration=qa
+RUN npm run build -- --c qa
 
 FROM nginx:1.15.8-alpine
 COPY --from=builder /usr/src/app/dist/Frontend/ /usr/share/nginx/html
