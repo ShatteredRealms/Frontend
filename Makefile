@@ -54,13 +54,22 @@ install:
 # Docker Targets
 #
 
-build:
-	docker build -t sro-frontend .
+build: build-dev
+build-%:
+	docker build -t sro-frontend -f $*.Dockerfile .
 
-push: build
+push: push-dev
+push-%: build-%
+ifeq ($*,prod)
 	docker tag sro-frontend $(REGISTRY)/frontend:latest
 	docker tag sro-frontend $(REGISTRY)/frontend:$(BASE_VERSION)
 	docker tag sro-frontend $(REGISTRY)/frontend:$(BASE_VERSION)-$(time)
+else
+	docker tag sro-frontend $(REGISTRY)/frontend/$*:latest
+	docker tag sro-frontend $(REGISTRY)/frontend/$*:$(BASE_VERSION)
+	docker tag sro-frontend $(REGISTRY)/frontend/$*:$(BASE_VERSION)-$(time)
+endif
+
 	docker push $(REGISTRY)/frontend:latest
 	docker push $(REGISTRY)/frontend:$(BASE_VERSION)
 	docker push $(REGISTRY)/frontend:$(BASE_VERSION)-$(time)
