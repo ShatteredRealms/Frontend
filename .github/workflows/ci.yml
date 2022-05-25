@@ -7,7 +7,7 @@ on:
     branches: '**'
 
 env:
-  BASE_REGISTRY: ${{ secrests.BASE_REGISTRY }}
+  BASE_REGISTRY: ${{ secrets.BASE_REGISTRY }}
   REGISTRY: '${{ secrets.BASE_REGISTRY }}/sro'
 
 jobs:
