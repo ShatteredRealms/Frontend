@@ -90,5 +90,5 @@ test:
 # AWS Targets
 #
 aws-docker-login:
-	aws ecr get-login-password | docker login --username AWS --password-stdin $(SRO_BASE_REGISTRY)
+	aws ecr get-login-password | docker login --username AWS --password-stdin $(BASE_REGISTRY)
 
