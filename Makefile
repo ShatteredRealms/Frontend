@@ -34,6 +34,10 @@ BASE_VERSION ?= 0.1.0
 # Current time for versioning
 time := $(shell date +%s)
 
+BUILD_DEV := dev
+BUILD_QA := qa
+BUILD_PROD := prod
+
 #  _______                   _
 # |__   __|                 | |
 #    | | __ _ _ __ __ _  ___| |_ ___
@@ -58,23 +62,22 @@ build: build-dev
 build-%:
 	docker build -t sro-frontend -f $*.Dockerfile .
 
-push: push-dev
-push-%: build-%
-ifeq ($*,prod)
+push-prod: build-prod
 	docker tag sro-frontend $(REGISTRY)/frontend:latest
 	docker tag sro-frontend $(REGISTRY)/frontend:$(BASE_VERSION)
 	docker tag sro-frontend $(REGISTRY)/frontend:$(BASE_VERSION)-$(time)
 	docker push $(REGISTRY)/frontend:latest
 	docker push $(REGISTRY)/frontend:$(BASE_VERSION)
 	docker push $(REGISTRY)/frontend:$(BASE_VERSION)-$(time)
-else
+
+push: push-dev
+push-%: build-%
 	docker tag sro-frontend $(REGISTRY)/frontend/$*:latest
 	docker tag sro-frontend $(REGISTRY)/frontend/$*:$(BASE_VERSION)
 	docker tag sro-frontend $(REGISTRY)/frontend/$*:$(BASE_VERSION)-$(time)
 	docker push $(REGISTRY)/frontend/$*:latest
 	docker push $(REGISTRY)/frontend/$*:$(BASE_VERSION)
 	docker push $(REGISTRY)/frontend/$*:$(BASE_VERSION)-$(time)
-endif
 
 
 

@@ -13,13 +13,13 @@ export class UsersService {
   constructor(protected http: HttpClient) { }
 
   getUser(id: number): Observable<any> {
-    return this.http.get(`${environment}/users/${id}`).pipe(map( resp => {
+    return this.http.get(`${environment.ACCOUNT_API_URL}/users/${id}`).pipe(map( resp => {
       return resp
     }));
   }
 
   getAllUsers(): Observable<any> {
-    return this.http.get(`${environment}/users`).pipe(map( resp => {
+    return this.http.get(`${environment.ACCOUNT_API_URL}/users`).pipe(map( resp => {
       return resp
     }));
   }

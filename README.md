@@ -1,6 +1,6 @@
 ![Shattered Realms Online](https://github.com/ShatteredRealms/Documentation/raw/main/assets/images/logo/WhiteLogo.png)
 
-# Overview [![Build CI](https://github.com/ShatteredRealms/Frontend/actions/workflows/build.yml/badge.svg)](https://github.com/ShatteredRealms/Frontend/actions/workflows/build.yml) [![codecov](https://codecov.io/gh/ShatteredRealms/Frontend/branch/main/graph/badge.svg?token=NHFJHSE37O)](https://codecov.io/gh/ShatteredRealms/Frontend)
+# Overview [![Build CI](https://github.com/ShatteredRealms/Frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/ShatteredRealms/Frontend/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/ShatteredRealms/Frontend/branch/main/graph/badge.svg?token=NHFJHSE37O)](https://codecov.io/gh/ShatteredRealms/Frontend)
 
 The frontend website for [Shattered Realms Online](https://github.com/ShatteredRealms/Game).
 
