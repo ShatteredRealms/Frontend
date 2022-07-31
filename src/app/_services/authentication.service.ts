@@ -22,10 +22,9 @@ export class AuthenticationService {
   login(email: string, password: string): Observable<User> {
     return this.http.post<any>(`${environment.ACCOUNT_API_URL}/login`, { email, password })
       .pipe(map(resp => {
-        const user = resp.data;
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
+        localStorage.setItem('currentUser', JSON.stringify(resp));
+        this.currentUserSubject.next(resp);
+        return resp;
       }));
   }
 
