@@ -14,7 +14,7 @@ import {Role} from "../../models/role.model";
 })
 export class UsersComponent implements OnInit {
   user: User = {
-    created_at: new Date(Date.now()),
+    createdAt: new Date(Date.now()),
     email: "a",
     first_name: "",
     id: 0,
