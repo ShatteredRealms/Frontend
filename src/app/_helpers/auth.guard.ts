@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { AuthenticationService } from '../_services/authentication.service';
-import { AlertService } from '../_services/alert.service';
-import { Permission } from '../models/permission.model';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {AuthenticationService} from '../_services/authentication.service';
+import {AlertService} from '../_services/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +11,13 @@ export class AuthGuard implements CanActivate {
     private router: Router,
     private authenticationService: AuthenticationService,
     private alertService: AlertService,
-  ) { }
+  ) {
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const currentUser = this.authenticationService.currentUserValue;
     if (currentUser) {
-      if (!this.userHasPermission(route.data['permissions'], currentUser.permissions)
-        || (route.data['role'] != null && route.data['role'] != currentUser.role)) {
-
+      if (!currentUser.roles.some(userRole => route.data['role'].some((requiredRoleName: string) => requiredRoleName == userRole.name))) {
         this.router.navigate(['/']).then(() =>
           this.alertService.error('ERROR: Access denied!')
         );
@@ -30,19 +28,8 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+    this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
     this.alertService.info('Please login to view this page');
     return false;
-  }
-
-  private userHasPermission(requiredPermissions: Permission[] | null, userPermissions: Permission[] | null): boolean {
-    if (requiredPermissions == null || requiredPermissions.length == 0) return true;
-    if (userPermissions == null || userPermissions.length == 0) return false;
-
-    return requiredPermissions.every((requiredPermission) => {
-      return userPermissions.some((userPermission) =>
-        userPermission == requiredPermission
-      )
-    });
   }
 }

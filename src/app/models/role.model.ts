@@ -1,5 +1,3 @@
-export enum Role {
-    ADMIN,
-    MODERATOR,
-    USER,
+export interface Role {
+  name: string;
 }

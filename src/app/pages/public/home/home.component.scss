@@ -1,7 +1,7 @@
-@import '~src/variables';
-@import '~node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/functions';
-@import '~node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/variables';
-@import '~node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/mixins';
+@import '../../../../variables';
+@import '../../../../../node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/functions';
+@import '../../../../../node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/variables';
+@import '../../../../../node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/mixins';
 
 @include media-breakpoint-up(md) {
   .hero-image > img {

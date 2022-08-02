@@ -2,8 +2,8 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {AlertComponent} from './_components/alert/alert.component';
-import {HomeComponent} from './pages/home/home.component';
-import {LoginComponent} from './pages/login/login.component';
+import {HomeComponent} from './pages/public/home/home.component';
+import {LoginComponent} from './pages/public/login/login.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
@@ -26,8 +26,9 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from "@angular/forms";
-import { RegisterComponent } from './pages/register/register.component';
-import { UsersComponent } from './pages/users/users.component';
+import { RegisterComponent } from './pages/public/register/register.component';
+import { UsersComponent } from './pages/public/users/users.component';
+import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { UsersComponent } from './pages/users/users.component';
     FooterComponent,
     RegisterComponent,
     UsersComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     BrowserModule,

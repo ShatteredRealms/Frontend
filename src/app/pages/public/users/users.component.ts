@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from "../../models/user.model";
-import {Permission} from "../../models/permission.model";
+import {User} from "../../../models/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
-import {AuthenticationService} from "../../_services/authentication.service";
-import {UsersService} from "../../_services/users.service";
-import {AlertService} from "../../_services/alert.service";
-import {Role} from "../../models/role.model";
+import {AuthenticationService} from "../../../_services/authentication.service";
+import {UsersService} from "../../../_services/users.service";
+import {AlertService} from "../../../_services/alert.service";
 
 @Component({
   selector: 'app-users',
@@ -15,14 +13,13 @@ import {Role} from "../../models/role.model";
 export class UsersComponent implements OnInit {
   user: User = {
     createdAt: new Date(Date.now()),
-    email: "a",
-    first_name: "",
+    email: "email",
+    first_name: "firstname",
     id: 0,
-    last_name: "",
-    permissions: [Permission.TEST_PERMISSION],
-    role: Role.USER,
-    token: "",
-    username: ""
+    last_name: "lastname",
+    roles: [{name: 'role'}],
+    token: "token",
+    username: "username"
   };
   loading: boolean = true;
 

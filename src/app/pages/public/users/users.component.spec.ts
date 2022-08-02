@@ -3,12 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UsersComponent } from './users.component';
 import {BrowserTestingModule} from "@angular/platform-browser/testing";
 import {RouterTestingModule} from "@angular/router/testing";
-import {AlertService} from "../../_services/alert.service";
-import {AuthenticationService} from "../../_services/authentication.service";
-import {UsersService} from "../../_services/users.service";
+import {AlertService} from "../../../_services/alert.service";
+import {AuthenticationService} from "../../../_services/authentication.service";
+import {UsersService} from "../../../_services/users.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {User} from "../../models/user.model";
-import {NewUser} from "../../_helpers/dummy.data";
+import {User} from "../../../models/user.model";
+import {NewUser} from "../../../_helpers/dummy.data";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {Observable, of, throwError} from 'rxjs';
 

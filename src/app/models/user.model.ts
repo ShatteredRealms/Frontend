@@ -1,4 +1,3 @@
-import { Permission } from "./permission.model";
 import { Role } from "./role.model";
 
 export interface User {
@@ -7,8 +6,7 @@ export interface User {
     last_name: string;
     email: string;
     username: string;
-    role: Role;
-    permissions: Array<Permission>;
+    roles: Role[];
     token: string;
     createdAt: Date;
 }
