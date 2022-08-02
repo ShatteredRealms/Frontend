@@ -19,6 +19,11 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
+  hasAnyRole(roleNames: string[]): boolean {
+    if (this.currentUserValue == null) return false;
+    return this.currentUserValue.roles.some(userRole => roleNames.some(requiredRole => requiredRole.toUpperCase() == userRole.name.toUpperCase()));
+  }
+
   login(email: string, password: string): Observable<User> {
     return this.http.post<any>(`${environment.ACCOUNT_API_URL}/login`, { email, password })
       .pipe(map(resp => {

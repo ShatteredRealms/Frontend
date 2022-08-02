@@ -17,7 +17,9 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const currentUser = this.authenticationService.currentUserValue;
     if (currentUser) {
-      if (!currentUser.roles.some(userRole => route.data['role'].some((requiredRoleName: string) => requiredRoleName == userRole.name))) {
+      console.log('current user roles', currentUser.roles);
+      console.log('required roles', route.data['roles'])
+      if (!this.authenticationService.hasAnyRole(route.data['roles'])) {
         this.router.navigate(['/']).then(() =>
           this.alertService.error('ERROR: Access denied!')
         );

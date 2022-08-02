@@ -17,4 +17,8 @@ export class FooterComponent implements OnInit {
   isUserSignedIn(): boolean {
     return this.authService.currentUserValue != undefined;
   }
+
+  isAdmin(): boolean {
+    return this.authService.hasAnyRole(["SUPER ADMIN", "ADMIN"])
+  }
 }

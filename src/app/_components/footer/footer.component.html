@@ -11,6 +11,12 @@
         <li><a *ngIf="!isUserSignedIn()" class="text-muted" href="/login">Login</a></li>
       </ul>
     </div>
+    <div class="col-12 col-sm" *ngIf="isAdmin()">
+      <h5>Admin Quick Links</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="/admin">Dashboard</a></li>
+      </ul>
+    </div>
 <!--    <div class="col-6 col-md">-->
 <!--      <h5>Features</h5>-->
 <!--      <ul class="list-unstyled text-small">-->
