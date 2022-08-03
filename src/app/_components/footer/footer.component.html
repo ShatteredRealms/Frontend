@@ -8,7 +8,8 @@
       <h5>Quick Links</h5>
       <ul class="list-unstyled text-small">
         <li><a class="text-muted" href="/">Home</a></li>
-        <li><a *ngIf="!isUserSignedIn()" class="text-muted" href="/login">Login</a></li>
+        <li><a *ngIf="!isUserSignedIn()" class="text-muted" routerLink="login">Login</a></li>
+        <li><a *ngIf="isUserSignedIn()" class="text-muted" [routerLink]="['/users', user?.id]">Profile</a></li>
       </ul>
     </div>
     <div class="col-12 col-sm" *ngIf="isAdmin()">

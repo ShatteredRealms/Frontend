@@ -72,20 +72,38 @@
           {{ user.email }}
         </td>
         <td>
-          {{ user.createdAt | date: "YY/MM/dd" }}
+          {{ user.createdAt | date: 'mediumDate' }}
         </td>
         <td>
-          <a [routerLink]="['/users', user.id]" mdbTooltip="View Profile" [delayShow]="500">
+          <a
+            [routerLink]="['/users', user.id]"
+            mdbTooltip="View Profile"
+            [delayShow]="500"
+            [offset]="10"
+            [trigger]="'hover'"
+          >
             <button class="btn btn-floating btn-sm">
               <i class="fa fa-eye text-light"></i>
             </button>
           </a>
-          <a [routerLink]="['/users', user.id, 'edit']"  mdbTooltip="Edit User" [delayShow]="500">
+          <a
+            [routerLink]="['/users', user.id, 'edit']"
+            mdbTooltip="Edit User"
+            [delayShow]="500"
+            [offset]="10"
+            [trigger]="'hover'"
+          >
             <button class="messhandle-btn btn btn-primary btn-floating btn-sm ms-2 ">
               <i class="fa fa-edit"></i>
             </button>
           </a>
-          <a [routerLink]="['/users', user.id, 'ban']" mdbTooltip="Ban User" [delayShow]="500">
+          <a
+            [routerLink]="['/users', user.id, 'ban']"
+            mdbTooltip="Ban User"
+            [delayShow]="500"
+            [offset]="10"
+            [trigger]="'hover'"
+          >
             <button class="btn btn-floating ms-2 btn-sm">
               <i class="fa fa-ban text-danger"></i>
             </button>

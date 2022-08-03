@@ -8,19 +8,19 @@
           </div>
           <div class="col-6">
             <div class="card-body">
-              <div class="card-text text-muted text-right">{{this.user?.email}}</div>
+              <p class="card-text text-muted text-right mb-0">{{this.user?.email}}</p>
               <h4 class="card-text text-light mb-0">{{this.user?.firstName}} {{this.user?.lastName}}</h4>
               <p class="card-text">
                 <span class="badge bg-success mx-1">Online</span>
                 <span
-                  *ngFor="let role of user.roles" class="badge mx-1 mt-1"
+                  *ngFor="let role of user?.roles" class="badge mx-1 mt-1"
                   [class]="getRoleHTMLClass(role)"
                 >
                   {{ role.name }}
                 </span>
               </p>
               <p class="card-text">
-                <a href="/users/1/edit">
+                <a [routerLink]="['/users', user?.id, 'edit']">
                   <span class="btn btn-sm btn-outline-primary">Edit Details</span>
                 </a>
               </p>
@@ -43,7 +43,7 @@
             </div>
             <div class="col-4">
               <h5 class="card-title">JOINED</h5>
-              <p class="card-text">{{this.user?.createdAt | date: 'MM/dd/yyyy'}}</p>
+              <p class="card-text">{{this.user?.createdAt | date: 'mediumDate'}}</p>
             </div>
           </div>
         </div>

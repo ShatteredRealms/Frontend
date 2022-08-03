@@ -50,6 +50,7 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import {UsersComponent} from "./_components/users/users.component";
 import {JwtInterceptor} from "./_helpers/jwt.interceptor";
+import { UserEditComponent } from './pages/user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import {JwtInterceptor} from "./_helpers/jwt.interceptor";
     UserProfileComponent,
     AdminDashboardComponent,
     UsersComponent,
+    UserEditComponent,
   ],
   imports: [
     BrowserModule,

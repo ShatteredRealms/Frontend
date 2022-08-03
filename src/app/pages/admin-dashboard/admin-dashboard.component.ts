@@ -8,7 +8,6 @@ import {User} from "../../models/user.model";
 })
 export class AdminDashboardComponent implements OnInit {
 
-
   constructor() { }
 
   ngOnInit(): void {

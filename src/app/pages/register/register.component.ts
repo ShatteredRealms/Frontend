@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../_services/authentication.service";
@@ -13,7 +13,14 @@ import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
+  registerForm: FormGroup = new FormGroup({
+    firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(100)]),
+    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.max(25)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
+    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
+  });
   loading: boolean;
   siteKey: string;
 
@@ -21,14 +28,7 @@ export class RegisterComponent implements OnInit {
               protected authService: AuthenticationService,
               protected notificationService: MdbNotificationService,
               protected reCaptchaV3Service: ReCaptchaV3Service) {
-    this.registerForm = new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-      lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-      email: new FormControl('', [Validators.required, Validators.email, Validators.maxLength(100)]),
-      username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.max(25)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
-      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
-    });
+    this.registerForm
   }
 
   ngOnInit(): void {

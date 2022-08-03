@@ -6,6 +6,7 @@ import {RegisterComponent} from "./pages/register/register.component";
 import {UserProfileComponent} from "./pages/user-profile/user-profile.component";
 import {AdminDashboardComponent} from "./pages/admin-dashboard/admin-dashboard.component";
 import {AuthGuard} from "./_helpers/auth.guard";
+import {UserEditComponent} from "./pages/user-edit/user-edit.component";
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'users/:user', component: UserProfileComponent},
   {path: 'admin', component: AdminDashboardComponent, data: {roles: ["SUPER ADMIN", "ADMIN"]}, canActivate: [AuthGuard]},
+  {path: 'users/:user/edit', component: UserEditComponent},
 ];
 
 @NgModule({

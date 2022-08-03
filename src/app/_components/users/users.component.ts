@@ -30,7 +30,6 @@ export class UsersComponent implements OnInit {
     this.loading = true;
     this.dataSource$ = this._usersService.getAllUsers().pipe(map(resp => {
       this.loading = false;
-      console.log('resp', resp);
       return resp.users;
     }));
   }

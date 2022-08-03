@@ -20,45 +20,43 @@ export class UserProfileComponent implements OnInit {
               protected router: Router,
               protected notificationService: MdbNotificationService,
               protected authService: AuthenticationService,
-              protected usersService: UsersService) {}
+              protected usersService: UsersService) {
+  }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('user'));
-    if (this.authService.currentUserValue != null && this.authService.currentUserValue.id == id) {
-      this.user = this.authService.currentUserValue;
-    } else {
-      this.usersService.getUser(id).subscribe((user) => {
-        this.user = user;
-      }, (error) => {
-        this.router.navigate(['/']).then(() => {
-          if (error.status == 404) {
-            this.notificationService.open(AlertComponent, {
-              data: {
-                message: 'User not found',
-                color: 'danger',
-              },
-              stacking: true
-            })
-          } else if (error.status == 401) {
-            this.notificationService.open(AlertComponent, {
-              data: {
-                message: 'Unauthorized',
-                color: 'danger',
-              },
-              stacking: true
-            })
-          } else {
-            this.notificationService.open(AlertComponent, {
-              data: {
-                message: 'Unknown server error. Please try again later.',
-                color: 'danger',
-              },
-              stacking: true
-            })
-          }
-        })
+    this.usersService.getUser(id).subscribe((user) => {
+      console.log('user', user);
+      this.user = user;
+    }, (error) => {
+      this.router.navigate(['/']).then(() => {
+        if (error.status == 404) {
+          this.notificationService.open(AlertComponent, {
+            data: {
+              message: 'User not found',
+              color: 'danger',
+            },
+            stacking: true
+          })
+        } else if (error.status == 401) {
+          this.notificationService.open(AlertComponent, {
+            data: {
+              message: 'Unauthorized',
+              color: 'danger',
+            },
+            stacking: true
+          })
+        } else {
+          this.notificationService.open(AlertComponent, {
+            data: {
+              message: 'Unknown server error. Please try again later.',
+              color: 'danger',
+            },
+            stacking: true
+          })
+        }
       })
-    }
+    })
   }
 
   getRoleHTMLClass(role: Role): string {
