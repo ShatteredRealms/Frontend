@@ -8,6 +8,10 @@ import {environment} from "../../../environments/environment";
 import {AlertComponent} from "../../_components/alert/alert.component";
 import {User} from "../../models/user.model";
 import {UsersService} from "../../_services/users.service";
+import {AuthorizationService} from "../../_services/authorization.service";
+import {map} from "rxjs/operators";
+import {Role} from "../../models/role.model";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-user-edit',
@@ -29,23 +33,60 @@ export class UserEditComponent implements OnInit {
   });
 
   siteKey: string;
-  loadingUser = true;
-  loadingDetails = false;
-  loadingPassword = false;
-  id: number;
 
-  constructor(protected route: ActivatedRoute,
-              protected router: Router,
-              protected authService: AuthenticationService,
-              protected notificationService: MdbNotificationService,
-              protected reCaptchaV3Service: ReCaptchaV3Service,
-              protected usersService: UsersService) {
+  id: number;
+  user: Observable<User>;
+  userRoles: Observable<Role[]>;
+  userPermissions: Observable<string[]>;
+  allRoles: Observable<Role[] | null>;
+  allPermissions: Observable<string[] | null>;
+
+  loadingUser: boolean = true;
+  loadingAllRoles: boolean = true;
+  loadingAllPermissions: boolean = true;
+  loadingUpdateDetails: boolean = false;
+  loadingUpdatePassword: boolean = false;
+
+  constructor(
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected authService: AuthenticationService,
+    protected notificationService: MdbNotificationService,
+    protected reCaptchaV3Service: ReCaptchaV3Service,
+    protected usersService: UsersService,
+    protected authorizationService: AuthorizationService,
+  ) {
   }
 
   ngOnInit(): void {
     this.siteKey = environment.recaptcha.siteKey;
+    this.initUser();
+    this.setUserRoles();
+
+    if (this.authService.hasAnyRole(['SUPER ADMIN', 'ADMIN'])) {
+      this.initAllPermissions();
+      this.initAllRoles();
+    }
+  }
+
+  private setUserRoles() {
+    this.userRoles = this.user.pipe(map(u => {
+      return u.roles;
+    }));
+  }
+
+  private initAllPermissions() {
+    this.allPermissions = this.authorizationService.permission.pipe();
+  }
+
+  private initAllRoles() {
+    this.allRoles = this.authorizationService.roles.pipe();
+  }
+
+  private initUser() {
     this.id = Number(this.route.snapshot.paramMap.get('user'));
-    this.usersService.getUser(this.id).subscribe((user: User) => {
+    this.user = this.usersService.getUser(this.id);
+    this.user.subscribe((user: User) => {
       this.updateDetailsForm.setValue({
         firstName: user.firstName,
         lastName: user.lastName,
@@ -111,7 +152,7 @@ export class UserEditComponent implements OnInit {
       return;
     }
 
-    this.loadingDetails = true;
+    this.loadingUpdateDetails = true;
 
     this.usersService.updateUserDetails(
       this.id,
@@ -151,14 +192,11 @@ export class UserEditComponent implements OnInit {
         position: "top-center",
       })
     }).add(() => {
-      this.loadingDetails = false;
+      this.loadingUpdateDetails = false;
     });
   }
 
   onSubmitPassword() {
-    this.loadingPassword = true;
-
-
     if (!this.updatePasswordForm.valid) {
       this.notificationService.open(AlertComponent, {
         data: {
@@ -185,7 +223,7 @@ export class UserEditComponent implements OnInit {
       return;
     }
 
-    this.loadingDetails = true;
+    this.loadingUpdateDetails = true;
 
     this.usersService.updateUserPassword(
       this.id,
@@ -222,11 +260,12 @@ export class UserEditComponent implements OnInit {
         position: "top-center",
       })
     }).add(() => {
-      this.loadingPassword = false;
+      this.loadingUpdatePassword = false;
     });
   }
 
   isAdmin(): boolean {
     return this.authService.hasAnyRole(["SUPER ADMIN", "ADMIN"])
   }
+
 }

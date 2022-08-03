@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-lg-6 col-md-12">
       <div class="card text-center">
-        <div class="card-header">Edit User Details</div>
+        <div class="card-header">Account Details</div>
         <form [formGroup]="updateDetailsForm">
           <div class="card-body">
 
@@ -66,10 +66,10 @@
               class="btn btn-primary ms-1"
               (click)="onSubmitDetails()"
             >
-              <div *ngIf="loadingDetails" class="spinner-border spinner-border-sm" role="status">
+              <div *ngIf="loadingUpdateDetails" class="spinner-border spinner-border-sm" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
-              <span *ngIf="!loadingDetails">Save Changes</span>
+              <span *ngIf="!loadingUpdateDetails">Save Changes</span>
             </a>
           </div>
         </form>
@@ -77,7 +77,7 @@
     </div>
     <div class="col-lg-6 col-md-12 mt-sm-4 mt-lg-0">
       <div class="card text-center">
-        <div class="card-header">Edit Password</div>
+        <div class="card-header">Password</div>
         <form [formGroup]="updatePasswordForm">
           <div class="card-body">
             <mdb-form-control class="form-white mb-4">
@@ -130,10 +130,10 @@
               class="btn btn-primary ms-1"
               (click)="onSubmitPassword()"
             >
-              <div *ngIf="loadingPassword" class="spinner-border spinner-border-sm" role="status">
+              <div *ngIf="loadingUpdatePassword" class="spinner-border spinner-border-sm" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
-              <span *ngIf="!loadingPassword">Save Changes</span>
+              <span *ngIf="!loadingUpdatePassword">Save Changes</span>
             </a>
           </div>
         </form>
@@ -141,18 +141,23 @@
     </div>
   </div>
 </section>
-<section *ngIf="isAdmin()" class="container mt-4">
+<section *ngIf="isAdmin()" class="container">
   <div class="row">
-    <div class="col-lg-6 col-md-12 mt-md-4">
+    <div class="col-lg-6 col-md-12 mt-4">
       <div class="card text-center">
-        <div class="card-header">Edit User Roles</div>
-        <div class="card-body"></div>
+        <div class="card-header">Roles</div>
+        <div class="card-body p-0">
+          <app-roles-table
+            [loading]="false"
+            [dataSource]="userRoles | async"
+          ></app-roles-table>
+        </div>
         <div class="card-footer"></div>
       </div>
     </div>
-    <div class="col-lg-6 col-md-12 mt-md-4">
+    <div class="col-lg-6 col-md-12 mt-4">
       <div class="card text-center">
-        <div class="card-header">Edit User Permissions</div>
+        <div class="card-header">Permissions</div>
         <div class="card-body"></div>
         <div class="card-footer"></div>
       </div>
