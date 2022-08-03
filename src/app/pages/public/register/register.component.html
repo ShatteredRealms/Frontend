@@ -38,6 +38,10 @@
           <label mdbLabel class="form-label" for="confirmPassword">Confirm Password</label>
         </mdb-form-control>
 
+        <mdb-form-control class="form-white mb-4">
+          <ngx-invisible-recaptcha #captchaElem [siteKey]="siteKey" formControlName="recaptcha"></ngx-invisible-recaptcha>
+        </mdb-form-control>
+
         <button type="submit" class="btn btn-primary btn-block" (click)="onRegister()" [disabled]="loading">
           <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           <span *ngIf="!loading">Create New Account</span>

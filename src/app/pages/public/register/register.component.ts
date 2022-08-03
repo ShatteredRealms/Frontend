@@ -3,6 +3,8 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../../_services/authentication.service";
 import {AlertService} from "../../../_services/alert.service";
+import {environment} from "../../../../environments/environment";
+import {ReCaptchaV3Service} from "ngx-captcha";
 
 @Component({
   selector: 'app-register',
@@ -12,10 +14,12 @@ import {AlertService} from "../../../_services/alert.service";
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading: boolean;
+  siteKey: string;
 
   constructor(protected router: Router,
               protected authService: AuthenticationService,
-              protected alertService: AlertService) {
+              protected alertService: AlertService,
+              protected reCaptchaV3Service: ReCaptchaV3Service) {
     this.registerForm = new FormGroup({
       firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
@@ -23,10 +27,12 @@ export class RegisterComponent implements OnInit {
       username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.max(25)]),
       password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
+      // recaptcha: new FormControl('', [Validators.required]),
     });
   }
 
   ngOnInit(): void {
+    this.siteKey = environment.recaptcha.siteKey;
     if (this.authService.currentUserValue) {
       this.router.navigate(['/']).then(() => {
         this.alertService.warn('You are already signed in.')
@@ -46,6 +52,12 @@ export class RegisterComponent implements OnInit {
       this.alertService.warn('Passwords do not match', {id: 'register-alert', autoClose: 'true'});
       return;
     }
+
+    this.reCaptchaV3Service.execute(this.siteKey, 'homepage', (token) => {
+      console.log('This is your token: ', token);
+    }, {
+      useGlobalDomain: false
+    });
 
     this.authService.requestRegister({
       email: this.registerForm.value.email,
