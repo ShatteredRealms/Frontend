@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UsersComponent } from './users.component';
+import { UserProfileComponent } from './user-profile.component';
 import {BrowserTestingModule} from "@angular/platform-browser/testing";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AlertService} from "../../../_services/alert.service";
-import {AuthenticationService} from "../../../_services/authentication.service";
-import {UsersService} from "../../../_services/users.service";
+import {AuthenticationService} from "../../_services/authentication.service";
+import {UsersService} from "../../_services/users.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {User} from "../../../models/user.model";
-import {NewUser} from "../../../_helpers/dummy.data";
+import {User} from "../../models/user.model";
+import {NewUser} from "../../_helpers/dummy.data";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {Observable, of, throwError} from 'rxjs';
 
 describe('UsersComponent', () => {
-  let component: UsersComponent;
-  let fixture: ComponentFixture<UsersComponent>;
+  let component: UserProfileComponent;
+  let fixture: ComponentFixture<UserProfileComponent>;
   let alertService: AlertService;
   let authService: AuthenticationService;
   let userService: UsersService;
@@ -24,7 +24,7 @@ describe('UsersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UsersComponent],
+      declarations: [UserProfileComponent],
       imports: [
         RouterTestingModule,
         HttpClientTestingModule
@@ -34,7 +34,7 @@ describe('UsersComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UsersComponent);
+    fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     alertService = TestBed.inject(AlertService);

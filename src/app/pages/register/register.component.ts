@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import {AuthenticationService} from "../../../_services/authentication.service";
-import {environment} from "../../../../environments/environment";
+import {AuthenticationService} from "../../_services/authentication.service";
+import {environment} from "../../../environments/environment";
 import {ReCaptchaV3Service} from "ngx-captcha";
-import {AlertComponent} from "../../../_components/alert/alert.component";
+import {AlertComponent} from "../../_components/alert/alert.component";
 import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
 
 @Component({
@@ -28,7 +28,6 @@ export class RegisterComponent implements OnInit {
       username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.max(25)]),
       password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]),
-      // recaptcha: new FormControl('', [Validators.required]),
     });
   }
 

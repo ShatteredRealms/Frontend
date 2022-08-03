@@ -2,18 +2,18 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {AlertComponent} from './_components/alert/alert.component';
-import {HomeComponent} from './pages/public/home/home.component';
-import {LoginComponent} from './pages/public/login/login.component';
+import {HomeComponent} from './pages/home/home.component';
+import {LoginComponent} from './pages/login/login.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {CommonModule} from "@angular/common";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { NavComponent } from './_components/nav/nav.component';
 import { FooterComponent } from './_components/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { RegisterComponent } from './pages/public/register/register.component';
-import { UsersComponent } from './pages/public/users/users.component';
-import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import {NgxCaptchaModule} from "ngx-captcha";
 
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
@@ -48,6 +48,8 @@ import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { MdbTimepickerModule } from 'mdb-angular-ui-kit/timepicker';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
+import {UsersComponent} from "./_components/users/users.component";
+import {JwtInterceptor} from "./_helpers/jwt.interceptor";
 
 @NgModule({
   declarations: [
@@ -58,8 +60,9 @@ import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
     NavComponent,
     FooterComponent,
     RegisterComponent,
-    UsersComponent,
+    UserProfileComponent,
     AdminDashboardComponent,
+    UsersComponent,
   ],
   imports: [
     BrowserModule,
@@ -103,7 +106,13 @@ import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
     ReactiveFormsModule,
     NgxCaptchaModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

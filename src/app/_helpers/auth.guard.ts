@@ -18,8 +18,6 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const currentUser = this.authenticationService.currentUserValue;
     if (currentUser) {
-      console.log('current user roles', currentUser.roles);
-      console.log('required roles', route.data['roles'])
       if (!this.authenticationService.hasAnyRole(route.data['roles'])) {
         this.router.navigate(['/']).then(() =>
           this.notificationService.open(AlertComponent, {

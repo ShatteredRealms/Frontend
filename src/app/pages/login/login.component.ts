@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthenticationService} from "../../../_services/authentication.service";
+import {AuthenticationService} from "../../_services/authentication.service";
 import {Router} from "@angular/router";
 import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {AlertComponent} from "../../../_components/alert/alert.component";
+import {AlertComponent} from "../../_components/alert/alert.component";
 
 @Component({
   selector: 'app-login',

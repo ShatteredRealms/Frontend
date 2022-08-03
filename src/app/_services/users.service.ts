@@ -19,8 +19,6 @@ export class UsersService {
   }
 
   getAllUsers(): Observable<any> {
-    return this.http.get(`${environment.ACCOUNT_API_URL}/users`).pipe(map( resp => {
-      return resp
-    }));
+    return this.http.get(`${environment.ACCOUNT_API_URL}/users`);
   }
 }
