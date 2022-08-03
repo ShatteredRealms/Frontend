@@ -225,4 +225,8 @@ export class UserEditComponent implements OnInit {
       this.loadingPassword = false;
     });
   }
+
+  isAdmin(): boolean {
+    return this.authService.hasAnyRole(["SUPER ADMIN", "ADMIN"])
+  }
 }

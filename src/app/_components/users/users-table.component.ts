@@ -1,37 +1,23 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {User} from "../../models/user.model";
 import {MdbTableDirective} from "mdb-angular-ui-kit/table";
-import {delay, Observable} from "rxjs";
-import {UsersService} from "../../_services/users.service";
-import {map} from "rxjs/operators";
 import {getRoleColor, Role} from "../../models/role.model";
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  selector: 'app-users-table',
+  templateUrl: './users-table.component.html',
+  styleUrls: ['./users-table.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UsersTableComponent implements OnInit {
   @ViewChild('table') table!: MdbTableDirective<User>;
 
-  dataSource$: Observable<User[]>;
-  loading = true;
+  @Input() dataSource: User[] | null;
+  @Input() loading = true;
 
-  constructor(
-    private _usersService: UsersService
-  ) {
+  constructor() {
   }
 
   ngOnInit(): void {
-    this.reloadData();
-  }
-
-  reloadData(): void {
-    this.loading = true;
-    this.dataSource$ = this._usersService.getAllUsers().pipe(map(resp => {
-      this.loading = false;
-      return resp.users;
-    }));
   }
 
   advancedSearch(value: string): void {

@@ -48,9 +48,11 @@ import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { MdbTimepickerModule } from 'mdb-angular-ui-kit/timepicker';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
-import {UsersComponent} from "./_components/users/users.component";
+import {UsersTableComponent} from "./_components/users/users-table.component";
 import {JwtInterceptor} from "./_helpers/jwt.interceptor";
 import { UserEditComponent } from './pages/user-edit/user-edit.component';
+import { RolesTableComponent } from './_components/roles-table/roles-table.component';
+import { PermissionsTableComponent } from './_components/permissions-table/permissions-table.component';
 
 @NgModule({
   declarations: [
@@ -63,8 +65,10 @@ import { UserEditComponent } from './pages/user-edit/user-edit.component';
     RegisterComponent,
     UserProfileComponent,
     AdminDashboardComponent,
-    UsersComponent,
+    UsersTableComponent,
     UserEditComponent,
+    RolesTableComponent,
+    PermissionsTableComponent,
   ],
   imports: [
     BrowserModule,

@@ -64,9 +64,9 @@ describe('AuthGuard', () => {
   it('fail if they do not have the correct permissions', () => {
     spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
       email: "",
-      first_name: "",
+      firstName: "",
       id: 0,
-      last_name: "",
+      lastName: "",
       token: "",
       username: "",
       permissions: [],
@@ -84,9 +84,9 @@ describe('AuthGuard', () => {
   it('fail if they do not have the correct role', () => {
     spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
       email: "",
-      first_name: "",
+      firstName: "",
       id: 0,
-      last_name: "",
+      lastName: "",
       token: "",
       username: "",
       permissions: [],
@@ -104,9 +104,9 @@ describe('AuthGuard', () => {
   it('succeed if they do not have the correct role and permissions', () => {
     spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
       email: "",
-      first_name: "",
+      firstName: "",
       id: 0,
-      last_name: "",
+      lastName: "",
       token: "",
       username: "",
       permissions: [Permission.TEST_PERMISSION],

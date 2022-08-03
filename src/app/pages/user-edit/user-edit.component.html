@@ -26,7 +26,7 @@
                 type="text"
                 id="lastName"
                 formControlName="lastName"
-                     class="form-control"
+                class="form-control"
               />
               <label mdbLabel class="form-label" for="lastName">Last Name</label>
             </mdb-form-control>
@@ -34,12 +34,12 @@
             <mdb-form-control class="form-white mb-4">
               <input
                 mdbInput
-                     mdbValidate
+                mdbValidate
                 [validateSuccess]="false"
                 type="email"
                 id="email"
                 formControlName="email"
-                     class="form-control"
+                class="form-control"
               />
               <label mdbLabel class="form-label" for="email">Email</label>
             </mdb-form-control>
@@ -47,11 +47,11 @@
             <mdb-form-control class="form-white mb-4">
               <input
                 mdbInput
-                     mdbValidate
+                mdbValidate
                 [validateSuccess]="false"
                 type="username"
                 id="username"
-                     formControlName="username" class="form-control"/>
+                formControlName="username" class="form-control"/>
               <label mdbLabel class="form-label" for="username">Username</label>
             </mdb-form-control>
           </div>
@@ -66,7 +66,7 @@
               class="btn btn-primary ms-1"
               (click)="onSubmitDetails()"
             >
-              <div *ngIf="loadingDetails"  class="spinner-border spinner-border-sm" role="status">
+              <div *ngIf="loadingDetails" class="spinner-border spinner-border-sm" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
               <span *ngIf="!loadingDetails">Save Changes</span>
@@ -75,7 +75,7 @@
         </form>
       </div>
     </div>
-    <div class="col-lg-6 col-sm-12">
+    <div class="col-lg-6 col-md-12 mt-sm-4 mt-lg-0">
       <div class="card text-center">
         <div class="card-header">Edit Password</div>
         <form [formGroup]="updatePasswordForm">
@@ -137,6 +137,24 @@
             </a>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+</section>
+<section *ngIf="isAdmin()" class="container mt-4">
+  <div class="row">
+    <div class="col-lg-6 col-md-12 mt-md-4">
+      <div class="card text-center">
+        <div class="card-header">Edit User Roles</div>
+        <div class="card-body"></div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-12 mt-md-4">
+      <div class="card text-center">
+        <div class="card-header">Edit User Permissions</div>
+        <div class="card-body"></div>
+        <div class="card-footer"></div>
       </div>
     </div>
   </div>

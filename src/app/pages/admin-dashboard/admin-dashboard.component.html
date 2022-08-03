@@ -4,7 +4,10 @@
       <div class="card text-center">
         <div class="card-header">All Users</div>
         <div class="card-body">
-          <app-users></app-users>
+          <app-users-table
+            [dataSource]="users | async"
+            [loading]="loading"
+          ></app-users-table>
         </div>
       </div>
     </div>
