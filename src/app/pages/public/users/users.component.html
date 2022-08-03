@@ -1,27 +1,46 @@
-<section class="user-info container">
+<section class="container mt-4">
   <div class="quick-info row">
-    <div class="col-md-12 col-lg-6 d-flex ml-1">
-      <div class="profile-picture"><i class="far fa-user"></i></div>
-      <div class="profile-info">
-        <div class="text-muted">{{this.user.email}}</div>
-        <h4 class="text-light mb-0">{{this.user.first_name}} {{this.user.last_name}}</h4>
-        <div class="profile-status"><span class="badge bg-success">Online</span></div>
-        <button class="btn btn-sm btn-outline-primary">Edit Details</button>
+    <div class="col-md-12 col-xl-6 col-xxl-4">
+      <div class="card">
+        <div class="row g-0">
+          <div class="col-6">
+            <div class="profile-picture"><i class="far fa-user"></i></div>
+          </div>
+          <div class="col-6">
+            <div class="card-body">
+              <div class="card-text text-muted text-right">{{this.user.email}}</div>
+              <h4 class="card-text text-light mb-0">{{this.user.firstName}} {{this.user.lastName}}</h4>
+              <p class="card-text"><span class="badge bg-success">Online</span></p>
+              <p class="card-text">
+                <a href="/users/1/edit">
+                  <span class="btn btn-sm btn-outline-primary">Edit Details</span>
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="profile-stats col-md-12 col-lg-6 text-center mt-lg-0 mt-4">
-      <div class="profile-stats-wrapper d-flex justify-content-between px-3 px-sm-5">
-        <div class="stat">
-          <h6 class="text-muted">PLAY TIME</h6>
-          <h5 class="text-light">0 hours</h5>
+    <div class="card-group col-md-12 col-xl-6 col-xxl-8 mt-xl-0 mt-4">
+      <div class="card text-center">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <h5 class="card-title">PLAY TIME</h5>
+              <p class="card-text">0 Hours</p>
+            </div>
+            <div class="col-4">
+              <h5 class="card-title">CHARACTERS</h5>
+              <p class="card-text">0</p>
+            </div>
+            <div class="col-4">
+              <h5 class="card-title">JOINED</h5>
+              <p class="card-text">{{this.user.createdAt | date: 'MM/dd/yyyy'}}</p>
+            </div>
+          </div>
         </div>
-        <div class="stat">
-          <h6 class="text-muted">CHARACTERS</h6>
-          <h5 class="text-light">0</h5>
-        </div>
-        <div class="stat">
-          <h6 class="text-muted">JOINED</h6>
-          <h5 class="text-light">{{this.user.createdAt | date: 'MM/dd/yyyy'}}</h5>
+        <div class="card-footer">
+          <small class="text-muted">Last updated right now</small>
         </div>
       </div>
     </div>

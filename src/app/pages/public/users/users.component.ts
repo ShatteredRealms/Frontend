@@ -15,9 +15,9 @@ export class UsersComponent implements OnInit {
   user: User = {
     createdAt: new Date(Date.now()),
     email: "email",
-    first_name: "firstname",
+    firstName: "firstname",
     id: 0,
-    last_name: "lastname",
+    lastName: "lastname",
     roles: [{name: 'role'}],
     token: "token",
     username: "username"
