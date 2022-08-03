@@ -2,7 +2,6 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MdbTableDirective} from "mdb-angular-ui-kit/table";
 import {User} from "../../models/user.model";
 import {getRoleColor, Role} from "../../models/role.model";
-import {advancedFilterFn} from "../../_helpers/filter.table";
 
 @Component({
   selector: 'app-roles-table',

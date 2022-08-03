@@ -12,6 +12,7 @@ import {AuthorizationService} from "../../_services/authorization.service";
 import {map} from "rxjs/operators";
 import {Role} from "../../models/role.model";
 import {Observable} from "rxjs";
+import {Permission} from "../../models/permission.model";
 
 @Component({
   selector: 'app-user-edit',
@@ -37,7 +38,7 @@ export class UserEditComponent implements OnInit {
   id: number;
   user: Observable<User>;
   userRoles: Observable<Role[]>;
-  userPermissions: Observable<string[]>;
+  userPermissions: Observable<Permission[]>;
   allRoles: Observable<Role[] | null>;
   allPermissions: Observable<string[] | null>;
 
