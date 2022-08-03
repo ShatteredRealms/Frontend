@@ -14,7 +14,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RegisterComponent } from './pages/public/register/register.component';
 import { UsersComponent } from './pages/public/users/users.component';
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard/admin-dashboard.component';
-import { environment } from '../environments/environment';
 import {NgxCaptchaModule} from "ngx-captcha";
 
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
@@ -98,7 +97,8 @@ import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
     MdbTabsModule,
     MdbTimepickerModule,
     MdbTooltipModule,
-    MdbValidationModule,    BrowserAnimationsModule,
+    MdbValidationModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     NgxCaptchaModule,

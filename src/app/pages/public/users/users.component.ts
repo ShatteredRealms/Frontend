@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {User} from "../../../models/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../../_services/authentication.service";
 import {UsersService} from "../../../_services/users.service";
-import {AlertService} from "../../../_services/alert.service";
+import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
+import {AlertComponent} from "../../../_components/alert/alert.component";
 
 @Component({
   selector: 'app-users',
@@ -25,7 +26,7 @@ export class UsersComponent implements OnInit {
 
   constructor(protected route: ActivatedRoute,
               protected router: Router,
-              protected alertService: AlertService,
+              protected notificationService: MdbNotificationService,
               protected authService: AuthenticationService,
               protected usersService: UsersService) {}
 
@@ -39,9 +40,21 @@ export class UsersComponent implements OnInit {
       }, (error) => {
         this.router.navigate(['/']).then(() => {
           if (error.status == 404) {
-            this.alertService.error('User not found');
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: 'User not found',
+                color: 'danger',
+              },
+              stacking: true
+            })
           } else {
-            this.alertService.error('Unknown server error. Please try again later.')
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: 'Unknown server error. Please try again later.',
+                color: 'danger',
+              },
+              stacking: true
+            })
           }
         })
       })

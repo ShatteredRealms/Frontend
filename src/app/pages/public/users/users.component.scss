@@ -1,9 +1,8 @@
-@import "../../../../variables";
 
 .profile-picture {
   height: 200px;
   width: 200px;
-  background-color: $semi-dark;
+  //background-color: $semi-dark;
   text-align: center;
   padding-top: 1rem;
   > i {
@@ -26,7 +25,7 @@
   > .profile-stats-wrapper {
     padding: 4rem 0;
     width: 100%;
-    background-color: $semi-dark;
+    //background-color: $semi-dark;
     border-radius: 1.5rem;
     position: relative;
   }

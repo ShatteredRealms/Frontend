@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {AuthenticationService} from '../_services/authentication.service';
-import {AlertService} from '../_services/alert.service';
+import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
+import {AlertComponent} from "../_components/alert/alert.component";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService,
+    private notificationService: MdbNotificationService,
   ) {
   }
 
@@ -21,7 +22,14 @@ export class AuthGuard implements CanActivate {
       console.log('required roles', route.data['roles'])
       if (!this.authenticationService.hasAnyRole(route.data['roles'])) {
         this.router.navigate(['/']).then(() =>
-          this.alertService.error('ERROR: Access denied!')
+          this.notificationService.open(AlertComponent, {
+            data: {
+              message: 'Access denied',
+              color: 'warning',
+            },
+            stacking: true,
+            position: "top-center",
+          })
         );
 
         return false;
@@ -31,7 +39,14 @@ export class AuthGuard implements CanActivate {
     }
 
     this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
-    this.alertService.info('Please login to view this page');
+    this.notificationService.open(AlertComponent, {
+      data: {
+        message: 'Please login to view this page',
+        color: 'info',
+      },
+      stacking: true,
+      position: "top-center",
+    })
     return false;
   }
 }
