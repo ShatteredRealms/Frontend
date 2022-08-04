@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Role} from "../models/role.model";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
+import {map} from "rxjs/operators";
 
 const ROLES_STORAGE_KEY = 'roles';
 const PERMISSIONS_STORAGE_KEY = 'permissions';
@@ -11,33 +12,57 @@ const PERMISSIONS_STORAGE_KEY = 'permissions';
   providedIn: 'root'
 })
 export class AuthorizationService {
-  private _roles: Observable<Role[]>;
-  private _permissions: Observable<string[]>;
+  _roles: Observable<Role[]>;
+  _getAllPermissions: Observable<string[]>;
 
   constructor(private http: HttpClient) {
-    this._roles = new Observable<Role[]>(JSON.parse(<string>localStorage.getItem(ROLES_STORAGE_KEY)));
-    this._permissions = new Observable<string[]>(JSON.parse(<string>localStorage.getItem(PERMISSIONS_STORAGE_KEY)));
+    this._roles = new Observable<Role[]>(this.getRoleStorage());
+    this._getAllPermissions = new Observable<string[]>(this.getPermissionStorage());
   }
 
-  public get roles(): Observable<Role[]> {
-    if (this._roles == null) this.refreshRoles();
-
-    return this._roles;
+  public getAllRoles(): Observable<Role[]> {
+    return this.refreshRoles();
   }
 
-  public get permission(): Observable<string[]> {
-    if (this._roles == null) this.refreshPermissions();
-
-    return this._permissions;
+  public getAllPermissions(): Observable<string[]> {
+    return this.refreshPermissions();
   }
 
   refreshRoles(): Observable<Role[]> {
-    this._roles = this.http.get<Role[]>(`${environment.ACCOUNT_API_URL}/authorization/roles`);
-    return this._roles;
+    // if (this.getRoleStorage()) return this._roles;
+
+    return this.http.get<any>(`${environment.ACCOUNT_API_URL}/authorization/roles`)
+      .pipe(map(resp => {
+        this.setRoleStorage(resp.roles);
+        return resp.roles;
+      }));
   }
 
   refreshPermissions(): Observable<string[]> {
-    this._permissions = this.http.get<string[]>(`${environment.ACCOUNT_API_URL}/authorization/permissions`);
-    return this._permissions;
+    // if (this.getPermissionStorage()) return this._getAllPermissions;
+
+    return this.http.get<any>(`${environment.ACCOUNT_API_URL}/authorization/permissions`)
+      .pipe(map(resp => {
+        this.setPermissionStorage(resp.permissions);
+        return resp.permissions;
+      }));
+  }
+
+  private getRoleStorage() {
+    return JSON.parse(<string>localStorage.getItem(ROLES_STORAGE_KEY))
+  }
+
+  private setRoleStorage(roles: Role[]) {
+    localStorage.setItem(ROLES_STORAGE_KEY, JSON.stringify(roles));
+    // this._roles = new Observable<Role[]>(getRoleStorage());
+  }
+
+  private getPermissionStorage() {
+    return JSON.parse(<string>localStorage.getItem(PERMISSIONS_STORAGE_KEY))
+  }
+
+  private setPermissionStorage(permissions: string[]) {
+    localStorage.setItem(PERMISSIONS_STORAGE_KEY, JSON.stringify(permissions));
+    // this._getAllPermissions = new Observable<string[]>(this.getPermissionStorage());
   }
 }
