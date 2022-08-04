@@ -5,7 +5,7 @@ import {AuthenticationService} from "../../_services/authentication.service";
 import {UsersService} from "../../_services/users.service";
 import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
 import {AlertComponent} from "../../_components/alert/alert.component";
-import {getRoleColor, Role} from "../../models/role.model";
+import {getRoleBadgeClasses, Role} from "../../models/role.model";
 
 @Component({
   selector: 'app-user-profile',
@@ -59,6 +59,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   getRoleHTMLClass(role: Role): string {
-    return `bg-${getRoleColor(role)}`;
+    return getRoleBadgeClasses(role);
   }
 }

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MdbTableDirective} from "mdb-angular-ui-kit/table";
 import {User} from "../../models/user.model";
-import {Permission} from "../../models/permission.model";
+import {UserPermission} from "../../models/user-permission.model";
 
 @Component({
   selector: 'app-permissions-table',
@@ -11,7 +11,7 @@ import {Permission} from "../../models/permission.model";
 export class PermissionsTableComponent implements OnInit {
   @ViewChild('table') table!: MdbTableDirective<User>;
 
-  @Input() dataSource: Permission[] | null;
+  @Input() dataSource: UserPermission[] | null;
   @Input() loading = true;
   @Input() showActions = false;
   @Input() searchable = false;

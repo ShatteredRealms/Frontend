@@ -1,7 +1,6 @@
 <div class="input-group mb-4">
   <input
     type="text"
-    id="advanced-search"
     class="form-control"
     id="search-input"
     #searchInput
@@ -60,7 +59,7 @@
         <td>
           <span
             *ngFor="let role of user.roles" class="badge m-1"
-            [class]="getRoleHTMLClass(role)"
+            [class]="getRoleHTMLClasses(role)"
           >
             {{ role.name }}
           </span>
@@ -93,7 +92,7 @@
             [offset]="10"
             [trigger]="'hover'"
           >
-            <button class="messhandle-btn btn btn-primary btn-floating btn-sm ms-2 ">
+            <button class="btn btn-primary btn-floating btn-sm ms-2 ">
               <i class="fa fa-edit"></i>
             </button>
           </a>

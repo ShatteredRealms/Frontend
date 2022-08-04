@@ -1,14 +1,26 @@
 <section class="container mt-4">
-  <div class="row">
-    <div class="col-sm-12">
+  <div class="row g-4">
+    <div class="col-12">
       <div class="card text-center">
         <div class="card-header">All Users</div>
         <div class="card-body">
           <app-users-table
             [dataSource]="users | async"
-            [loading]="loading"
+            [loading]="loadingUsers"
           ></app-users-table>
         </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card text-center">
+        <div class="card-header">All Roles</div>
+        <div class="card-body p-0">
+          <app-roles-table
+            [dataSource]="roles | async"
+            [loading]="loadingRoles"
+          ></app-roles-table>
+        </div>
+        <div class="card-footer"></div>
       </div>
     </div>
   </div>

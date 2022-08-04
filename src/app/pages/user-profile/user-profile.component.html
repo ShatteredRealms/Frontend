@@ -11,7 +11,7 @@
               <span class="badge bg-success mx-1">Online</span>
               <span
                 *ngFor="let role of user?.roles" class="badge mx-1 mt-1"
-                [class]="getRoleHTMLClass(role)"
+                [className]="getRoleHTMLClass(role)"
               >
                   {{ role.name }}
                 </span>

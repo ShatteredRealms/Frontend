@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {User} from "../../models/user.model";
 import {MdbTableDirective} from "mdb-angular-ui-kit/table";
-import {getRoleColor, Role} from "../../models/role.model";
+import {getRoleBadgeClasses, Role} from "../../models/role.model";
 import {advancedFilterFn} from "../../_helpers/filter.table";
 
 @Component({
@@ -29,7 +29,7 @@ export class UsersTableComponent implements OnInit {
     return advancedFilterFn(data, searchTerm);
   }
 
-  getRoleHTMLClass(role: Role): string {
-    return `bg-${getRoleColor(role)}`;
+  getRoleHTMLClasses(role: Role): string {
+    return getRoleBadgeClasses(role);
   }
 }

@@ -3,7 +3,7 @@ export interface Role {
   name: string;
 }
 
-export function getRoleColor(role: Role): string {
-  if (role.name.toUpperCase() == 'SUPER ADMIN') return 'primary';
-  return 'light';
+export function getRoleBadgeClasses(role: Role): string {
+  if (role.name.toUpperCase() == 'SUPER ADMIN') return 'bg-secondary text-white';
+  return 'bg-dark text-light';
 }

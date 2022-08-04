@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MdbTableDirective} from "mdb-angular-ui-kit/table";
-import {User} from "../../models/user.model";
-import {getRoleColor, Role} from "../../models/role.model";
+import {getRoleBadgeClasses, Role} from "../../models/role.model";
 
 @Component({
   selector: 'app-roles-table',
@@ -9,7 +8,7 @@ import {getRoleColor, Role} from "../../models/role.model";
   styleUrls: ['./roles-table.component.scss']
 })
 export class RolesTableComponent implements OnInit {
-  @ViewChild('table') table!: MdbTableDirective<User>;
+  @ViewChild('table') table!: MdbTableDirective<Role>;
 
   @Input() dataSource: Role[] | null;
   @Input() loading = true;
@@ -27,6 +26,6 @@ export class RolesTableComponent implements OnInit {
   }
 
   getRoleHTMLClass(role: Role): string {
-    return `bg-${getRoleColor(role)}`;
+    return getRoleBadgeClasses(role);
   }
 }
