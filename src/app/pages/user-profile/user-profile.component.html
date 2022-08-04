@@ -1,35 +1,31 @@
 <section class="container mt-4">
-  <div class="row">
+  <div class="row g-4">
     <div class="col-md-12 col-xl-6 col-xxl-4">
       <div class="card">
-        <div class="row g-0">
-          <div class="col-6">
-            <div class="profile-picture"><i class="far fa-user"></i></div>
-          </div>
-          <div class="col-6">
-            <div class="card-body">
-              <p class="card-text text-muted text-right mb-0">{{this.user?.email}}</p>
-              <h4 class="card-text text-light mb-0">{{this.user?.firstName}} {{this.user?.lastName}}</h4>
-              <p class="card-text">
-                <span class="badge bg-success mx-1">Online</span>
-                <span
-                  *ngFor="let role of user?.roles" class="badge mx-1 mt-1"
-                  [class]="getRoleHTMLClass(role)"
-                >
+        <div class="d-flex">
+          <div class="profile-picture"><i class="far fa-user"></i></div>
+          <div class="card-body">
+            <p class="text-muted mb-0">{{this.user?.email}}</p>
+            <h4 class="text-light mb-0">{{this.user?.firstName}} {{this.user?.lastName}}</h4>
+            <p>
+              <span class="badge bg-success mx-1">Online</span>
+              <span
+                *ngFor="let role of user?.roles" class="badge mx-1 mt-1"
+                [class]="getRoleHTMLClass(role)"
+              >
                   {{ role.name }}
                 </span>
-              </p>
-              <p class="card-text">
-                <a [routerLink]="['/users', user?.id, 'edit']">
-                  <span class="btn btn-sm btn-outline-primary">Edit Details</span>
-                </a>
-              </p>
-            </div>
+            </p>
+            <p class="card-text">
+              <a [routerLink]="['/users', user?.id, 'edit']">
+                <span class="btn btn-sm btn-outline-primary">Edit Details</span>
+              </a>
+            </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="card-group col-md-12 col-xl-6 col-xxl-8 mt-xl-0 mt-4">
+    <div class="card-group col-md-12 col-xl-6 col-xxl-8">
       <div class="card text-center">
         <div class="card-body">
           <div class="row">
