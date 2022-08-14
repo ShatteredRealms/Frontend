@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
-import {AlertService} from "../../_services/alert.service";
+import {AlertService} from "../../../_services/alert.service";
 import {AuthenticationService} from "../../_services/authentication.service";
 import {Router} from "@angular/router";
 import {HttpClientTestingModule} from "@angular/common/http/testing";

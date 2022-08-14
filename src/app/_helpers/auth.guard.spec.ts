@@ -7,7 +7,6 @@ import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from "@angular/rout
 import {AuthenticationService} from "../_services/authentication.service";
 import {AlertService} from "../_services/alert.service";
 import {Role} from "../models/role.model";
-import {Permission} from "../models/permission.model";
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
@@ -23,7 +22,7 @@ describe('AuthGuard', () => {
   let activatedRouteSnapshot = jasmine.createSpyObj<ActivatedRouteSnapshot>(
     'ActivatedRouterSnapshot',
     [],
-    {data: {['permissions']: [Permission.TEST_PERMISSION], ['role']: Role.ADMIN}},
+    {data: {['role']: 'ADMIN'}},
   );
 
   const promise = Promise.resolve();
@@ -55,14 +54,6 @@ describe('AuthGuard', () => {
     expect(guard['userHasPermission'](null, null)).toBeTruthy();
   });
 
-  it('should fail if there are permissions required but no user permissions', () => {
-    expect(guard['userHasPermission']([Permission.TEST_PERMISSION], [])).toBeFalsy();
-  })
-
-  it('should succeed if there are permissions required and the user has the permissions', () => {
-    expect(guard['userHasPermission']([Permission.TEST_PERMISSION], [Permission.TEST_PERMISSION])).toBeTruthy();
-  })
-
   it('should fail with no authenticated user', () => {
     spyOnProperty(authenticationService, 'currentUserValue').and.returnValue(undefined);
     expect(guard.canActivate(activatedRouteSnapshot, routerStateSnapshot)).toBeFalsy();
@@ -73,13 +64,13 @@ describe('AuthGuard', () => {
   it('fail if they do not have the correct permissions', () => {
     spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
       email: "",
-      first_name: "",
+      firstName: "",
       id: 0,
-      last_name: "",
+      lastName: "",
       token: "",
       username: "",
       permissions: [],
-      role: Role.USER
+      role:
     });
 
     router.navigate.and.returnValue(promise);
@@ -93,9 +84,9 @@ describe('AuthGuard', () => {
   it('fail if they do not have the correct role', () => {
     spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
       email: "",
-      first_name: "",
+      firstName: "",
       id: 0,
-      last_name: "",
+      lastName: "",
       token: "",
       username: "",
       permissions: [],
@@ -113,9 +104,9 @@ describe('AuthGuard', () => {
   it('succeed if they do not have the correct role and permissions', () => {
     spyOnProperty(authenticationService, 'currentUserValue').and.returnValue({
       email: "",
-      first_name: "",
+      firstName: "",
       id: 0,
-      last_name: "",
+      lastName: "",
       token: "",
       username: "",
       permissions: [Permission.TEST_PERMISSION],

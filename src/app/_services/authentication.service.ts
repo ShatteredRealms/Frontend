@@ -19,13 +19,18 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
+  hasAnyRole(roleNames: string[]): boolean {
+    if (this.currentUserValue == null) return false;
+    return this.currentUserValue.roles.some(userRole => roleNames.some(requiredRole => requiredRole.toUpperCase() == userRole.name.toUpperCase()));
+  }
+
   login(email: string, password: string): Observable<User> {
     return this.http.post<any>(`${environment.ACCOUNT_API_URL}/login`, { email, password })
       .pipe(map(resp => {
-        const user = resp.data;
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
+        resp.createdAt = new Date(resp.createdAt);
+        localStorage.setItem('currentUser', JSON.stringify(resp));
+        this.currentUserSubject.next(resp);
+        return resp;
       }));
   }
 

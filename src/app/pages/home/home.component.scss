@@ -1,7 +1,13 @@
-@import '~src/variables';
-@import '~node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/functions';
-@import '~node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/variables';
-@import '~node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/mixins';
+@import 'node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/functions';
+@import 'node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/variables';
+@import 'node_modules/mdb-angular-ui-kit/assets/scss/bootstrap/mixins';
+
+.background-blend {
+  background: radial-gradient(
+    rgba(48, 48, 48, 0),
+    rgba(48, 48, 48, 1) 65%
+  );
+}
 
 @include media-breakpoint-up(md) {
   .hero-image > img {

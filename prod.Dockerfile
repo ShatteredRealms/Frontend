@@ -1,11 +1,11 @@
-FROM node:16-alpine As builder
+FROM node:18-alpine As builder
 
 WORKDIR /usr/src/app
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json mdb-angular-ui-kit-2.3.0.tgz ./
 RUN npm install
 COPY . .
 
-RUN npm run build --prod
+RUN npm run build
 
 FROM nginx:1.15.8-alpine
 COPY --from=builder /usr/src/app/dist/Frontend/ /usr/share/nginx/html

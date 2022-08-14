@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { AuthenticationService } from '../_services/authentication.service';
-import { AlertService } from '../_services/alert.service';
-import { Permission } from '../models/permission.model';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {AuthenticationService} from '../_services/authentication.service';
+import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
+import {AlertComponent} from "../_components/alert/alert.component";
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +11,23 @@ export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService,
-  ) { }
+    private notificationService: MdbNotificationService,
+  ) {
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const currentUser = this.authenticationService.currentUserValue;
     if (currentUser) {
-      if (!this.userHasPermission(route.data['permissions'], currentUser.permissions)
-        || (route.data['role'] != null && route.data['role'] != currentUser.role)) {
-
+      if (!this.authenticationService.hasAnyRole(route.data['roles'])) {
         this.router.navigate(['/']).then(() =>
-          this.alertService.error('ERROR: Access denied!')
+          this.notificationService.open(AlertComponent, {
+            data: {
+              message: 'Access denied',
+              color: 'warning',
+            },
+            stacking: true,
+            position: "top-center",
+          })
         );
 
         return false;
@@ -30,19 +36,15 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-    this.alertService.info('Please login to view this page');
+    this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
+    this.notificationService.open(AlertComponent, {
+      data: {
+        message: 'Please login to view this page',
+        color: 'info',
+      },
+      stacking: true,
+      position: "top-center",
+    })
     return false;
-  }
-
-  private userHasPermission(requiredPermissions: Permission[] | null, userPermissions: Permission[] | null): boolean {
-    if (requiredPermissions == null || requiredPermissions.length == 0) return true;
-    if (userPermissions == null || userPermissions.length == 0) return false;
-
-    return requiredPermissions.every((requiredPermission) => {
-      return userPermissions.some((userPermission) =>
-        userPermission == requiredPermission
-      )
-    });
   }
 }

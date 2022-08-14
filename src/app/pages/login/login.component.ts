@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../_services/authentication.service";
-import {AlertService} from "../../_services/alert.service";
 import {Router} from "@angular/router";
+import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
+import {AlertComponent} from "../../_components/alert/alert.component";
 
 @Component({
   selector: 'app-login',
@@ -14,13 +15,20 @@ export class LoginComponent implements OnInit {
   loading: boolean = false;
 
   constructor(protected authService: AuthenticationService,
-              public alertService: AlertService,
+              public notificationService: MdbNotificationService,
               public router: Router) { }
 
   ngOnInit(): void {
     if (this.authService.currentUserValue) {
       this.router.navigate(['/']).then(() => {
-        this.alertService.warn('You are already signed in.')
+        this.notificationService.open(AlertComponent, {
+          data: {
+            message: 'You are already signed in.',
+            color: 'warning',
+          },
+          stacking: true,
+          position: "top-center",
+        })
       });
     }
 
@@ -37,20 +45,49 @@ export class LoginComponent implements OnInit {
    */
   onLogin(): boolean {
     if (!this.loginForm.valid) {
-      this.alertService.warn('Invalid email or password fields', {id: 'login-alert', autoClose: true})
+      this.notificationService.open(AlertComponent, {
+        data: {
+          message: 'Please fill out all fields correctly',
+          color: 'warning',
+        },
+        stacking: true,
+        position: "top-center",
+      })
       return false;
     }
     this.loading = true;
 
     this.authService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe((success) => {
       this.router.navigate(['/']).then(() => {
-        this.alertService.success('Successfully logged in', {autoClose: true});
+        this.notificationService.open(AlertComponent, {
+          data: {
+            message: 'Successfully logged in',
+            color: 'success',
+            fade: 'true',
+          },
+          stacking: true,
+          position: "top-center",
+        })
       });
     }, (error) => {
       if(error.status == 401) {
-        this.alertService.warn('Invalid email or password', {id: 'login-alert', autoClose: true})
+        this.notificationService.open(AlertComponent, {
+          data: {
+            message: 'Invalid email or password',
+            color: 'warning',
+          },
+          stacking: true,
+          position: "top-center",
+        })
       } else {
-        this.alertService.error('Error communicating with the server. Please try again later.');
+        this.notificationService.open(AlertComponent, {
+          data: {
+            message: 'Error communicating with the server. Please try again later.',
+            color: 'error',
+          },
+          stacking: true,
+          position: "top-center",
+        })
       }
     }).add(() => {
       this.loading = false;

@@ -2,7 +2,7 @@ import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {AlertService} from "../../_services/alert.service";
+import {AlertService} from "../../../_services/alert.service";
 import {AuthenticationService} from "../../_services/authentication.service";
 import {Observable, of, throwError} from "rxjs";
 import {RouterTestingModule} from "@angular/router/testing";

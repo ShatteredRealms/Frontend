@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from "../../_services/authentication.service";
+import {User} from "../../models/user.model";
 
 @Component({
   selector: 'app-footer',
@@ -13,8 +14,15 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public get user(): User | null {
+    return this.authService.currentUserValue;
+  }
 
   isUserSignedIn(): boolean {
-    return this.authService.currentUserValue != undefined;
+    return this.user != null;
+  }
+
+  isAdmin(): boolean {
+    return this.authService.hasAnyRole(["SUPER ADMIN", "ADMIN"])
   }
 }

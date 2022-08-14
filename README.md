@@ -1,8 +1,8 @@
-![Shattered Realms Online](https://github.com/ShatteredRealms/Documentation/raw/main/assets/images/logo/WhiteLogo.png)
+![Shattered Realms Online](../docs/assets/images/logo/WhiteLogo.png)
 
 # Overview [![Build CI](https://github.com/ShatteredRealms/Frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/ShatteredRealms/Frontend/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/ShatteredRealms/Frontend/branch/main/graph/badge.svg?token=NHFJHSE37O)](https://codecov.io/gh/ShatteredRealms/Frontend)
 
-The frontend website for [Shattered Realms Online](https://github.com/ShatteredRealms/Game).
+The frontend website for Shattered Realms Online.
 
 # Development
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.2.

@@ -9,4 +9,7 @@ export const environment = {
   ACCOUNT_API_VERSION: ACCOUNTS_API_VERSION,
   ACCOUNT_API_BASE_URL: ACCOUNTS_API_BASE_URL,
   ACCOUNT_API_URL: ACCOUNTS_API_URL,
+  recaptcha: {
+    siteKey: '6LeFKkEhAAAAALeg05zJHu1kKaj-vSPdJ80ilEBV'
+  },
 };
