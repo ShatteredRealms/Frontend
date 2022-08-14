@@ -16,8 +16,8 @@ export class AdminDashboardComponent implements OnInit {
   loadingRoles = true;
   loadingPermissions = true;
 
-  users: Observable<User[]>;
-  roles: Observable<Role[]>;
+  users: User[] = [];
+  roles: Role[] = [];
 
   constructor(
     private _usersService: UsersService,
@@ -31,16 +31,16 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getAllUsers() {
-    this.users = this._usersService.getAllUsers().pipe(map(resp => {
+    this._usersService.getAllUsers().subscribe(resp => {
       this.loadingUsers = false;
-      return resp.users;
-    }));
+      this.users = resp.users;
+    });
   }
 
   getAllRoles() {
-    this.roles = this._authorizationService.getAllRoles();
-    this.roles.subscribe(() => {
+    this._authorizationService.getAllRoles().subscribe((resp) => {
       this.loadingRoles = false;
+      this.roles = resp;
     });
   }
 }

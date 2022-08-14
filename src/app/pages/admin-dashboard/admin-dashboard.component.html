@@ -5,7 +5,7 @@
         <div class="card-header">All Users</div>
         <div class="card-body">
           <app-users-table
-            [dataSource]="users | async"
+            [dataSource]="users"
             [loading]="loadingUsers"
           ></app-users-table>
         </div>
@@ -16,7 +16,7 @@
         <div class="card-header">All Roles</div>
         <div class="card-body p-0">
           <app-roles-table
-            [dataSource]="roles | async"
+            [dataSource]="roles"
             [loading]="loadingRoles"
           ></app-roles-table>
         </div>

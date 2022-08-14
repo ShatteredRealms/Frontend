@@ -11,4 +11,5 @@ export interface User {
     permissions: UserPermission[];
     token: string;
     createdAt: Date;
+    bannedAt: Date | null;
 }

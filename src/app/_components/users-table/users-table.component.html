@@ -46,6 +46,9 @@
         <th [mdbTableSortHeader]="'createdAt'" scope="col">
           Creation Date
         </th>
+        <th [mdbTableSortHeader]="'bannedAt'" scope="col">
+          Ban Date
+        </th>
         <th scope="col">
           Actions
         </th>
@@ -74,6 +77,9 @@
           {{ user.createdAt | date: 'mediumDate' }}
         </td>
         <td>
+          {{ user.bannedAt | date: 'mediumDate' }}
+        </td>
+        <td>
           <a
             [routerLink]="['/users', user.id]"
             mdbTooltip="View Profile"
@@ -96,17 +102,33 @@
               <i class="fa fa-edit"></i>
             </button>
           </a>
-          <a
-            [routerLink]="['/users', user.id, 'ban']"
-            mdbTooltip="Ban User"
-            [delayShow]="500"
-            [offset]="10"
-            [trigger]="'hover'"
-          >
-            <button class="btn btn-floating ms-2 btn-sm">
-              <i class="fa fa-ban text-danger"></i>
-            </button>
-          </a>
+          <div *ngIf="isNaN(user.bannedAt);then unbanButton else banButton"></div>
+          <ng-template #banButton>
+            <a
+              (click)="banUser(user.id)"
+              mdbTooltip="Ban User"
+              [delayShow]="500"
+              [offset]="10"
+              [trigger]="'hover'"
+            >
+              <button class="btn btn-floating ms-2 btn-sm">
+                <i class="fa fa-ban text-danger"></i>
+              </button>
+            </a>
+          </ng-template>
+          <ng-template #unbanButton>
+            <a
+              (click)="unbanUser(user.id)"
+              mdbTooltip="Unban User"
+              [delayShow]="500"
+              [offset]="10"
+              [trigger]="'hover'"
+            >
+              <button class="btn btn-floating ms-2 btn-sm">
+                <i class="fas fa-unlock text-warning"></i>
+              </button>
+            </a>
+          </ng-template>
         </td>
       </tr>
       </tbody>

@@ -34,4 +34,12 @@ export class UsersService {
       password
     });
   }
+
+  banUser(userId: number): Observable<any> {
+    return this.http.post(`${environment.ACCOUNT_API_URL}/users/${userId}/ban`, {});
+  }
+
+  unBanUser(userId: number): Observable<any> {
+    return this.http.post(`${environment.ACCOUNT_API_URL}/users/${userId}/unban`, {});
+  }
 }
