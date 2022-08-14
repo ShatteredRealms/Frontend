@@ -4,6 +4,6 @@ export interface Role {
 }
 
 export function getRoleBadgeClasses(role: Role): string {
-  if (role.name.toUpperCase() == 'SUPER ADMIN') return 'bg-secondary text-white';
-  return 'bg-dark text-light';
+  if (role.name.toUpperCase() == 'SUPER ADMIN') return 'badge bg-secondary text-white';
+  return 'badge bg-dark text-light';
 }
