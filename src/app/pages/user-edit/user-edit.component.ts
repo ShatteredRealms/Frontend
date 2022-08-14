@@ -9,10 +9,13 @@ import {AlertComponent} from "../../_components/alert/alert.component";
 import {User} from "../../models/user.model";
 import {UsersService} from "../../_services/users.service";
 import {AuthorizationService} from "../../_services/authorization.service";
-import {map} from "rxjs/operators";
+import {map, tap} from "rxjs/operators";
 import {Role} from "../../models/role.model";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {UserPermission} from "../../models/user-permission.model";
+import {MdbModalRef, MdbModalService} from "mdb-angular-ui-kit/modal";
+import {ModalComponent} from "../../_components/modal/modal.component";
+import {ModalSelectComponent} from "../../_components/modal-select/modal-select.component";
 
 @Component({
   selector: 'app-user-edit',
@@ -36,17 +39,17 @@ export class UserEditComponent implements OnInit {
   siteKey: string;
 
   id: number;
-  user: Observable<User>;
-  userRoles: Observable<Role[]>;
-  userPermissions: Observable<UserPermission[]>;
-  allRoles: Observable<Role[] | null>;
-  allPermissions: Observable<string[] | null>;
+  user: User;
+  allRoles: Role[] = [];
+  allPermissions: string[] = [];
 
   loadingUser: boolean = true;
   loadingAllRoles: boolean = true;
   loadingAllPermissions: boolean = true;
   loadingUpdateDetails: boolean = false;
   loadingUpdatePassword: boolean = false;
+
+  modalRef: MdbModalRef<ModalComponent> | null = null;
 
   constructor(
     protected route: ActivatedRoute,
@@ -56,13 +59,13 @@ export class UserEditComponent implements OnInit {
     protected reCaptchaV3Service: ReCaptchaV3Service,
     protected usersService: UsersService,
     protected authorizationService: AuthorizationService,
+    protected modalService: MdbModalService,
   ) {
   }
 
   ngOnInit(): void {
     this.siteKey = environment.recaptcha.siteKey;
     this.initUser();
-    this.setUserRoles();
 
     if (this.authService.hasAnyRole(['SUPER ADMIN', 'ADMIN'])) {
       this.initAllPermissions();
@@ -70,60 +73,57 @@ export class UserEditComponent implements OnInit {
     }
   }
 
-  private setUserRoles() {
-    this.userRoles = this.user.pipe(map(u => {
-      return u.roles;
-    }));
-  }
-
   private initAllPermissions() {
-    this.allPermissions = this.authorizationService.getAllPermissions();
+    this.authorizationService.getAllPermissions().subscribe(permissions => this.allPermissions = permissions);
   }
 
   private initAllRoles() {
-    this.allRoles = this.authorizationService.getAllRoles();
+    this.authorizationService.getAllRoles().subscribe(roles => this.allRoles = roles);
   }
 
   private initUser() {
     this.id = Number(this.route.snapshot.paramMap.get('user'));
-    this.user = this.usersService.getUser(this.id);
-    this.user.subscribe((user: User) => {
-      this.updateDetailsForm.setValue({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        username: user.username,
-      })
-      this.loadingUser = false;
-    }, (error) => {
-      this.router.navigate(['/']).then(() => {
-        if (error.status == 404) {
-          this.notificationService.open(AlertComponent, {
-            data: {
-              message: 'User not found',
-              color: 'danger',
-            },
-            stacking: true
-          })
-        } else if (error.status == 401) {
-          this.notificationService.open(AlertComponent, {
-            data: {
-              message: 'Unauthorized',
-              color: 'danger',
-            },
-            stacking: true
-          })
-        } else {
-          this.notificationService.open(AlertComponent, {
-            data: {
-              message: 'Unknown server error. Please try again later.',
-              color: 'danger',
-            },
-            stacking: true
-          })
-        }
-      })
-    })
+    this.usersService.getUser(this.id).subscribe({
+      next: (user) => {
+        this.user = user;
+        this.updateDetailsForm.setValue({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          username: user.username,
+        })
+        this.loadingUser = false;
+      },
+      error: (error) => {
+        this.router.navigate(['/']).then(() => {
+          if (error.status == 404) {
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: 'User not found',
+                color: 'danger',
+              },
+              stacking: true
+            })
+          } else if (error.status == 401) {
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: 'Unauthorized',
+                color: 'danger',
+              },
+              stacking: true
+            })
+          } else {
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: 'Unknown server error. Please try again later.',
+                color: 'danger',
+              },
+              stacking: true
+            })
+          }
+        });
+      },
+    });
   }
 
   onSubmitDetails() {
@@ -265,8 +265,86 @@ export class UserEditComponent implements OnInit {
     });
   }
 
-  isAdmin(): boolean {
+  isAdmin()
+    :
+    boolean {
     return this.authService.hasAnyRole(["SUPER ADMIN", "ADMIN"])
   }
 
+  openAddRolesModal() {
+    this.modalRef = this.modalService.open(ModalSelectComponent, {
+      data: {
+        title: 'Add Roles',
+        message: 'Select roles to add',
+        options: this.allRoles,
+        ignoreOptions: this.user.roles,
+      }
+    });
+
+    this.modalRef.onClose.subscribe((roles: Role[]) => {
+      if (roles) {
+        this.authorizationService.addRoles(roles, this.user.id).subscribe({
+          next: () => {
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: "Roles added",
+                color: 'success',
+              },
+              stacking: true,
+              position: "top-center",
+            });
+            this.user.roles = [...this.user.roles, ...roles];
+          },
+          error: err => {
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: `ERROR: ${err.error.message}`,
+                color: 'danger',
+              },
+              stacking: true,
+              position: "top-center",
+            });
+          }
+        });
+      }
+    });
+  }
+
+  openRemRolesModal() {
+    this.modalRef = this.modalService.open(ModalSelectComponent, {
+      data: {
+        title: 'Remove Roles',
+        message: 'Select roles to remove',
+        options: this.user.roles,
+      }
+    });
+
+    this.modalRef.onClose.subscribe((roles: Role[]) => {
+      if (roles) {
+        this.authorizationService.remRoles(roles, this.user.id).subscribe({
+          next: () => {
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: "Roles removed",
+                color: 'info',
+              },
+              stacking: true,
+              position: "top-center",
+            });
+            this.user.roles = this.user.roles.filter(role1 => !roles.some(role2 => role1.id == role2.id));
+          },
+          error: err => {
+            this.notificationService.open(AlertComponent, {
+              data: {
+                message: `ERROR: ${err.error.message}`,
+                color: 'danger',
+              },
+              stacking: true,
+              position: "top-center",
+            });
+          }
+        });
+      }
+    });
+  }
 }

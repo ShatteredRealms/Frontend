@@ -89,6 +89,7 @@
                 id="currentPassword"
                 formControlName="currentPassword"
                 class="form-control"
+                autocomplete="current-password"
               />
               <label mdbLabel class="form-label" for="currentPassword">Current Password</label>
             </mdb-form-control>
@@ -102,6 +103,7 @@
                 id="newPassword"
                 formControlName="newPassword"
                 class="form-control"
+                autocomplete="new-password"
               />
               <label mdbLabel class="form-label" for="newPassword">New Password</label>
             </mdb-form-control>
@@ -115,6 +117,7 @@
                 id="confirmNewPassword"
                 formControlName="confirmNewPassword"
                 class="form-control"
+                autocomplete="new-password"
               />
               <label mdbLabel class="form-label" for="confirmNewPassword">Confirm New Password</label>
             </mdb-form-control>
@@ -139,14 +142,29 @@
         </form>
       </div>
     </div>
+
     <ng-container *ngIf="isAdmin()">
       <div class="col-lg-6 col-md-12">
         <div class="card text-center">
-          <div class="card-header">Roles</div>
+          <h4 class="card-header">
+            Roles
+            <button
+              class="btn btn-sm btn-outline-primary btn-floating mx-2"
+              (click)="openAddRolesModal()"
+            >
+             <i class="fas fa-plus"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-warning btn-floating mx-2"
+              (click)="openRemRolesModal()"
+            >
+              <i class="fas fa-minus"></i>
+            </button>
+          </h4>
           <div class="card-body p-0">
             <app-roles-table
               [loading]="loadingUser"
-              [dataSource]="userRoles | async"
+              [dataSource]="user ? user.roles : []"
             ></app-roles-table>
           </div>
           <div class="card-footer"></div>
@@ -158,7 +176,7 @@
           <div class="card-body">
             <app-permissions-table
               [loading]="loadingUser"
-              [dataSource]="userPermissions | async"
+              [dataSource]="user ? user.permissions : []"
             ></app-permissions-table>
           </div>
           <div class="card-footer"></div>

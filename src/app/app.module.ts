@@ -53,6 +53,9 @@ import {JwtInterceptor} from "./_helpers/jwt.interceptor";
 import { UserEditComponent } from './pages/user-edit/user-edit.component';
 import { RolesTableComponent } from './_components/roles-table/roles-table.component';
 import { PermissionsTableComponent } from './_components/permissions-table/permissions-table.component';
+import { ModalComponent } from './_components/modal/modal.component';
+import { ModalSelectComponent } from './_components/modal-select/modal-select.component';
+import { FilterFromPipe } from './_helpers/filter-from.pipe';
 
 @NgModule({
   declarations: [
@@ -69,6 +72,9 @@ import { PermissionsTableComponent } from './_components/permissions-table/permi
     UserEditComponent,
     RolesTableComponent,
     PermissionsTableComponent,
+    ModalComponent,
+    ModalSelectComponent,
+    FilterFromPipe,
   ],
   imports: [
     BrowserModule,
