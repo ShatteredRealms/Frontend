@@ -8,7 +8,7 @@ import {MdbModalRef} from 'mdb-angular-ui-kit/modal';
 export class ModalComponent {
   title: string | null = null;
   message: string | null = null;
-  closeText: string = 'Close';
+  closeText: string = 'Cancel';
   submitText: string = 'Save Changes';
 
   constructor(public modalRef: MdbModalRef<ModalComponent>) {

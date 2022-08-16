@@ -56,6 +56,9 @@ import { PermissionsTableComponent } from './_components/permissions-table/permi
 import { ModalComponent } from './_components/modal/modal.component';
 import { ModalSelectComponent } from './_components/modal-select/modal-select.component';
 import { FilterFromPipe } from './_helpers/filter-from.pipe';
+import { ViewRoleComponent } from './pages/roles/view-role/view-role.component';
+import { NewRoleComponent } from './pages/roles/new-role/new-role.component';
+import { EditRoleComponent } from './pages/roles/edit-role/edit-role.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +78,9 @@ import { FilterFromPipe } from './_helpers/filter-from.pipe';
     ModalComponent,
     ModalSelectComponent,
     FilterFromPipe,
+    ViewRoleComponent,
+    NewRoleComponent,
+    EditRoleComponent,
   ],
   imports: [
     BrowserModule,

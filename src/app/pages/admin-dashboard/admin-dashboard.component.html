@@ -13,11 +13,20 @@
     </div>
     <div class="col-12">
       <div class="card text-center">
-        <div class="card-header">All Roles</div>
+        <div class="card-header">
+          All Roles
+          <a
+            class="btn btn-sm btn-outline-primary btn-floating mx-2"
+            routerLink="/roles/new"
+          >
+            <i class="fas fa-plus"></i>
+          </a>
+        </div>
         <div class="card-body p-0">
           <app-roles-table
             [dataSource]="roles"
             [loading]="loadingRoles"
+            [showActions]="true"
           ></app-roles-table>
         </div>
         <div class="card-footer"></div>

@@ -18,7 +18,7 @@
 <div class="datatable mt-4">
   <div class="datatable-inner" mdbScrollbar style="position: relative">
     <table
-      class="table datatable-table"
+      class="table datatable-table table-dark table-hover"
       mdbTable
       mdbTableSort
       #table="mdbTable"
@@ -54,8 +54,13 @@
         </th>
       </tr>
       </thead>
-      <tbody class="datatable-body" *ngIf="!loading">
-      <tr *ngFor="let user of table.data" scope="row">
+      <tbody *ngIf="!loading">
+      <tr
+        *ngFor="let user of table.data"
+        (click)="onUserClick(user)"
+        class="user-row"
+        scope="row"
+      >
         <td>
           {{ user.id}}
         </td>
@@ -81,18 +86,7 @@
         </td>
         <td>
           <a
-            [routerLink]="['/users', user.id]"
-            mdbTooltip="View Profile"
-            [delayShow]="500"
-            [offset]="10"
-            [trigger]="'hover'"
-          >
-            <button class="btn btn-floating btn-sm">
-              <i class="fa fa-eye text-light"></i>
-            </button>
-          </a>
-          <a
-            [routerLink]="['/users', user.id, 'edit']"
+            (click)="$event.stopPropagation(); onUserEditClick(user)"
             mdbTooltip="Edit User"
             [delayShow]="500"
             [offset]="10"
@@ -105,7 +99,7 @@
           <div *ngIf="isNaN(user.bannedAt);then unbanButton else banButton"></div>
           <ng-template #banButton>
             <a
-              (click)="banUser(user.id)"
+              (click)="$event.stopPropagation(); banUser(user.id)"
               mdbTooltip="Ban User"
               [delayShow]="500"
               [offset]="10"
@@ -118,7 +112,7 @@
           </ng-template>
           <ng-template #unbanButton>
             <a
-              (click)="unbanUser(user.id)"
+              (click)="$event.stopPropagation(); unbanUser(user.id)"
               mdbTooltip="Unban User"
               [delayShow]="500"
               [offset]="10"

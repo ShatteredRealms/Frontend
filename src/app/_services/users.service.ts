@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {map} from "rxjs/operators";
+import {User} from "../models/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,12 @@ export class UsersService {
     }));
   }
 
-  getAllUsers(): Observable<any> {
-    return this.http.get(`${environment.ACCOUNT_API_URL}/users`);
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<any>(`${environment.ACCOUNT_API_URL}/users`).pipe(
+      map(resp => {
+        return resp.users;
+      })
+    );
   }
 
   updateUserDetails(id: number, username: string, email: string, firstName: string, lastName: string): Observable<any> {

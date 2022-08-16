@@ -31,27 +31,55 @@
     >
       <thead class="datatable-header">
       <tr>
+        <th *ngIf="selectable">
+          <input
+            mdbCheckbox
+            type="checkbox"
+            class="datatable-row-checkbox form-check-input"
+            [checked]="areAllChecked()"
+            (checkboxChange)="toggleAll($event)"
+          />
+        </th>
         <th
           [mdbTableSortHeader]="'id'"
           scope="col"
         >
-         Permission
+          Permission
         </th>
         <th
           [mdbTableSortHeader]="'name'"
           scope="col"
         >
-         Others
+          Others
         </th>
       </tr>
       </thead>
       <tbody class="datatable-body" *ngIf="!loading">
       <tr *ngFor="let permission of table.data" scope="row">
-        <td>
-          {{ permission.permission}}
+        <td *ngIf="selectable">
+          <input
+            mdbCheckbox
+            type="checkbox"
+            class="datatable-row-checkbox form-check-input"
+            (click)="$event.stopPropagation()"
+            (checkboxChange)="toggleSelection($event, permission)"
+            [checked]="selected.has(permission)"
+          />
         </td>
         <td>
-          {{ permission.other.toString() | titlecase }}
+          {{ permission.permission }}
+        </td>
+        <td>
+          <div class="form-check form-switch">
+            <input
+              mdbCheckbox
+              class="form-check-input"
+              type="checkbox"
+              [checked]="permission.other"
+              (checkboxChange)="permission.other = !permission.other"
+              [disabled]="!selectable"
+            />
+          </div>
         </td>
       </tr>
       </tbody>

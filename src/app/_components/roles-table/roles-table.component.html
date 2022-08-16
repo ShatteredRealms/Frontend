@@ -19,7 +19,7 @@
 <div class="datatable">
   <div class="datatable-inner" mdbScrollbar style="position: relative">
     <table
-      class="table datatable-table"
+      class="table datatable-table table-dark table-hover"
       mdbTable
       mdbTableSort
       #table="mdbTable"
@@ -52,7 +52,11 @@
       </tr>
       </thead>
       <tbody class="datatable-body" *ngIf="!loading">
-      <tr *ngFor="let role of table.data" scope="row">
+      <tr
+        *ngFor="let role of table.data"
+        (click)="roleClicked(role)"
+        scope="row"
+      >
         <td>
           {{ role.id}}
         </td>
@@ -66,18 +70,7 @@
         </td>
         <td *ngIf="showActions">
           <a
-            [routerLink]="['/roles', role.id]"
-            mdbTooltip="View Role"
-            [delayShow]="500"
-            [offset]="10"
-            [trigger]="'hover'"
-          >
-            <button class="btn btn-floating btn-sm">
-              <i class="fa fa-eye text-light"></i>
-            </button>
-          </a>
-          <a
-            [routerLink]="['/roles', role.id, 'edit']"
+            (click)="$event.stopPropagation(); roleEditClicked(role)"
             mdbTooltip="Edit Role"
             [delayShow]="500"
             [offset]="10"
@@ -88,14 +81,14 @@
             </button>
           </a>
           <a
-            [routerLink]="['/roles', role.id, 'ban']"
+            (click)="$event.stopPropagation(); roleDeleteClicked(role)"
             mdbTooltip="Delete Role"
             [delayShow]="500"
             [offset]="10"
             [trigger]="'hover'"
           >
-            <button class="btn btn-floating ms-2 btn-sm">
-              <i class="far fa-trash-alt text-danger"></i>
+            <button class="messhandle-btn btn btn-danger btn-floating btn-sm ms-2 ">
+              <i class="fa fa-trash"></i>
             </button>
           </a>
         </td>

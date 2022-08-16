@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {User} from "../../models/user.model";
 import {MdbTableDirective} from "mdb-angular-ui-kit/table";
 import {getRoleBadgeClasses, Role} from "../../models/role.model";
@@ -6,6 +6,7 @@ import {advancedFilterFn} from "../../_helpers/filter.table";
 import {UsersService} from "../../_services/users.service";
 import {AlertComponent} from "../alert/alert.component";
 import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-users-table',
@@ -17,10 +18,12 @@ export class UsersTableComponent implements OnInit {
 
   @Input() dataSource: User[];
   @Input() loading = true;
+  @Input() userSelectable = true;
 
   constructor(
     private usersService: UsersService,
     private notificationService: MdbNotificationService,
+    private router: Router,
   ) {
   }
 
@@ -101,5 +104,15 @@ export class UsersTableComponent implements OnInit {
 
   isNaN(input: any): boolean {
    return isNaN(input);
+  }
+
+  onUserClick(user: User) {
+    if (this.userSelectable) {
+      this.router.navigate(['/users', user.id]);
+    }
+  }
+
+  onUserEditClick(user: User) {
+    this.router.navigate(['/users', user.id, 'edit']);
   }
 }

@@ -33,7 +33,7 @@ export class AdminDashboardComponent implements OnInit {
   getAllUsers() {
     this._usersService.getAllUsers().subscribe(resp => {
       this.loadingUsers = false;
-      this.users = resp.users;
+      this.users = resp;
     });
   }
 

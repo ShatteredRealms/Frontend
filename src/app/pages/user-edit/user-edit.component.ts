@@ -41,7 +41,7 @@ export class UserEditComponent implements OnInit {
   id: number;
   user: User;
   allRoles: Role[] = [];
-  allPermissions: string[] = [];
+  allPermissions: UserPermission[] = [];
 
   loadingUser: boolean = true;
   loadingAllRoles: boolean = true;
