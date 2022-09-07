@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
         this.notificationService.open(AlertComponent, {
           data: {
             message: 'Error communicating with the server. Please try again later.',
-            color: 'error',
+            color: 'danger',
           },
           stacking: true,
           position: "top-center",

@@ -28,7 +28,6 @@ export class RegisterComponent implements OnInit {
               protected authService: AuthenticationService,
               protected notificationService: MdbNotificationService,
               protected reCaptchaV3Service: ReCaptchaV3Service) {
-    this.registerForm
   }
 
   ngOnInit(): void {

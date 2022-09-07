@@ -3,6 +3,8 @@ import {User} from "../models/user.model";
 
 export function NewUser(): User {
   return {
+    bannedAt: null,
+    permissions: [],
     email: "",
     firstName: "",
     id: 0,
@@ -10,6 +12,6 @@ export function NewUser(): User {
     token: "",
     username: "",
     roles: [],
-    createdAt: new Date(Date.now()),
+    createdAt: new Date(Date.now())
   };
 }
