@@ -7,7 +7,6 @@ import {
 } from '@angular/common/http';
 import {catchError, EMPTY, Observable} from 'rxjs';
 import { AuthenticationService } from '../_services/authentication.service';
-import {map} from "rxjs/operators";
 import {Router} from "@angular/router";
 import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
 import {AlertComponent} from "../_components/alert/alert.component";
@@ -21,7 +20,6 @@ export class JwtInterceptor implements HttpInterceptor {
   ) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('asdfadfasdf')
     const currentUser = this.authenticationService.currentUserValue;
     if (currentUser && currentUser.token) {
       request = request.clone({
@@ -30,7 +28,6 @@ export class JwtInterceptor implements HttpInterceptor {
         }
       });
     }
-    console.log('interceptro')
     return next.handle(request).pipe(catchError(err => {
       console.log('error', err);
       if ((err.status == 401 && err.error.message == 'invalid authentication token')) {
