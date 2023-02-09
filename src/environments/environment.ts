@@ -2,10 +2,17 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 const DOMAIN = 'localhost';
+
 const ACCOUNT_API_PORT = 8080;
 const ACCOUNT_API_VERSION = 'v1';
 const ACCOUNT_API_BASE_URL = `http://${DOMAIN}:${ACCOUNT_API_PORT}`;
 const ACCOUNT_API_URL = `${ACCOUNT_API_BASE_URL}/${ACCOUNT_API_VERSION}`
+
+const CHAT_API_PORT = 8180;
+const CHAT_API_VERSION = 'v1';
+const CHAT_API_BASE_URL = `http://${DOMAIN}:${CHAT_API_PORT}`;
+const CHAT_API_URL = `${CHAT_API_BASE_URL}/${CHAT_API_VERSION}`
+const CHAT_GRPC_URL = DOMAIN;
 
 export const environment = {
   production: false,
@@ -13,6 +20,9 @@ export const environment = {
   ACCOUNT_API_VERSION: ACCOUNT_API_VERSION,
   ACCOUNT_API_BASE_URL: ACCOUNT_API_BASE_URL,
   ACCOUNT_API_URL: ACCOUNT_API_URL,
+  CHAT_API_URL: CHAT_API_URL,
+  CHAT_API_BASE_URL: CHAT_API_BASE_URL,
+  CHAT_GRPC_URL: CHAT_GRPC_URL,
   recaptcha: {
     siteKey: '6LeFKkEhAAAAALeg05zJHu1kKaj-vSPdJ80ilEBV'
   },

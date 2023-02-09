@@ -66,7 +66,7 @@ export class NewRoleComponent implements OnInit {
         console.log('error', err)
         this.notificationService.open(AlertComponent, {
           data: {
-            message: `Error: ${err.message}`,
+            message: `Error: ${err.error.message}`,
             color: 'danger',
             fade: true,
           }

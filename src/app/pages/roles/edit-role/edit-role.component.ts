@@ -78,7 +78,7 @@ export class EditRoleComponent implements OnInit {
       error: err => {
         this.notificationService.open(AlertComponent, {
           data: {
-            message: `Error: ${err.message}`,
+            message: `Error: ${err.error.message}`,
             color: 'danger',
           },
           stacking: true
@@ -106,7 +106,7 @@ export class EditRoleComponent implements OnInit {
       error: err => {
         this.notificationService.open(AlertComponent, {
           data: {
-            message: `Error: ${err.message}`,
+            message: `Error: ${err.error.message}`,
             color: 'danger',
           },
           stacking: true

@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12">
+    <div class="col-12 col-lg-6">
       <div class="card text-center">
         <div class="card-header">
           All Roles
@@ -28,6 +28,27 @@
             [loading]="loadingRoles"
             [showActions]="true"
           ></app-roles-table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="card text-center">
+        <div class="card-header">
+          All Chat Channels
+          <a
+            class="btn btn-sm btn-outline-primary btn-floating mx-2"
+            routerLink="/chat/channels/new"
+          >
+            <i class="fas fa-plus"></i>
+          </a>
+        </div>
+        <div class="card-body p-0">
+          <app-chat-channels-table
+            [dataSource]="chatChannels"
+            [loading]="loadingChatChannels"
+            [showActions]="true"
+          ></app-chat-channels-table>
         </div>
         <div class="card-footer"></div>
       </div>

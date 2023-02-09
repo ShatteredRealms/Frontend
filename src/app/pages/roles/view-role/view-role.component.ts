@@ -27,15 +27,14 @@ export class ViewRoleComponent implements OnInit {
     this.authorizationService.getRole(Number(this.route.snapshot.paramMap.get('role'))).subscribe(
       (role) => {
         this.role = role;
+        this.usersService.getAllUsers().subscribe(
+          users => {
+            this.users = users.filter(u => u.roles.some(r => r.id == this.role.id));
+            this.loadingUsers = false;
+          }
+        );
       }
     );
-
-    this.usersService.getAllUsers().subscribe(
-      users => {
-        this.users = users.filter(u => u.roles.some(r => r.id == this.role.id));
-        this.loadingUsers = false;
-      }
-    )
   }
 
   getRoleClasses(): string {

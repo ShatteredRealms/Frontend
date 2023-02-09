@@ -1,0 +1,28 @@
+<section class="container mt-4">
+  <div class="row g-4">
+    <h2 class="col-12 text-center">
+      Editing {{ chatChannel?.name }}
+    </h2>
+    <div class="col-md-6 col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          Change Name
+        </div>
+        <div class="card-body">
+          <div class="input-group mb-3">
+            <mdb-form-control>
+              <input mdbInput type="text" id="name" class="form-control" [(ngModel)]="newName"/>
+              <label mdbLabel class="form-label" for="name">Name</label>
+            </mdb-form-control>
+            <button class="btn btn-secondary" type="button" mdbRipple (click)="cancelNameChange()">
+              <i class="fas fa-times"></i>
+            </button>
+            <button class="btn btn-primary" type="button" id="save-name-btn" mdbRipple (click)="submitNameChange()">
+              <i class="fas fa-check"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

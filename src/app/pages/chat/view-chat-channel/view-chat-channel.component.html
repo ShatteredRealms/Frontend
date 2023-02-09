@@ -1,0 +1,67 @@
+<section class="container mt-4">
+  <div class="row g-4">
+    <h4 class="text-center">
+      Chat Channel
+    </h4>
+    <h2 class="col-12 text-center">
+      {{ chatChannel?.name }} <span
+      [class]="getChatChannelClasses()">{{ chatChannel?.public ? "Public" : "Private" }}</span>
+    </h2>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title text-center">
+            Live Chat
+            <a
+              class="btn btn-sm btn-outline-primary btn-floating mx-2"
+              [routerLink]="['edit']"
+            >
+              <i class="fas fa-edit"></i>
+            </a>
+          </h4>
+        </div>
+        <div class="card-body">
+          <div class="container">
+            <div class="messages" *ngFor="let chatMessage of chatMessages">
+              <div class="message">
+                <span class="username fw-bold">{{chatMessage.getUsername()}}</span>
+                <span aria-hidden="true" class="fw-bold">: </span>
+                <span class="message-body text-muted">{{chatMessage.getMessage()}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="input-group">
+            <input
+              [(ngModel)]="chatMessage"
+              class="form-control"
+              placeholder="Chat message"
+              type="text"
+              (keyup.enter)="sendChatMessage()"
+            />
+            <button
+              (click)="sendChatMessage()"
+              type="button"
+              class="btn btn-primary"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title text-center">
+            Users Connected
+          </h4>
+        </div>
+        <div class="card-body">
+          List of connected users here
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

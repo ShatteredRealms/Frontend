@@ -29,7 +29,8 @@ endif
 #     \/ \__,_|_|  |___/
 
 # Base version
-BASE_VERSION ?= 0.1.0
+BASE_VERSION := $(shell git describe --tags --always --abbrev=0 --match='v[0-9]*.[0-9]*.[0-9]*' 2> /dev/null | sed 's/^.//')
+COMMIT_HASH=$(shell git rev-parse --short HEAD)
 
 # Current time for versioning
 time := $(shell date +%s)
@@ -37,6 +38,13 @@ time := $(shell date +%s)
 BUILD_DEV := dev
 BUILD_QA := qa
 BUILD_PROD := prod
+
+ROOT_DIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+PROTO_DIR=$(shell realpath $(ROOT_DIR)/../go-backend/api)
+PROTO_THIRD_PARTY_DIR=$(shell realpath $(ROOT_DIR)/../go-backend/third_party)
+PROTO_FILES = $(shell find $(PROTO_DIR) $(PROTO_THIRD_PARTY_DIR) -type f -name '*.proto')
+PROTO_GENERATED_DIR=$(ROOT_DIR)/src/app/generated
+
 
 #  _______                   _
 # |__   __|                 | |
@@ -58,28 +66,18 @@ install:
 # Docker Targets
 #
 
-build: build-dev
-build-%:
-	docker build -t sro-frontend -f $*.Dockerfile .
+build:
+	docker build -t sro-frontend -f Dockerfile .
 
-push-prod: build-prod
+pushf:
 	docker tag sro-frontend $(REGISTRY)/frontend:latest
 	docker tag sro-frontend $(REGISTRY)/frontend:$(BASE_VERSION)
-	docker tag sro-frontend $(REGISTRY)/frontend:$(BASE_VERSION)-$(time)
+	docker tag sro-frontend $(REGISTRY)/frontend:$(BASE_VERSION)-$(COMMIT_HASH)
 	docker push $(REGISTRY)/frontend:latest
 	docker push $(REGISTRY)/frontend:$(BASE_VERSION)
-	docker push $(REGISTRY)/frontend:$(BASE_VERSION)-$(time)
+	docker push $(REGISTRY)/frontend:$(BASE_VERSION)-$(COMMIT_HASH)
 
-push: push-dev
-push-%: build-%
-	docker tag sro-frontend $(REGISTRY)/frontend/$*:latest
-	docker tag sro-frontend $(REGISTRY)/frontend/$*:$(BASE_VERSION)
-	docker tag sro-frontend $(REGISTRY)/frontend/$*:$(BASE_VERSION)-$(time)
-	docker push $(REGISTRY)/frontend/$*:latest
-	docker push $(REGISTRY)/frontend/$*:$(BASE_VERSION)
-	docker push $(REGISTRY)/frontend/$*:$(BASE_VERSION)-$(time)
-
-
+push: build pushf
 
 #
 # Testing Targets
@@ -95,3 +93,17 @@ test:
 aws-docker-login:
 	aws ecr get-login-password | docker login --username AWS --password-stdin $(BASE_REGISTRY)
 
+.PHONY: clean-protos protos $(PROTO_FILES)
+
+clean-protos:
+	rm -rf "$(PROTO_GENERATED_DIR)"
+	mkdir "$(PROTO_GENERATED_DIR)"
+
+protos: clean-protos $(PROTO_FILES)
+
+$(PROTO_FILES):
+	protoc "$@" \
+		-I "$(PROTO_DIR)" \
+		-I "$(PROTO_THIRD_PARTY_DIR)" \
+		--js_out="import_style=commonjs:$(PROTO_GENERATED_DIR)" \
+		--ts_out="service=grpc-web:$(PROTO_GENERATED_DIR)"

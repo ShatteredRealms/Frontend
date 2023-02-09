@@ -73,7 +73,7 @@ export class RolesTableComponent implements OnInit {
           error: err => {
             this.notificationService.open(AlertComponent, {
               data: {
-                message: `Error: ${err.error}`,
+                message: `Error: ${err.error.message}`,
                 color: 'danger',
               }
             });

@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      username: new FormControl('', [Validators.required]),
       password: new FormControl('', Validators.required),
     });
   }
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
     }
     this.loading = true;
 
-    this.authService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe((success) => {
+    this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe((success) => {
       this.router.navigate(['/']).then(() => {
         this.notificationService.open(AlertComponent, {
           data: {
@@ -73,7 +73,7 @@ export class LoginComponent implements OnInit {
       if(error.status == 401) {
         this.notificationService.open(AlertComponent, {
           data: {
-            message: 'Invalid email or password',
+            message: 'Invalid username or password',
             color: 'warning',
           },
           stacking: true,

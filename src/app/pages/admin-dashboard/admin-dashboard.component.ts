@@ -5,6 +5,8 @@ import {map} from "rxjs/operators";
 import {UsersService} from "../../_services/users.service";
 import {Role} from "../../models/role.model";
 import {AuthorizationService} from "../../_services/authorization.service";
+import {ChatChannel} from "../../models/chat-channel.model";
+import {ChatChannelService} from "../../_services/chat-channel.service";
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -15,19 +17,23 @@ export class AdminDashboardComponent implements OnInit {
   loadingUsers = true;
   loadingRoles = true;
   loadingPermissions = true;
+  loadingChatChannels = true;
 
   users: User[] = [];
   roles: Role[] = [];
+  chatChannels: ChatChannel[] = [];
 
   constructor(
     private _usersService: UsersService,
     private _authorizationService: AuthorizationService,
+    private _chatChannelService: ChatChannelService,
   ) {
   }
 
   ngOnInit(): void {
     this.getAllUsers();
     this.getAllRoles();
+    this.getAllChatChannels();
   }
 
   getAllUsers() {
@@ -42,5 +48,12 @@ export class AdminDashboardComponent implements OnInit {
       this.loadingRoles = false;
       this.roles = resp;
     });
+  }
+
+  getAllChatChannels() {
+    this._chatChannelService.getAllChatChannels().subscribe((resp) => {
+      this.loadingChatChannels = false;
+      this.chatChannels = resp;
+    })
   }
 }

@@ -59,6 +59,10 @@ import { FilterFromPipe } from './_helpers/filter-from.pipe';
 import { ViewRoleComponent } from './pages/roles/view-role/view-role.component';
 import { NewRoleComponent } from './pages/roles/new-role/new-role.component';
 import { EditRoleComponent } from './pages/roles/edit-role/edit-role.component';
+import { ChatChannelsTableComponent } from './_components/chat-channels-table/chat-channels-table.component';
+import { NewChatChannelComponent } from './pages/chat/new-chat-channel/new-chat-channel.component';
+import { EditChatChannelComponent } from './pages/chat/edit-chat-channel/edit-chat-channel.component';
+import { ViewChatChannelComponent } from './pages/chat/view-chat-channel/view-chat-channel.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +85,10 @@ import { EditRoleComponent } from './pages/roles/edit-role/edit-role.component';
     ViewRoleComponent,
     NewRoleComponent,
     EditRoleComponent,
+    ChatChannelsTableComponent,
+    NewChatChannelComponent,
+    EditChatChannelComponent,
+    ViewChatChannelComponent,
   ],
   imports: [
     BrowserModule,
