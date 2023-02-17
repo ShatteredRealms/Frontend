@@ -24,12 +24,12 @@ export class ViewRoleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.authorizationService.getRole(Number(this.route.snapshot.paramMap.get('role'))).subscribe(
+    this.authorizationService.getRole(this.route.snapshot.paramMap.get('role')!).subscribe(
       (role) => {
         this.role = role;
         this.usersService.getAllUsers().subscribe(
           users => {
-            this.users = users.filter(u => u.roles.some(r => r.id == this.role.id));
+            this.users = users.filter(u => u.roles.some(r => r.name == this.role.name));
             this.loadingUsers = false;
           }
         );

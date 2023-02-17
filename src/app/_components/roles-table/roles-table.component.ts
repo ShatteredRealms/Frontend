@@ -43,12 +43,12 @@ export class RolesTableComponent implements OnInit {
 
   roleClicked(role: Role) {
     if (this.rowSelectable) {
-      this.router.navigate(['/roles', role.id])
+      this.router.navigate(['/roles', role.name])
     }
   }
 
   roleEditClicked(role: Role) {
-    this.router.navigate(['/roles', role.id, 'edit'])
+    this.router.navigate(['/roles', role.name, 'edit'])
   }
 
   roleDeleteClicked(role: Role) {
@@ -60,7 +60,7 @@ export class RolesTableComponent implements OnInit {
       }
     }).onClose.subscribe((message) => {
       if (message) {
-        this.authorizationService.deleteRole(role.id).subscribe({
+        this.authorizationService.deleteRole(role.name).subscribe({
           next: () => {
             this.notificationService.open(AlertComponent, {
               data: {

@@ -1,10 +1,11 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable, SecurityContext} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Role} from "../models/role.model";
 import {Observable, of} from "rxjs";
 import {environment} from "../../environments/environment";
 import {map} from "rxjs/operators";
 import {UserPermission} from "../models/user-permission.model";
+import {DomSanitizer} from "@angular/platform-browser";
 
 const ROLES_KEY = 'roles';
 const PERMISSIONS_KEY = 'permission';
@@ -14,8 +15,8 @@ const PERMISSIONS_KEY = 'permission';
 })
 export class AuthorizationService {
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(protected http: HttpClient,
+              private _sanitizer: DomSanitizer) { }
 
   public getAllRoles(forceRefresh: boolean = true): Observable<Role[]> {
     if (!forceRefresh) {
@@ -47,43 +48,43 @@ export class AuthorizationService {
       }));
   }
 
-  public addRoles(roles: Role[], userId: number) {
+  public addRoles(roles: Role[], username: string) {
     return this.http.post(
-      `${environment.ACCOUNT_API_URL}/users/${userId}/authorization/add`,
+      this.safeUrl(`${environment.ACCOUNT_API_URL}/users/${username}/authorization/add`),
       {
-        roles: roles.map(role => ({id: role.id})),
+        roles: roles.map(role => ({name: role.name})),
       }
     );
   }
 
-  public remRoles(roles: Role[], userId: number) {
+  public remRoles(roles: Role[], username: string) {
     return this.http.post(
-      `${environment.ACCOUNT_API_URL}/users/${userId}/authorization/remove`,
+      this.safeUrl(`${environment.ACCOUNT_API_URL}/users/${username}/authorization/remove`),
       {
-        roles: roles.map(role => ({id: role.id})),
+        roles: roles.map(role => ({name: role.name})),
       }
     );
   }
 
-  public getRole(id: number): Observable<Role> {
-    return this.http.get<Role>(`${environment.ACCOUNT_API_URL}/authorization/roles/${id}`).pipe(
+  public getRole(name: string): Observable<Role> {
+    return this.http.get<Role>(this.safeUrl(`${environment.ACCOUNT_API_URL}/authorization/roles/${name}`)).pipe(
       map(resp => {
         return resp
       })
     );
   }
 
-  public updateRoleName(id: number, name: string) {
+  public updateRoleName(name: string, newName: string) {
     return this.http.put(
-      `${environment.ACCOUNT_API_URL}/authorization/roles/${id}`,
-      {id, name},
+      this.safeUrl(`${environment.ACCOUNT_API_URL}/authorization/roles/${name}`),
+      {name, newName},
     );
   }
 
-  public updateRolePermissions(id: number, permissions: UserPermission[]) {
+  public updateRolePermissions(name: string, permissions: UserPermission[]) {
     return this.http.put(
-      `${environment.ACCOUNT_API_URL}/authorization/roles/${id}`,
-      {id, permissions},
+      this.safeUrl(`${environment.ACCOUNT_API_URL}/authorization/roles/${name}`),
+      {name, permissions},
     );
   }
 
@@ -94,7 +95,11 @@ export class AuthorizationService {
     );
   }
 
-  deleteRole(id: number) {
-    return this.http.delete(`${environment.ACCOUNT_API_URL}/authorization/roles/${id}`);
+  deleteRole(name: string) {
+    return this.http.delete(this.safeUrl(`${environment.ACCOUNT_API_URL}/authorization/roles/${name}`));
+  }
+
+  safeUrl(str: string): string {
+    return str.replace(' ', '%20');
   }
 }

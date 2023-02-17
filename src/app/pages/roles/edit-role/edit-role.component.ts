@@ -27,7 +27,7 @@ export class EditRoleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authorizationService.getRole(Number(this.route.snapshot.paramMap.get('role'))).subscribe(
+    this.authorizationService.getRole(this.route.snapshot.paramMap.get('role')!).subscribe(
       (role) => {
         this.role = role;
         this.newName = role.name;
@@ -63,7 +63,7 @@ export class EditRoleComponent implements OnInit {
   }
 
   submitNameChange() {
-    this.authorizationService.updateRoleName(this.role.id, this.newName).subscribe({
+    this.authorizationService.updateRoleName(this.role.name, this.newName).subscribe({
       next: () => {
         this.role.name = this.newName;
         this.notificationService.open(AlertComponent, {
@@ -92,7 +92,7 @@ export class EditRoleComponent implements OnInit {
   }
 
   saveChanges() {
-    this.authorizationService.updateRolePermissions(this.role.id, Array.from(this.selected)).subscribe({
+    this.authorizationService.updateRolePermissions(this.role.name, Array.from(this.selected)).subscribe({
       next: () => {
         this.notificationService.open(AlertComponent, {
           data: {

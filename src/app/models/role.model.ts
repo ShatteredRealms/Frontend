@@ -1,7 +1,6 @@
 import {UserPermission} from "./user-permission.model";
 
 export interface Role {
-  id: number,
   name: string;
   permissions: UserPermission[];
 }

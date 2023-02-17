@@ -42,8 +42,8 @@ export class UsersTableComponent implements OnInit {
     return getRoleBadgeClasses(role);
   }
 
-  banUser(id: any) {
-    this.usersService.banUser(id).subscribe({
+  banUser(username: string) {
+    this.usersService.banUser(username).subscribe({
       next: () => {
         this.notificationService.open(AlertComponent, {
           data: {
@@ -53,7 +53,7 @@ export class UsersTableComponent implements OnInit {
           stacking: true,
           position: "top-center",
         });
-        let user = this.dataSource.find(u => u.id == id);
+        let user = this.dataSource.find(u => u.username == username);
         if (user) {
           user.bannedAt = new Date();
           this.dataSource = [...this.dataSource];
@@ -72,8 +72,8 @@ export class UsersTableComponent implements OnInit {
     })
   }
 
-  unbanUser(id: any) {
-    this.usersService.unBanUser(id).subscribe({
+  unbanUser(username: string) {
+    this.usersService.unBanUser(username).subscribe({
       next: () => {
         this.notificationService.open(AlertComponent, {
           data: {
@@ -83,7 +83,7 @@ export class UsersTableComponent implements OnInit {
           stacking: true,
           position: "top-center",
         });
-        let user = this.dataSource.find(u => u.id == id);
+        let user = this.dataSource.find(u => u.username == username);
         if (user) {
           user.bannedAt = null;
           this.dataSource = [...this.dataSource];
@@ -108,11 +108,11 @@ export class UsersTableComponent implements OnInit {
 
   onUserClick(user: User) {
     if (this.userSelectable) {
-      this.router.navigate(['/users', user.id]);
+      this.router.navigate(['/users', user.username]);
     }
   }
 
   onUserEditClick(user: User) {
-    this.router.navigate(['/users', user.id, 'edit']);
+    this.router.navigate(['/users', user.username, 'edit']);
   }
 }

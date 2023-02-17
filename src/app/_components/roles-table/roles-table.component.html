@@ -32,12 +32,6 @@
       <thead class="datatable-header">
       <tr>
         <th
-          [mdbTableSortHeader]="'id'"
-          scope="col"
-        >
-          ID
-        </th>
-        <th
           [mdbTableSortHeader]="'name'"
           scope="col"
         >
@@ -57,9 +51,6 @@
         (click)="roleClicked(role)"
         scope="row"
       >
-        <td>
-          {{ role.id}}
-        </td>
         <td>
           <span
             class="badge m-1"

@@ -62,7 +62,7 @@
         scope="row"
       >
         <td>
-          {{ user.id}}
+          {{ user.username}}
         </td>
         <td>
           <span
@@ -99,7 +99,7 @@
           <div *ngIf="isNaN(user.bannedAt);then unbanButton else banButton"></div>
           <ng-template #banButton>
             <a
-              (click)="$event.stopPropagation(); banUser(user.id)"
+              (click)="$event.stopPropagation(); banUser(user.username)"
               mdbTooltip="Ban User"
               [delayShow]="500"
               [offset]="10"
@@ -112,7 +112,7 @@
           </ng-template>
           <ng-template #unbanButton>
             <a
-              (click)="$event.stopPropagation(); unbanUser(user.id)"
+              (click)="$event.stopPropagation(); unbanUser(user.username)"
               mdbTooltip="Unban User"
               [delayShow]="500"
               [offset]="10"

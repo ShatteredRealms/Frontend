@@ -37,7 +37,7 @@ export class UserEditComponent implements OnInit {
 
   siteKey: string;
 
-  id: number;
+  username: string;
   user: User;
   allRoles: Role[] = [];
   allPermissions: UserPermission[] = [];
@@ -81,8 +81,8 @@ export class UserEditComponent implements OnInit {
   }
 
   private initUser() {
-    this.id = Number(this.route.snapshot.paramMap.get('user'));
-    this.usersService.getUser(this.id).subscribe({
+    this.username = this.route.snapshot.paramMap.get('user')!;
+    this.usersService.getUser(this.username).subscribe({
       next: (user) => {
         this.user = user;
         this.updateDetailsForm.setValue({
@@ -155,7 +155,6 @@ export class UserEditComponent implements OnInit {
     this.loadingUpdateDetails = true;
 
     this.usersService.updateUserDetails(
-      this.id,
       this.updateDetailsForm.get('username')?.value,
       this.updateDetailsForm.get('email')?.value,
       this.updateDetailsForm.get('firstName')?.value,
@@ -226,7 +225,7 @@ export class UserEditComponent implements OnInit {
     this.loadingUpdatePassword = true;
 
     this.usersService.updateUserPassword(
-      this.id,
+      this.username,
       this.updatePasswordForm.get('currentPassword')?.value,
       this.updatePasswordForm.get('newPassword')?.value,
     ).subscribe((success) => {
@@ -281,7 +280,7 @@ export class UserEditComponent implements OnInit {
 
     this.modalRef.onClose.subscribe((roles: Role[]) => {
       if (roles) {
-        this.authorizationService.addRoles(roles, this.user.id).subscribe({
+        this.authorizationService.addRoles(roles, this.user.username).subscribe({
           next: () => {
             this.notificationService.open(AlertComponent, {
               data: {
@@ -319,7 +318,7 @@ export class UserEditComponent implements OnInit {
 
     this.modalRef.onClose.subscribe((roles: Role[]) => {
       if (roles) {
-        this.authorizationService.remRoles(roles, this.user.id).subscribe({
+        this.authorizationService.remRoles(roles, this.user.username).subscribe({
           next: () => {
             this.notificationService.open(AlertComponent, {
               data: {
@@ -329,7 +328,7 @@ export class UserEditComponent implements OnInit {
               stacking: true,
               position: "top-center",
             });
-            this.user.roles = this.user.roles.filter(role1 => !roles.some(role2 => role1.id == role2.id));
+            this.user.roles = this.user.roles.filter(role1 => !roles.some(role2 => role1.name == role2.name));
           },
           error: err => {
             this.notificationService.open(AlertComponent, {

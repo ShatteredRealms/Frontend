@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserProfileComponent } from './user-profile.component';
-import {BrowserTestingModule} from "@angular/platform-browser/testing";
 import {RouterTestingModule} from "@angular/router/testing";
-import {AlertService} from "../../../_services/alert.service";
 import {AuthenticationService} from "../../_services/authentication.service";
 import {UsersService} from "../../_services/users.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -11,6 +9,7 @@ import {User} from "../../models/user.model";
 import {NewUser} from "../../_helpers/dummy.data";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {Observable, of, throwError} from 'rxjs';
+import {AlertService} from "../../_services/alert.service";
 
 describe('UsersComponent', () => {
   let component: UserProfileComponent;
@@ -50,9 +49,9 @@ describe('UsersComponent', () => {
   });
 
   describe('ngOnInit()', () => {
-    let getUserSpy: jasmine.Spy<(id: number) => Observable<any>>;
+    let getUserSpy: jasmine.Spy<(username: string) => Observable<any>>;
     beforeEach(() => {
-      spyOn(route.snapshot.paramMap, 'get').and.returnValue(user.id.toString());
+      spyOn(route.snapshot.paramMap, 'get').and.returnValue(user.username.toString());
       getUserSpy = spyOn(userService, 'getUser');
     });
 

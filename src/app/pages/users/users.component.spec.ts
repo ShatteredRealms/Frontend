@@ -52,7 +52,7 @@ describe('UsersComponent', () => {
   describe('ngOnInit()', () => {
     let getUserSpy: jasmine.Spy<(id: number) => Observable<any>>;
     beforeEach(() => {
-      spyOn(route.snapshot.paramMap, 'get').and.returnValue(user.id.toString());
+      spyOn(route.snapshot.paramMap, 'get').and.returnValue(user.username.toString());
       getUserSpy = spyOn(userService, 'getUser');
     });
 

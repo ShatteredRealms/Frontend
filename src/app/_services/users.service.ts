@@ -12,9 +12,9 @@ export class UsersService {
 
   constructor(protected http: HttpClient) { }
 
-  getUser(id: number, forceRefresh: boolean = false): Observable<any> {
+  getUser(username: string, forceRefresh: boolean = false): Observable<any> {
 
-    return this.http.get(`${environment.ACCOUNT_API_URL}/users/${id}`).pipe(map( resp => {
+    return this.http.get(`${environment.ACCOUNT_API_URL}/users/${username}`).pipe(map( resp => {
       return resp
     }));
   }
@@ -27,24 +27,24 @@ export class UsersService {
     );
   }
 
-  updateUserDetails(id: number, username: string, email: string, firstName: string, lastName: string): Observable<any> {
-    return this.http.put(`${environment.ACCOUNT_API_URL}/users/${id}`, {
+  updateUserDetails(username: string, email: string, firstName: string, lastName: string): Observable<any> {
+    return this.http.put(`${environment.ACCOUNT_API_URL}/users/${username}`, {
       username, email, firstName, lastName,
     });
   }
 
 
-  updateUserPassword(id: number, currentPassword: string, newPassword: string): Observable<any> {
-    return this.http.put(`${environment.ACCOUNT_API_URL}/users/${id}/password`, {
+  updateUserPassword(username: string, currentPassword: string, newPassword: string): Observable<any> {
+    return this.http.put(`${environment.ACCOUNT_API_URL}/users/${username}/password`, {
       currentPassword, newPassword
     });
   }
 
-  banUser(userId: number): Observable<any> {
-    return this.http.post(`${environment.ACCOUNT_API_URL}/users/${userId}/ban`, {});
+  banUser(username: string): Observable<any> {
+    return this.http.post(`${environment.ACCOUNT_API_URL}/users/${username}/ban`, {});
   }
 
-  unBanUser(userId: number): Observable<any> {
-    return this.http.post(`${environment.ACCOUNT_API_URL}/users/${userId}/unban`, {});
+  unBanUser(username: string): Observable<any> {
+    return this.http.post(`${environment.ACCOUNT_API_URL}/users/${username}/unban`, {});
   }
 }

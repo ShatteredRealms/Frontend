@@ -34,7 +34,7 @@
           <li *ngIf="isUserSignedIn()" class="nav-item dropdown" mdbDropdown>
             <a mdbDropdownToggle class="nav-link dropdown-toggle"><i class="far fa-user-circle fa-lg"></i></a>
             <div mdbDropdownMenu class="dropdown-menu dropdown-menu-dark dropdown" role="menu">
-              <a class="dropdown-item col-sm-12" [routerLink]="['/users', this.authService.currentUserValue?.id]">Profile</a>
+              <a class="dropdown-item col-sm-12" [routerLink]="['/users', this.authService.currentUserValue?.username]">Profile</a>
               <a class="dropdown-item col-sm-12" style="cursor: pointer" (click)="signOutUser()">Logout</a>
             </div>
           </li>
@@ -44,7 +44,7 @@
             <hr class="text-light"/>
             <div class="d-flex">
               <li class="nav-item text-center col-6">
-                <a class="nav-link" [routerLink]="['/users', this.authService.currentUserValue?.id]">Profile</a>
+                <a class="nav-link" [routerLink]="['/users', this.authService.currentUserValue?.username]">Profile</a>
               </li>
               <li class="nav-item text-center col-6">
                 <a class="nav-link" style="cursor: pointer" (click)="signOutUser()">Logout</a>
