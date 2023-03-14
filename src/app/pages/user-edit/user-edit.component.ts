@@ -1,20 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthenticationService} from "../../_services/authentication.service";
-import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {ReCaptchaV3Service} from "ngx-captcha";
-import {environment} from "../../../environments/environment";
-import {AlertComponent} from "../../_components/alert/alert.component";
-import {User} from "../../models/user.model";
-import {UsersService} from "../../_services/users.service";
-import {AuthorizationService} from "../../_services/authorization.service";
-import {Role} from "../../models/role.model";
-import {UserPermission} from "../../models/user-permission.model";
-import {MdbModalRef, MdbModalService} from "mdb-angular-ui-kit/modal";
-import {ModalComponent} from "../../_components/modal/modal.component";
-import {ModalSelectComponent} from "../../_components/modal-select/modal-select.component";
-import {catchError} from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
+import { ReCaptchaV3Service } from "ngx-captcha";
+import { environment } from "../../../environments/environment";
+import { AlertComponent } from "../../_components/alert/alert.component";
+import { User } from "../../models/user.model";
+import { UsersService } from "../../_services/users.service";
+import { AuthorizationService } from "../../_services/authorization.service";
+import { Role } from "../../models/role.model";
+import { UserPermission } from "../../models/user-permission.model";
+import { MdbModalRef, MdbModalService } from "mdb-angular-ui-kit/modal";
+import { ModalComponent } from "../../_components/modal/modal.component";
+import { ModalSelectComponent } from "../../_components/modal-select/modal-select.component";
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-user-edit',
@@ -53,12 +52,12 @@ export class UserEditComponent implements OnInit {
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
-    protected authService: AuthenticationService,
     protected notificationService: MdbNotificationService,
     protected reCaptchaV3Service: ReCaptchaV3Service,
     protected usersService: UsersService,
     protected authorizationService: AuthorizationService,
     protected modalService: MdbModalService,
+    protected keycloak: KeycloakService,
   ) {
   }
 
@@ -66,7 +65,7 @@ export class UserEditComponent implements OnInit {
     this.siteKey = environment.recaptcha.siteKey;
     this.initUser();
 
-    if (this.authService.hasAnyRole(['SUPER ADMIN', 'ADMIN'])) {
+    if (this.isAdmin()) {
       this.initAllPermissions();
       this.initAllRoles();
     }
@@ -111,7 +110,7 @@ export class UserEditComponent implements OnInit {
               },
               stacking: true
             })
-        } else {
+          } else {
             this.notificationService.open(AlertComponent, {
               data: {
                 message: 'Unknown server error. Please try again later.',
@@ -265,7 +264,7 @@ export class UserEditComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-    return this.authService.hasAnyRole(["SUPER ADMIN", "ADMIN"])
+    return this.keycloak.getUserRoles().some(r => ["SUPER ADMIN", "ADMIN"].includes(r));
   }
 
   openAddRolesModal() {

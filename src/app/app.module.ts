@@ -1,20 +1,18 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {AppComponent} from './app.component';
-import {AlertComponent} from './_components/alert/alert.component';
-import {HomeComponent} from './pages/home/home.component';
-import {LoginComponent} from './pages/login/login.component';
-import {AppRoutingModule} from "./app-routing.module";
-import {CommonModule} from "@angular/common";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+import { AlertComponent } from './_components/alert/alert.component';
+import { HomeComponent } from './pages/home/home.component';
+import { AppRoutingModule } from "./app-routing.module";
+import { CommonModule } from "@angular/common";
+import { HttpClientModule } from "@angular/common/http";
 import { NavComponent } from './_components/nav/nav.component';
 import { FooterComponent } from './_components/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { RegisterComponent } from './pages/register/register.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
-import {NgxCaptchaModule} from "ngx-captcha";
+import { NgxCaptchaModule } from "ngx-captcha";
 
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 import { MdbAutocompleteModule } from 'mdb-angular-ui-kit/autocomplete';
@@ -48,8 +46,7 @@ import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { MdbTimepickerModule } from 'mdb-angular-ui-kit/timepicker';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
-import {UsersTableComponent} from "./_components/users-table/users-table.component";
-import {JwtInterceptor} from "./_helpers/jwt.interceptor";
+import { UsersTableComponent } from "./_components/users-table/users-table.component";
 import { UserEditComponent } from './pages/user-edit/user-edit.component';
 import { RolesTableComponent } from './_components/roles-table/roles-table.component';
 import { PermissionsTableComponent } from './_components/permissions-table/permissions-table.component';
@@ -63,16 +60,31 @@ import { ChatChannelsTableComponent } from './_components/chat-channels-table/ch
 import { NewChatChannelComponent } from './pages/chat/new-chat-channel/new-chat-channel.component';
 import { EditChatChannelComponent } from './pages/chat/edit-chat-channel/edit-chat-channel.component';
 import { ViewChatChannelComponent } from './pages/chat/view-chat-channel/view-chat-channel.component';
+import { KeycloakService } from 'keycloak-angular';
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:8080',
+        realm: 'your-realm',
+        clientId: 'your-client-id'
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/assets/silent-check-sso.html'
+      }
+    });
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     AlertComponent,
     HomeComponent,
-    LoginComponent,
     NavComponent,
     FooterComponent,
-    RegisterComponent,
     UserProfileComponent,
     AdminDashboardComponent,
     UsersTableComponent,
@@ -134,11 +146,12 @@ import { ViewChatChannelComponent } from './pages/chat/view-chat-channel/view-ch
   ],
   providers: [
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
       multi: true,
-    },
+      deps: [KeycloakService]
+    }
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

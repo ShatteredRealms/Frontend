@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {ChatChannel, getChatChannelBadgeClasses} from "../../../models/chat-channel.model";
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {ChatChannelService} from "../../../_services/chat-channel.service";
-import {AuthenticationService} from "../../../_services/authentication.service";
-import {environment} from "../../../../environments/environment";
-import {ChatService} from "../../../generated/chat_pb_service";
-import {ChannelIdMessage, ChatMessage} from "../../../generated/chat_pb";
-import {grpc} from "@improbable-eng/grpc-web";
-import {MdbNotificationRef, MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {AlertComponent} from "../../../_components/alert/alert.component";
+import { Component, OnInit } from '@angular/core';
+import { ChatChannel, getChatChannelBadgeClasses } from "../../../models/chat-channel.model";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { ChatChannelService } from "../../../_services/chat-channel.service";
+import { environment } from "../../../../environments/environment";
+import { ChatService } from "../../../generated/chat_pb_service";
+import { ChannelIdMessage, ChatMessage } from "../../../generated/chat_pb";
+import { grpc } from "@improbable-eng/grpc-web";
+import { MdbNotificationRef, MdbNotificationService } from "mdb-angular-ui-kit/notification";
+import { AlertComponent } from "../../../_components/alert/alert.component";
 import Request = grpc.Request;
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-view-chat-channel',
@@ -40,9 +40,9 @@ export class ViewChatChannelComponent implements OnInit {
 
   constructor(
     private chatChannelService: ChatChannelService,
-    private authenticationService: AuthenticationService,
     private notificationService: MdbNotificationService,
     private route: ActivatedRoute,
+    private keycloak: KeycloakService,
     private router: Router,
   ) {
   }
@@ -72,7 +72,7 @@ export class ViewChatChannelComponent implements OnInit {
       request: request,
       host: environment.CHAT_API_BASE_URL,
       metadata: {
-        Authorization: `Bearer ${this.authenticationService.currentUserValue?.token}`,
+        Authorization: `Bearer ${this.keycloak.getToken()}`,
       },
       onMessage: (message: ChatMessage) => {
         console.log('msg:', message)
@@ -100,7 +100,7 @@ export class ViewChatChannelComponent implements OnInit {
       },
       error: (err) => {
         console.log('error', err);
-        if(this.chatAlert) {
+        if (this.chatAlert) {
           this.chatAlert.close();
         }
 

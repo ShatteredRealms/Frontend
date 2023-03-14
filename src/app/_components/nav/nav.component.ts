@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthenticationService} from "../../_services/authentication.service";
-import {fromEvent} from "rxjs";
-import {debounceTime, map, startWith} from "rxjs/operators";
+import { ActivatedRoute, Router } from "@angular/router";
+import { fromEvent } from "rxjs";
+import { debounceTime, map, startWith } from "rxjs/operators";
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-nav',
@@ -11,15 +11,17 @@ import {debounceTime, map, startWith} from "rxjs/operators";
 })
 export class NavComponent implements OnInit {
   links = [
-    {title: 'Home', link: '/'},
-    {title: 'Login', link: '/login'},
+    { title: 'Home', link: '/' },
+    { title: 'Login', link: '/login' },
   ];
 
   isScreenSmall$: any;
 
-  constructor(protected route: ActivatedRoute,
-              protected router: Router,
-              public authService: AuthenticationService) { }
+  constructor(
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected keycloak: KeycloakService
+  ) { }
 
   ngOnInit(): void {
     // Checks if screen size is less than 1024 pixels
@@ -33,12 +35,18 @@ export class NavComponent implements OnInit {
     this.isScreenSmall$ = screenSizeChanged$.pipe(startWith(checkScreenSize()))
   }
 
-  isUserSignedIn(): boolean {
-    return this.authService.currentUserValue != undefined;
+  isUserSignedIn(): Promise<boolean> {
+    return this.keycloak.isLoggedIn();
   }
 
   signOutUser(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']).then();
+    this.keycloak.logout();
+    this.router.navigate(['/']);
+  }
+
+  userProfile() {
+    this.keycloak.loadUserProfile().then(profile => {
+      this.router.navigate(['/users', profile.username])
+    });
   }
 }

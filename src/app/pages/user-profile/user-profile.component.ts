@@ -1,12 +1,10 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
-import {User} from "../../models/user.model";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthenticationService} from "../../_services/authentication.service";
-import {UsersService} from "../../_services/users.service";
-import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {AlertComponent} from "../../_components/alert/alert.component";
-import {getRoleBadgeClasses, Role} from "../../models/role.model";
-import {D} from "@angular/cdk/keycodes";
+import { Component, OnInit } from '@angular/core';
+import { User } from "../../models/user.model";
+import { ActivatedRoute, Router } from "@angular/router";
+import { UsersService } from "../../_services/users.service";
+import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
+import { AlertComponent } from "../../_components/alert/alert.component";
+import { getRoleBadgeClasses, Role } from "../../models/role.model";
 
 @Component({
   selector: 'app-user-profile',
@@ -18,10 +16,9 @@ export class UserProfileComponent implements OnInit {
   loading: boolean = true;
 
   constructor(protected route: ActivatedRoute,
-              protected router: Router,
-              protected notificationService: MdbNotificationService,
-              protected authService: AuthenticationService,
-              protected usersService: UsersService) {
+    protected router: Router,
+    protected notificationService: MdbNotificationService,
+    protected usersService: UsersService) {
   }
 
   ngOnInit(): void {

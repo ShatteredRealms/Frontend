@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {NavigationEnd, Router} from "@angular/router";
-import {AuthenticationService} from "./_services/authentication.service";
-import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {AlertComponent} from "./_components/alert/alert.component";
+import { Component } from '@angular/core';
+import { NavigationEnd, Router } from "@angular/router";
+import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
+import { AlertComponent } from "./_components/alert/alert.component";
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-root',
@@ -11,39 +11,16 @@ import {AlertComponent} from "./_components/alert/alert.component";
 })
 export class AppComponent {
   constructor(
-    private router: Router,
-    private authService: AuthenticationService,
-    private notificationService: MdbNotificationService,
+    protected router: Router,
+    protected keycloak: KeycloakService,
+    protected notificationService: MdbNotificationService,
   ) {
-    setInterval(() => {
-      this.logoutExpired()
-    }, 15000);
-
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
-        this.logoutExpired(true);
+        if (this.keycloak.isTokenExpired()) {
+          this.keycloak.logout()
+        }
       }
     })
-  }
-
-  logoutExpired(shouldRefresh: boolean = false): void {
-    if (this.authService.currentUserValue != null) {
-      if (this.authService.isExpired()) {
-        this.authService.logout();
-        this.router.navigate(['/login']).then(() => {
-          this.notificationService.open(AlertComponent, {
-            data: {
-              message: 'You have been logged out due to being inactive',
-              color: 'warning',
-              fade: 'true',
-            },
-            stacking: true,
-            position: "top-center",
-          })
-        })
-      } else if (this.authService.expiresWithin(600) && shouldRefresh) {
-        this.authService.refresh()
-      }
-    }
   }
 }

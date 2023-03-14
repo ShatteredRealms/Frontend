@@ -1,50 +1,38 @@
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {AuthenticationService} from '../_services/authentication.service';
-import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {AlertComponent} from "../_components/alert/alert.component";
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard extends KeycloakAuthGuard {
   constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService,
-    private notificationService: MdbNotificationService,
+    protected readonly router: Router,
+    protected readonly keycloak: KeycloakService
   ) {
+    super(router, keycloak);
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const currentUser = this.authenticationService.currentUserValue;
-    if (currentUser) {
-      if (!this.authenticationService.hasAnyRole(route.data['roles'])) {
-        this.router.navigate(['/']).then(() =>
-          this.notificationService.open(AlertComponent, {
-            data: {
-              message: 'Access denied',
-              color: 'warning',
-            },
-            stacking: true,
-            position: "top-center",
-          })
-        );
+  public async isAccessAllowed(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ) {
+    // Force the user to log in if currently unauthenticated.
+    if (!this.authenticated) {
+      await this.keycloak.login({
+        redirectUri: window.location.origin + state.url
+      });
+    }
 
-        return false;
-      }
+    // Get the roles required from the route.
+    const requiredRoles = route.data.roles;
 
+    // Allow the user to proceed if no additional roles are required to access the route.
+    if (!(requiredRoles instanceof Array) || requiredRoles.length === 0) {
       return true;
     }
 
-    this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
-    this.notificationService.open(AlertComponent, {
-      data: {
-        message: 'Please login to view this page',
-        color: 'info',
-      },
-      stacking: true,
-      position: "top-center",
-    })
-    return false;
+    // Allow the user to proceed if all the required roles are present.
+    return requiredRoles.every((role) => this.roles.includes(role));
   }
 }
