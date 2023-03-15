@@ -1,27 +1,28 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { KeycloakService } from '../_services/keycloak.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard extends KeycloakAuthGuard {
+export class AuthGuard implements CanActivate {
   constructor(
     protected readonly router: Router,
-    protected readonly keycloak: KeycloakService
+    protected readonly keycloak: KeycloakService,
   ) {
-    super(router, keycloak);
   }
 
-  public async isAccessAllowed(
+  public canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ) {
     // Force the user to log in if currently unauthenticated.
-    if (!this.authenticated) {
-      await this.keycloak.login({
+    if (!this.keycloak.instance.authenticated) {
+      this.keycloak.login({
         redirectUri: window.location.origin + state.url
       });
+
+      return false;
     }
 
     // Get the roles required from the route.
@@ -32,7 +33,9 @@ export class AuthGuard extends KeycloakAuthGuard {
       return true;
     }
 
+    const roles = this.keycloak.getUserRoles();
+
     // Allow the user to proceed if all the required roles are present.
-    return requiredRoles.every((role) => this.roles.includes(role));
+    return requiredRoles.every((role) => roles.includes(role));
   }
 }

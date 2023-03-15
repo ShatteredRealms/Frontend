@@ -193,7 +193,7 @@ export class MdbAutocompleteDirective implements OnDestroy, ControlValueAccessor
         ? this.mdbAutocomplete.displayValue(option.value)
         : option.value;
     this._setInputValue(value);
-    this._onChange(value);
+    this._onChange(option.value);
 
     this.mdbAutocomplete.selected.emit({
       component: this.mdbAutocomplete,

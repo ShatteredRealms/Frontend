@@ -36,14 +36,13 @@ const browseOutRight = (options: MdbAnimationOptions): AnimationReferenceMetadat
         '{{duration}}ms {{delay}}ms',
         keyframes([
           style({
-            transform: 'transform: translateX(0%) rotateY(0deg) rotateX(0deg)',
+            transform: 'translateX(0%) rotateY(0deg) rotateX(0deg)',
             zIndex: 999,
             easing: 'ease',
             offset: 0,
           }),
           style({
-            transform:
-              'transform: translateX(-105%) rotateY(35deg) rotateX(10deg) translateZ(-10px)',
+            transform: 'translateX(-105%) rotateY(35deg) rotateX(10deg) translateZ(-10px)',
             zIndex: -1,
             easing: 'ease',
             offset: 0.5,

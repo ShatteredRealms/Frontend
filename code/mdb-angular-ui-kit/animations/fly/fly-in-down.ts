@@ -48,17 +48,17 @@ const flyInDown = (options: MdbAnimationOptions): AnimationReferenceMetadata => 
             offset: 0.6,
           }),
           style({
-            transform: 'transform: translate3d(0, -10px, 0)',
+            transform: 'translate3d(0, -10px, 0)',
             easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
             offset: 0.75,
           }),
           style({
-            transform: 'transform: translate3d(0, 5px, 0)',
+            transform: 'translate3d(0, 5px, 0)',
             easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
             offset: 0.9,
           }),
           style({
-            transform: 'transform: translate3d(0, 0, 0)',
+            transform: 'translate3d(0, 0, 0)',
             easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
             offset: 1,
           }),

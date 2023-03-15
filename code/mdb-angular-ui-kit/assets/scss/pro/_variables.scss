@@ -24,7 +24,7 @@ $sidenav-box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0
 $sidenav-data-hidden-false-transform: translateX(0%) !default;
 $sidenav-data-color-light-color: rgba(255, 255, 255, 0.6) !default;
 $sidenav-data-right-true-transform: translateX(100%) !default;
-$sidenav-data-slim-collapsed-true-width: 70px !default;
+$sidenav-data-slim-collapsed-true-width: 77px !default;
 
 $sidenav-menu-padding: 0.2rem !default;
 
@@ -53,9 +53,19 @@ $sidenav-backdrop-background-color: rgba(0, 0, 0, 0.1) !default;
 
 $sidenav-light-color: $sidenav-data-color-light-color !default;
 
+$sidenav-subheading-font-size: 0.6rem !default;
+$sidenav-subheading-padding-y: 1rem !default;
+$sidenav-subheading-padding-x: 1.5rem !default;
+$sidenav-subheading-fw: 700 !default;
+
+$sidenav-sm-link-pt: 0.4rem !default;
+$sidenav-sm-link-pb: $sidenav-sm-link-pt !default;
+
 // Rating
 
 $rating-icon-padding: 0.25rem !default;
+
+// Timepicker
 
 // Timepicker
 
@@ -71,7 +81,7 @@ $timepicker-elements-border-top-right-radius: 0.6rem !default;
 $timepicker-elements-border-top-left-radius: 0.6rem !default;
 $timepicker-elements-media-border-bottom-left-radius: 0.5rem !default;
 
-$timepicker-head-background-color: $blue-accent-400 !default;
+$timepicker-head-background-color: $primary !default;
 $timepicker-head-height: 100px !default;
 $timepicker-head-border-top-right-radius: 0.5rem !default;
 $timepicker-head-border-top-left-radius: 0.5rem !default;
@@ -89,7 +99,7 @@ $timepicker-button-font-weight: 500 !default;
 $timepicker-button-line-height: 40px !default;
 $timepicker-button-border-radius: 10px !default;
 $timepicker-button-letter-spacing: 0.1rem !default;
-$timepicker-button-color: $blue-accent-400 !default;
+$timepicker-button-color: $primary !default;
 $timepicker-button-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
   box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms !default;
 $timepicker-button-hover-background-color: rgba(0, 0, 0, 0.08) !default;
@@ -132,7 +142,7 @@ $timepicker-time-tips-inner-height: 32px !default;
 $timepicker-time-tips-inner-font-size: 1.1rem !default;
 $timepicker-time-tips-inner-font-weight: 300 !default;
 $timepicker-time-tips-inner-active-color: $white !default;
-$timepicker-time-tips-inner-active-background-color: $blue-accent-400 !default;
+$timepicker-time-tips-inner-active-background-color: $primary !default;
 $timepicker-time-tips-inner-active-font-weight: 400 !default;
 $timepicker-time-tips-inner-disabled-color: #b3afaf !default;
 
@@ -158,9 +168,9 @@ $timepicker-item-middle-dot-width: 6px !default;
 $timepicker-item-middle-dot-height: $timepicker-item-middle-dot-width !default;
 $timepicker-item-middle-dot-transform: translate(-50%, -50%) !default;
 $timepicker-item-middle-dot-border-radius: 50% !default;
-$timepicker-item-middle-dot-background-color: $blue-accent-400 !default;
+$timepicker-item-middle-dot-background-color: $primary !default;
 
-$timepicker-hand-pointer-background-color: $blue-accent-400 !default;
+$timepicker-hand-pointer-background-color: $primary !default;
 $timepicker-hand-pointer-bottom: 50% !default;
 $timepicker-hand-pointer-height: 40% !default;
 $timepicker-hand-pointer-left: calc(50% - 1px) !default;
@@ -178,7 +188,7 @@ $timepicker-circle-top: -21px !default;
 $timepicker-circle-left: -15px !default;
 $timepicker-circle-width: 4px !default;
 $timepicker-circle-border-width: 14px !default;
-$timepicker-circle-border-color: $blue-accent-400 !default;
+$timepicker-circle-border-color: $primary !default;
 $timepicker-circle-height: 4px !default;
 
 $timepicker-hour-mode-color: $white !default;
@@ -205,14 +215,14 @@ $timepicker-icon-down-bottom: -47px !default;
 
 $timepicker-icon-btn-width: 30px !default;
 $timepicker-icon-btn-height: 30px !default;
-$timepicker-input-color: $blue-accent-400 !default;
+$timepicker-input-color: $primary !default;
 
 $timepicker-btn-icon-right: -10px !default;
 $timepicker-btn-icon-transform: translate(-50%, -50%) !default;
 $timepicker-btn-icon-top: 50% !default;
 $timepicker-btn-icon-transition: all 0.3s ease !default;
-$timepicker-btn-icon-hover-color: $blue-accent-400 !default;
-$timepicker-btn-icon-focus-color: $blue-accent-400 !default;
+$timepicker-btn-icon-hover-color: $primary !default;
+$timepicker-btn-icon-focus-color: $primary !default;
 
 // Lightbox
 
@@ -271,7 +281,7 @@ $lightbox-disabled-scroll-media-padding-right: 17px !default;
 
 $datepicker-toggle-right: -10px !default;
 $datepicker-toggle-top: 50% !default;
-$datepicker-toggle-focus-color: $blue-accent-400 !default;
+$datepicker-toggle-focus-color: $primary !default;
 
 $datepicker-backdrop-background-color: rgba(0, 0, 0, 0.4) !default;
 
@@ -298,7 +308,7 @@ $datepicker-modal-container-media-day-cell-height: $datepicker-modal-container-m
 
 $datepicker-header-height: 120px !default;
 $datepicker-header-padding-x: 24px !default;
-$datepicker-header-background-color: $blue-accent-400 !default;
+$datepicker-header-background-color: $primary !default;
 $datepicker-header-border-radius: 0.5rem 0.5rem 0 0 !default;
 
 $datepicker-title-height: 32px !default;
@@ -365,10 +375,10 @@ $datepicker-day-heading-font-weight: 400 !default;
 
 $datepicker-cell-disabled-color: #ccc !default;
 $datepicker-cell-hover-background-color: #d3d3d3 !default;
-$datepicker-cell-selected-background-color: $blue-accent-400 !default;
+$datepicker-cell-selected-background-color: $primary !default;
 $datepicker-cell-selected-color: $white !default;
 $datepicker-cell-focused-background-color: #eee !default;
-$datepicker-cell-focused-selected-background-color: $blue-accent-400 !default;
+$datepicker-cell-focused-selected-background-color: $primary !default;
 $datepicker-cell-border-width: 1px !default;
 $datepicker-cell-border-color: $black !default;
 
@@ -397,7 +407,7 @@ $datepicker-footer-height: 56px !default;
 $datepicker-footer-padding-x: $datepicker-yearview-content-padding-x !default;
 
 $datepicker-footer-btn-background-color: $white !default;
-$datepicker-footer-btn-color: $blue-accent-400 !default;
+$datepicker-footer-btn-color: $primary !default;
 $datepicker-footer-btn-padding-x: 10px !default;
 $datepicker-footer-btn-font-size: 0.8rem !default;
 $datepicker-footer-btn-font-weight: 500 !default;
@@ -417,8 +427,9 @@ $popconfirm-border-radius: 0.5rem !default;
 $popconfirm-popover-width: 300px !default;
 $popconfirm-popover-margin: 5px !default;
 $popconfirm-modal-width: $popconfirm-popover-width !default;
-$popconfirm-buttons-container-btn-ml: 0.75rem !default;
+$popconfirm-buttons-container-btn-ml: 0.5rem !default;
 $popconfirm-backdrop-background-color: rgba(0, 0, 0, 0.4) !default;
+$popconfirm-border: 1px solid #f5f5f5 !default;
 
 // Datatable
 
@@ -505,8 +516,8 @@ $perfectScrollbar-ps-ps__thumb-x-y-color: #aaa !default;
 // Chips
 $chip-height: 32px !default;
 $chip-font-size: 13px !default;
-$chip-font-weight: 500 !default;
-$chip-font-color: rgba($black, 0.6) !default;
+$chip-font-weight: 400 !default;
+$chip-font-color: $body-color !default;
 $chip-line-height: $chip-height !default;
 $chip-padding-right: 12px !default;
 $chip-br: 16px !default;
@@ -524,7 +535,7 @@ $chip-close-padding-left: 8px !default;
 $chips-margin-bottom: 30px !default;
 $chips-min-height: 45px !default;
 $chips-padding-bottom: 1rem !default;
-$chips-input-font-color: rgba($black, 0.6) !default;
+$chips-input-font-color: $body-color !default;
 $chips-input-font-size: 13px !default;
 $chips-input-font-weight: 500 !default;
 $chips-input-height: $chip-height !default;
@@ -610,11 +621,11 @@ $form-outline-select-option-pr: 16px !default;
 $form-outline-select-option-font-size: 1rem !default;
 $form-outline-select-option-font-weight: 400 !default;
 
-$form-outline-select-option-hover-not-disabled-bgc: #ddd !default;
-$form-outline-select-option-active-bgc: #ddd !default;
-$form-outline-select-option-selected-active-bgc: #ddd !default;
+$form-outline-select-option-hover-not-disabled-bgc: rgba(0, 0, 0, 0.048) !default;
+$form-outline-select-option-active-bgc: rgba(0, 0, 0, 0.048) !default;
+$form-outline-select-option-selected-active-bgc: rgba(0, 0, 0, 0.048) !default;
 $form-outline-select-option-selected-disabled-color: #9e9e9e !default;
-$form-outline-select-option-selected-bgc: #eee !default;
+$form-outline-select-option-selected-bgc: rgba(0, 0, 0, 0.02) !default;
 $form-outline-select-option-disabled-color: #9e9e9e !default;
 
 $form-outline-select-option-text-form-check-input-mr: 10px !default;

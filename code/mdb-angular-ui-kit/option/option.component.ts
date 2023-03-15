@@ -12,6 +12,8 @@ import {
   ChangeDetectorRef,
   EventEmitter,
   Output,
+  AfterViewChecked,
+  OnDestroy,
 } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { MdbOptionGroupComponent } from './option-group.component';
@@ -34,7 +36,7 @@ export const MDB_OPTION_GROUP = new InjectionToken<MdbOptionGroupComponent>('MDB
   selector: 'mdb-option',
   templateUrl: 'option.component.html',
 })
-export class MdbOptionComponent implements OnInit {
+export class MdbOptionComponent implements OnInit, AfterViewChecked, OnDestroy {
   @Input() value: any;
 
   hidden = false;
@@ -69,10 +71,12 @@ export class MdbOptionComponent implements OnInit {
 
   private _selected = false;
   private _active = false;
+  private _previousLabelValue = '';
   _multiple = false;
 
   clicked = false;
 
+  readonly _labelChange = new Subject<void>();
   clickSource: Subject<MdbOptionComponent> = new Subject<MdbOptionComponent>();
   click$: Observable<MdbOptionComponent> = this.clickSource.asObservable();
 
@@ -139,6 +143,25 @@ export class MdbOptionComponent implements OnInit {
     if (this._parent && this._parent.multiple) {
       this._multiple = true;
     }
+  }
+
+  ngAfterViewChecked(): void {
+    // We need to let parent component know about dynamic label changes, so it can trigger
+    // change detection and update value displayed in input. We only need to do that for
+    // selected options, because other options will be hidden inside the dropdown, and their
+    // labels will be updated automatically when dropdown is opened.
+    if (this._selected) {
+      const label = this.getLabel();
+
+      if (label !== this._previousLabelValue) {
+        this._previousLabelValue = label;
+        this._labelChange.next();
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this._labelChange.complete();
   }
 
   select(): void {

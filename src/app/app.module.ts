@@ -13,6 +13,14 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { NgxCaptchaModule } from "ngx-captcha";
+import { ModalComponent } from './_components/modal/modal.component';
+import { ModalSelectComponent } from './_components/modal-select/modal-select.component';
+import { FilterFromPipe } from './_helpers/filter-from.pipe';
+import { ChatChannelsTableComponent } from './_components/chat-channels-table/chat-channels-table.component';
+import { NewChatChannelComponent } from './pages/chat/new-chat-channel/new-chat-channel.component';
+import { EditChatChannelComponent } from './pages/chat/edit-chat-channel/edit-chat-channel.component';
+import { ViewChatChannelComponent } from './pages/chat/view-chat-channel/view-chat-channel.component';
+import { RouterModule } from '@angular/router';
 
 import { MdbAccordionModule } from 'mdb-angular-ui-kit/accordion';
 import { MdbAutocompleteModule } from 'mdb-angular-ui-kit/autocomplete';
@@ -46,36 +54,10 @@ import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { MdbTimepickerModule } from 'mdb-angular-ui-kit/timepicker';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
-import { UsersTableComponent } from "./_components/users-table/users-table.component";
-import { UserEditComponent } from './pages/user-edit/user-edit.component';
-import { RolesTableComponent } from './_components/roles-table/roles-table.component';
-import { PermissionsTableComponent } from './_components/permissions-table/permissions-table.component';
-import { ModalComponent } from './_components/modal/modal.component';
-import { ModalSelectComponent } from './_components/modal-select/modal-select.component';
-import { FilterFromPipe } from './_helpers/filter-from.pipe';
-import { ViewRoleComponent } from './pages/roles/view-role/view-role.component';
-import { NewRoleComponent } from './pages/roles/new-role/new-role.component';
-import { EditRoleComponent } from './pages/roles/edit-role/edit-role.component';
-import { ChatChannelsTableComponent } from './_components/chat-channels-table/chat-channels-table.component';
-import { NewChatChannelComponent } from './pages/chat/new-chat-channel/new-chat-channel.component';
-import { EditChatChannelComponent } from './pages/chat/edit-chat-channel/edit-chat-channel.component';
-import { ViewChatChannelComponent } from './pages/chat/view-chat-channel/view-chat-channel.component';
-import { KeycloakService } from 'keycloak-angular';
+import { KeycloakService } from './_services/keycloak.service';
 
-function initializeKeycloak(keycloak: KeycloakService) {
-  return () =>
-    keycloak.init({
-      config: {
-        url: 'http://localhost:8080',
-        realm: 'your-realm',
-        clientId: 'your-client-id'
-      },
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri:
-          window.location.origin + '/assets/silent-check-sso.html'
-      }
-    });
+export function initKeycloak(keycloak: KeycloakService) {
+  return () => keycloak.init();
 }
 
 @NgModule({
@@ -87,16 +69,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
     FooterComponent,
     UserProfileComponent,
     AdminDashboardComponent,
-    UsersTableComponent,
-    UserEditComponent,
-    RolesTableComponent,
-    PermissionsTableComponent,
     ModalComponent,
     ModalSelectComponent,
     FilterFromPipe,
-    ViewRoleComponent,
-    NewRoleComponent,
-    EditRoleComponent,
     ChatChannelsTableComponent,
     NewChatChannelComponent,
     EditChatChannelComponent,
@@ -106,7 +81,12 @@ function initializeKeycloak(keycloak: KeycloakService) {
     BrowserModule,
     AppRoutingModule,
     CommonModule,
+    RouterModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxCaptchaModule,
     MdbAccordionModule,
     MdbAutocompleteModule,
     MdbCarouselModule,
@@ -139,19 +119,18 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MdbTimepickerModule,
     MdbTooltipModule,
     MdbValidationModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxCaptchaModule,
   ],
   providers: [
+    KeycloakService,
     {
       provide: APP_INITIALIZER,
-      useFactory: initializeKeycloak,
+      useFactory: initKeycloak,
+      deps: [KeycloakService],
       multi: true,
-      deps: [KeycloakService]
     }
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
+
+

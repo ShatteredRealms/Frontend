@@ -1,4 +1,4 @@
-// package: sro.accounts
+// package: sro
 // file: health.proto
 
 var health_pb = require("./health_pb");
@@ -7,7 +7,7 @@ var grpc = require("@improbable-eng/grpc-web").grpc;
 
 var HealthService = (function () {
   function HealthService() {}
-  HealthService.serviceName = "sro.accounts.HealthService";
+  HealthService.serviceName = "sro.HealthService";
   return HealthService;
 }());
 

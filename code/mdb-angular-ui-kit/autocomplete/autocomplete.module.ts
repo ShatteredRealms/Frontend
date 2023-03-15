@@ -13,4 +13,4 @@ import { OverlayModule } from '@angular/cdk/overlay';
   declarations: [MdbAutocompleteComponent, MdbAutocompleteDirective],
   exports: [MdbAutocompleteComponent, MdbAutocompleteDirective, MdbOptionModule],
 })
-export class MdbAutocompleteModule {}
+export class MdbAutocompleteModule { }

@@ -14,8 +14,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { fromEvent, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { fromEvent, merge, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { MdbCollapseDirective } from 'mdb-angular-ui-kit/collapse';
 import { MdbSidenavLayoutComponent } from './sidenav-loyaut.component';
 import { MdbSidenavComponent } from './sidenav.component';
@@ -104,18 +104,22 @@ export class MdbSidenavItemComponent implements AfterViewInit, AfterContentInit,
         .subscribe(() => this.setActiveElement(child));
     });
 
-    fromEvent(this._sidenavLink.nativeElement, 'click')
-      .pipe(takeUntil(this._destroy$))
-      .subscribe(() => {
-        if (this._sidenav.accordion) {
-          this._sidenav.closeOtherCollapseItems(this.collapse);
-        }
-        this.collapse.toggle();
-        if (this._sidenav.slimCollapsed && !this._isSlimTransitioning) {
-          this._tempSlim = true;
-          this._sidenav.setSlim(false);
-        }
-      });
+    const clickEvent$ = fromEvent(this._sidenavLink.nativeElement, 'click');
+    const keydownEvent$ = fromEvent(this._sidenavLink.nativeElement, 'keydown').pipe(
+      filter((event: KeyboardEvent) => event.key === 'Enter')
+    );
+
+    const pressLinkEvents$ = merge(clickEvent$, keydownEvent$).pipe(takeUntil(this._destroy$));
+    pressLinkEvents$.subscribe(() => {
+      if (this._sidenav.accordion) {
+        this._sidenav.closeOtherCollapseItems(this.collapse);
+      }
+      this.collapse.toggle();
+      if (this._sidenav.slimCollapsed && !this._isSlimTransitioning) {
+        this._tempSlim = true;
+        this._sidenav.setSlim(false);
+      }
+    });
   }
 
   ngOnDestroy(): void {

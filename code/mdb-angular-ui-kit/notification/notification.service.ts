@@ -51,21 +51,36 @@ export class MdbNotificationService {
     }
 
     if (this.config.autohide) {
-      this.timeout = setTimeout(() => {
-        container._hidden.pipe(first()).subscribe(() => {
-          if (this.config.stacking) {
-            this.updateToast(toastRef);
-          }
-          overlayRef.detach();
-          overlayRef.dispose();
-        });
-
-        container.animationState = 'hidden';
-        container.detectChanges();
-      }, this.config.delay);
+      this.autohide(overlayRef, container, toastRef);
     }
 
     return toastRef;
+  }
+
+  autohide<T>(
+    overlayRef: OverlayRef,
+    container: MdbNotificationContainerComponent,
+    toastRef: MdbNotificationRef<T>
+  ): void {
+    this.timeout = setTimeout(() => {
+      if (container.hover) {
+        container._mouseleave.pipe(first()).subscribe(() => {
+          this.autohide(overlayRef, container, toastRef);
+        });
+        return;
+      }
+
+      container._hidden.pipe(first()).subscribe(() => {
+        if (this.config.stacking) {
+          this.updateToast(toastRef);
+        }
+        overlayRef.detach();
+        overlayRef.dispose();
+      });
+
+      container.animationState = 'hidden';
+      container.detectChanges();
+    }, this.config.delay);
   }
 
   updateToast(toastRef): void {
@@ -169,7 +184,7 @@ export class MdbNotificationService {
       this._cfr
     );
     const containerRef = overlayRef.attach(portal);
-    containerRef.instance._config = config;
+    containerRef.instance.config = config;
     return containerRef.instance;
   }
 

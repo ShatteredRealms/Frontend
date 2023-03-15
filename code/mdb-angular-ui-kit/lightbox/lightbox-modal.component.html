@@ -4,8 +4,8 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-  <div class="lightbox-gallery-left-tools">
-    <p class="lightbox-gallery-counter">{{ index + 1 }} / {{ total }}</p>
+  <div *ngIf="this.lightboxItems.length > 1" class="lightbox-gallery-left-tools">
+    <p class="lightbox-gallery-counter">{{ index + 1 }} / {{ lightboxItems.length }}</p>
   </div>
   <div class="lightbox-gallery-right-tools">
     <button
@@ -22,7 +22,7 @@
       class="lightbox-gallery-button lightbox-gallery-zoom-btn"
       [ngClass]="{ 'fontawesome-pro': lightbox.fontAwesome === 'pro' }"
       aria-label="Zoom in"
-      (click)="zoom()"
+      (click)="toggleZoom()"
     ></button>
     <button
       type="button"
@@ -45,17 +45,22 @@
         #image
         draggable="false"
         @fade
-        (load)="load()"
+        (load)="load(index)"
         (mousedown)="onMousedown($event)"
         (mouseup)="onMouseup($event)"
         (mousemove)="onMousemove($event)"
+        (swipeleft)="slide('right')"
+        (swiperight)="slide('left')"
         (wheel)="onWheel($event)"
+        (touchmove)="onTouchMove($event.touches)"
+        (touchstart)="onTouchStart($event.touches)"
+
       />
     </div>
   </ng-container>
 </div>
 
-<div #leftArrow class="lightbox-gallery-arrow-left" style="opacity: 1">
+<div *ngIf="lightboxItems.length > 1" #leftArrow class="lightbox-gallery-arrow-left" style="opacity: 1">
   <button
     type="button"
     #btnPrevious
@@ -65,7 +70,7 @@
     [ngClass]="{ 'fontawesome-pro': lightbox.fontAwesome === 'pro' }"
   ></button>
 </div>
-<div #rightArrow class="lightbox-gallery-arrow-right" style="opacity: 1">
+<div *ngIf="lightboxItems.length > 1" #rightArrow class="lightbox-gallery-arrow-right" style="opacity: 1">
   <button
     type="button"
     #btnNext

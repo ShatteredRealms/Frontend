@@ -105,7 +105,8 @@ export class MdbPopconfirmService {
 
     const positionStrategy = this._overlayPositionBuilder
       .flexibleConnectedTo(this._element)
-      .withPositions(this._getPosition());
+      .withPositions(this._getPosition())
+      .withPush(false);
 
     return positionStrategy;
   }
@@ -269,7 +270,7 @@ export class MdbPopconfirmService {
     componentOrTemplate: ComponentType<T> | TemplateRef<T>,
     container: MdbPopconfirmContainerComponent
   ): MdbPopconfirmRef<T> {
-    const popconfirmRef = new MdbPopconfirmRef(this._overlayRef);
+    const popconfirmRef = new MdbPopconfirmRef(this._overlayRef, container);
 
     if (componentOrTemplate instanceof TemplateRef) {
       container.attachTemplatePortal(

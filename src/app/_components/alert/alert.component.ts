@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {MdbNotificationRef} from 'mdb-angular-ui-kit/notification';
-import {NavigationEnd, Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { MdbNotificationRef } from 'mdb-angular-ui-kit/notification';
+import { NavigationEnd, Router } from "@angular/router";
 
 @Component({
   selector: 'app-alert',

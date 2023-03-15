@@ -23,4 +23,4 @@ import { FormsModule } from '@angular/forms';
     MdbTableDirective,
   ],
 })
-export class MdbTableModule {}
+export class MdbTableModule { }

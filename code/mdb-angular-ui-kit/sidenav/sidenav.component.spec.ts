@@ -30,7 +30,9 @@ describe('MDB Sidenav', () => {
   let sidenavItem: QueryList<MdbSidenavItemComponent>;
   let testComponent: TestSidenavComponent;
   let sidenavComponent: MdbSidenavComponent;
-  let collapseElements: QueryList<MdbCollapseDirective>;
+  let sidenavEl: HTMLElement;
+  let collapseElements: NodeListOf<HTMLElement>;
+  let sidenavBackdropEl: HTMLElement;
 
   function createComponent<T>(component: Type<T>, providers: Provider[] = []): ComponentFixture<T> {
     TestBed.configureTestingModule({
@@ -57,7 +59,9 @@ describe('MDB Sidenav', () => {
     secondCollapse = testComponent.secondCollapse;
     sidenavComponent = testComponent.sidenavComponent;
     sidenavToggle = testComponent.sidenavToggle;
-    collapseElements = testComponent.collapseElements;
+    sidenavEl = document.querySelector('.sidenav') as HTMLElement;
+    collapseElements = document.querySelectorAll('.sidenav-collapse');
+    sidenavBackdropEl = document.querySelector('.sidenav-backdrop') as HTMLElement;
   });
 
   it('should change default options', fakeAsync(() => {
@@ -111,14 +115,14 @@ describe('MDB Sidenav', () => {
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._sidenav.nativeElement.style.transform).toBe('translateX(0%)');
+    expect(sidenavEl.style.transform).toBe('translateX(0%)');
 
     jest.spyOn(sidenavComponent, 'isVisible', 'get').mockReturnValue(true);
     sidenavToggle.nativeElement.click();
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._sidenav.nativeElement.style.transform).toBe('translateX(-100%)');
+    expect(sidenavEl.style.transform).toBe('translateX(-100%)');
   }));
 
   it('should close on backdrop click', fakeAsync(() => {
@@ -130,14 +134,15 @@ describe('MDB Sidenav', () => {
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._sidenav.nativeElement.style.transform).toBe('translateX(0%)');
+    expect(sidenavEl.style.transform).toBe('translateX(0%)');
 
+    sidenavBackdropEl = document.querySelector('.sidenav-backdrop');
     jest.spyOn(sidenavComponent, 'isVisible', 'get').mockReturnValue(true);
-    sidenavLayout._backdropEl.nativeElement.click();
+    sidenavBackdropEl.click();
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._sidenav.nativeElement.style.transform).toBe('translateX(-100%)');
+    expect(sidenavEl.style.transform).toBe('translateX(-100%)');
   }));
 
   it('should set active el and remove active class for prev el', fakeAsync(() => {
@@ -158,41 +163,96 @@ describe('MDB Sidenav', () => {
     expect(secondItem.nativeElement.classList.contains('active')).toBe(true);
   }));
 
+  it('should toggle collapse item group on "enter" keydown', fakeAsync(() => {
+    fixture.detectChanges();
+    flush();
+
+    const enterEvent = new KeyboardEvent('keydown', {
+      bubbles: true,
+      keyCode: 13,
+      key: 'Enter',
+    });
+
+    const sEvent = new KeyboardEvent('keydown', {
+      bubbles: true,
+      keyCode: 83,
+      key: 's',
+    });
+
+    expect(collapseElements[0].classList.contains('show')).toBe(false);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
+
+    firstCollapse.nativeElement.dispatchEvent(sEvent);
+
+    fixture.detectChanges();
+    flush();
+
+    expect(collapseElements[0].classList.contains('show')).toBe(false);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
+
+    firstCollapse.nativeElement.dispatchEvent(enterEvent);
+
+    fixture.detectChanges();
+    flush();
+
+    expect(collapseElements[0].classList.contains('show')).toBe(true);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
+
+    secondCollapse.nativeElement.dispatchEvent(enterEvent);
+    fixture.detectChanges();
+    flush();
+
+    expect(collapseElements[0].classList.contains('show')).toBe(true);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(true);
+
+    secondCollapse.nativeElement.dispatchEvent(enterEvent);
+    fixture.detectChanges();
+    flush();
+
+    expect(collapseElements[0].classList.contains('show')).toBe(true);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
+
+    firstCollapse.nativeElement.dispatchEvent(enterEvent);
+    fixture.detectChanges();
+    flush();
+
+    expect(collapseElements[0].classList.contains('show')).toBe(false);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
+  }));
+
   it('should toggle collapse item group', fakeAsync(() => {
     fixture.detectChanges();
     flush();
 
-    sidenavComponent._collapse.forEach((collapse) => {
-      expect(collapse.collapsed).toBe(true);
-    });
+    expect(collapseElements[0].classList.contains('show')).toBe(false);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
 
     firstCollapse.nativeElement.click();
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._collapse.first.collapsed).toBe(false);
-    expect(sidenavComponent._collapse.last.collapsed).toBe(true);
+    expect(collapseElements[0].classList.contains('show')).toBe(true);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
 
     secondCollapse.nativeElement.click();
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._collapse.first.collapsed).toBe(false);
-    expect(sidenavComponent._collapse.last.collapsed).toBe(false);
+    expect(collapseElements[0].classList.contains('show')).toBe(true);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(true);
 
     secondCollapse.nativeElement.click();
     fixture.detectChanges();
     flush();
-
-    expect(sidenavComponent._collapse.first.collapsed).toBe(false);
-    expect(sidenavComponent._collapse.last.collapsed).toBe(true);
+    expect(collapseElements[0].classList.contains('show')).toBe(true);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
 
     firstCollapse.nativeElement.click();
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._collapse.first.collapsed).toBe(true);
-    expect(sidenavComponent._collapse.last.collapsed).toBe(true);
+    expect(collapseElements[0].classList.contains('show')).toBe(false);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
   }));
 
   it('should close other category list if accordion = true', fakeAsync(() => {
@@ -200,30 +260,29 @@ describe('MDB Sidenav', () => {
     fixture.detectChanges();
     flush();
 
-    sidenavComponent._collapse.forEach((collapse) => {
-      expect(collapse.collapsed).toBe(true);
-    });
+    expect(collapseElements[0].classList.contains('show')).toBe(false);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
 
     firstCollapse.nativeElement.click();
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._collapse.first.collapsed).toBe(false);
-    expect(sidenavComponent._collapse.last.collapsed).toBe(true);
+    expect(collapseElements[0].classList.contains('show')).toBe(true);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
 
     secondCollapse.nativeElement.click();
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._collapse.first.collapsed).toBe(true);
-    expect(sidenavComponent._collapse.last.collapsed).toBe(false);
+    expect(collapseElements[0].classList.contains('show')).toBe(false);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(true);
 
     secondCollapse.nativeElement.click();
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._collapse.first.collapsed).toBe(true);
-    expect(sidenavComponent._collapse.last.collapsed).toBe(true);
+    expect(collapseElements[0].classList.contains('show')).toBe(false);
+    expect(collapseElements[collapseElements.length - 1].classList.contains('show')).toBe(false);
   }));
 
   it('should toggle slim programmatically', fakeAsync(() => {
@@ -232,7 +291,7 @@ describe('MDB Sidenav', () => {
 
     const sidenavWidth = sidenavComponent.width + 'px';
 
-    expect(sidenavComponent._sidenav.nativeElement.style.width).toBe(sidenavWidth);
+    expect(sidenavEl.style.width).toBe(sidenavWidth);
 
     sidenavComponent.toggleSlim();
     fixture.detectChanges();
@@ -240,7 +299,7 @@ describe('MDB Sidenav', () => {
 
     const sidenavSlimWidth = sidenavComponent.slimWidth + 'px';
 
-    expect(sidenavComponent._sidenav.nativeElement.style.width).toBe(sidenavSlimWidth);
+    expect(sidenavEl.style.width).toBe(sidenavSlimWidth);
   }));
 
   it('should toggle mode programmatically', fakeAsync(() => {
@@ -261,17 +320,18 @@ describe('MDB Sidenav', () => {
     flush();
 
     expect(sidenavComponent.right).toBe(false);
-    expect(sidenavComponent._sidenav.nativeElement.classList.contains('sidenav-right')).toBe(false);
+    expect(sidenavEl.classList.contains('sidenav-right')).toBe(false);
 
     testComponent.right = true;
     fixture.detectChanges();
     flush();
 
     expect(sidenavComponent.right).toBe(true);
-    expect(sidenavComponent._sidenav.nativeElement.classList.contains('sidenav-right')).toBe(true);
+    expect(sidenavEl.classList.contains('sidenav-right')).toBe(true);
   }));
 
   it('should show backdrop on open and hide backdrop on close', fakeAsync(() => {
+    let sidenavBackdropEl = document.querySelector('.sidenav-backdrop') as HTMLElement;
     fixture.detectChanges();
     flush();
 
@@ -281,17 +341,17 @@ describe('MDB Sidenav', () => {
     sidenavToggle.nativeElement.click();
     fixture.detectChanges();
     flush();
-
-    expect(sidenavComponent.sidenavLayout._backdropEl).not.toBe(null);
-    expect(sidenavComponent.sidenavLayout._backdropEl.nativeElement.style.opacity).toBe('1');
+    sidenavBackdropEl = document.querySelector('.sidenav-backdrop');
+    expect(sidenavBackdropEl).not.toBe(null);
+    expect(sidenavBackdropEl.style.opacity).toBe('1');
 
     jest.spyOn(sidenavComponent, 'isVisible', 'get').mockReturnValue(true);
     sidenavToggle.nativeElement.click();
     fixture.detectChanges();
     flush();
-
-    expect(sidenavComponent.sidenavLayout._backdropEl).not.toBe(null);
-    expect(sidenavComponent.sidenavLayout._backdropEl.nativeElement.style.opacity).toBe('0');
+    sidenavBackdropEl = document.querySelector('.sidenav-backdrop');
+    expect(sidenavBackdropEl).not.toBe(null);
+    expect(sidenavBackdropEl.style.opacity).toBe('0');
   }));
 
   it('should dont show backdrop if backdrop = false', fakeAsync(() => {
@@ -299,38 +359,37 @@ describe('MDB Sidenav', () => {
     fixture.detectChanges();
     flush();
 
-    expect(document.querySelector('.sidenav-backdrop')).toBe(null);
+    let sidenavBackdropEl = document.querySelector('.sidenav-backdrop') as HTMLElement;
+    expect(sidenavBackdropEl).toBe(null);
 
     jest.spyOn(sidenavComponent, 'isVisible', 'get').mockReturnValue(false);
     sidenavToggle.nativeElement.click();
     fixture.detectChanges();
     flush();
-
-    expect(document.querySelector('.sidenav-backdrop')).toBe(null);
+    sidenavBackdropEl = document.querySelector('.sidenav-backdrop') as HTMLElement;
+    expect(sidenavBackdropEl).toBe(null);
 
     jest.spyOn(sidenavComponent, 'isVisible', 'get').mockReturnValue(true);
     sidenavToggle.nativeElement.click();
     fixture.detectChanges();
     flush();
 
-    expect(document.querySelector('.sidenav-backdrop')).toBe(null);
+    sidenavBackdropEl = document.querySelector('.sidenav-backdrop') as HTMLElement;
+    expect(sidenavBackdropEl).toBe(null);
   }));
 
   it('should toggle color', fakeAsync(() => {
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._sidenav.nativeElement.classList.contains('sidenav-primary')).toBe(
-      true
-    );
+    let sidenavBackdropEl = document.querySelector('.sidenav-backdrop') as HTMLElement;
+    expect(sidenavEl.classList.contains('sidenav-primary')).toBe(true);
 
     testComponent.color = 'secondary';
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._sidenav.nativeElement.classList.contains('sidenav-secondary')).toBe(
-      true
-    );
+    expect(sidenavEl.classList.contains('sidenav-secondary')).toBe(true);
   }));
 
   it('should add custom backdrop class', fakeAsync(() => {
@@ -343,10 +402,9 @@ describe('MDB Sidenav', () => {
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent.sidenavLayout._backdropEl).not.toBe(null);
-    expect(
-      sidenavComponent.sidenavLayout._backdropEl.nativeElement.classList.contains('custom-class')
-    ).toBe(true);
+    sidenavBackdropEl = document.querySelector('.custom-class');
+    expect(sidenavBackdropEl).not.toBe(null);
+    expect(sidenavBackdropEl.classList.contains('custom-class')).toBe(true);
   }));
 
   it('should close on esc', fakeAsync(() => {
@@ -358,7 +416,7 @@ describe('MDB Sidenav', () => {
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._sidenav.nativeElement.style.transform).toBe('translateX(0%)');
+    expect(sidenavEl.style.transform).toBe('translateX(0%)');
 
     jest.spyOn(sidenavComponent, 'isVisible', 'get').mockReturnValue(true);
     const event = new KeyboardEvent('keydown', { code: 'Escape' });
@@ -366,7 +424,7 @@ describe('MDB Sidenav', () => {
     fixture.detectChanges();
     flush();
 
-    expect(sidenavComponent._sidenav.nativeElement.style.transform).toBe('translateX(-100%)');
+    expect(sidenavEl.style.transform).toBe('translateX(-100%)');
   }));
 });
 
@@ -475,7 +533,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(routes, {})],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

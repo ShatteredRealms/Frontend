@@ -11,7 +11,7 @@ import { Subject, Observable } from 'rxjs';
 import { startWith, map, tap } from 'rxjs/operators';
 import { TestBed, ComponentFixture, inject, fakeAsync, flush } from '@angular/core/testing';
 import { MdbAutocompleteModule } from './autocomplete.module';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { MdbAutocompleteDirective } from './autocomplete.directive';
@@ -109,7 +109,7 @@ const TEMPLATE_WITH_FORM_CONTROL = `
 })
 export class AutocompleteWithFormControlComponent {
   @ViewChild(MdbAutocompleteDirective, { static: true }) directive: MdbAutocompleteDirective;
-  control = new FormControl();
+  control = new UntypedFormControl();
   results: Observable<string[]>;
   notFound = false;
   data = ['Red', 'Green', 'Blue', 'Cyan', 'Magenta', 'Yellow', 'Black'];

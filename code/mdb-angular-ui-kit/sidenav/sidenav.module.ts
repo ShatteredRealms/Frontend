@@ -21,4 +21,4 @@ import { NgModule } from '@angular/core';
     MdbSidenavItemComponent,
   ],
 })
-export class MdbSidenavModule {}
+export class MdbSidenavModule { }

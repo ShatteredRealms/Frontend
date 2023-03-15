@@ -21,4 +21,4 @@ import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
     MdbAccordionItemBodyDirective,
   ],
 })
-export class MdbAccordionModule {}
+export class MdbAccordionModule { }

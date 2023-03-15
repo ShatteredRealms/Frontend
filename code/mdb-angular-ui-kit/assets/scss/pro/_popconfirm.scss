@@ -2,6 +2,7 @@
   padding: $popconfirm-padding;
   background-color: $popconfirm-background-color;
   border-radius: $popconfirm-border-radius;
+  // opacity: 0;
 
   &.show {
     opacity: 1;
@@ -11,12 +12,15 @@
 .popconfirm-popover {
   z-index: $zindex-popconfirm;
   width: $popconfirm-popover-width;
+  border-radius: $popconfirm-border-radius;
+  border: $popconfirm-border;
 }
 
 .popconfirm-modal {
   z-index: $zindex-popconfirm;
   width: $popconfirm-modal-width;
   position: absolute;
+  border-radius: $popconfirm-border-radius;
 }
 
 .popconfirm-buttons-container {

@@ -43,7 +43,7 @@ const flyOutLeft = (options: MdbAnimationOptions): AnimationReferenceMetadata =>
           }),
           style({
             opacity: 0,
-            transform: 'transform: translate3d(2000px, 0, 0)',
+            transform: 'translate3d(2000px, 0, 0)',
             easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
             offset: 1,
           }),

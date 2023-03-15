@@ -7,6 +7,7 @@ import {
   ContentChildren,
   ElementRef,
   EventEmitter,
+  HostBinding,
   HostListener,
   Input,
   OnDestroy,
@@ -124,6 +125,8 @@ export class MdbCarouselComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  @HostBinding('class.d-block') display = true;
+
   constructor(private _elementRef: ElementRef, private _cdRef: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
@@ -173,6 +176,7 @@ export class MdbCarouselComponent implements AfterViewInit, OnDestroy {
         const nInterval = +interval;
         if (this._isPlaying && !isNaN(nInterval) && nInterval > 0) {
           this.next();
+          this._cdRef.markForCheck();
         } else {
           this.stop();
         }

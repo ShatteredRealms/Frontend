@@ -1,8 +1,12 @@
 import { OverlayRef } from '@angular/cdk/overlay';
-import { Observable, Subject } from 'rxjs';
+import { first, Observable, Subject } from 'rxjs';
+import { MdbPopconfirmContainerComponent } from './popconfirm-container.component';
 
 export class MdbPopconfirmRef<T> {
-  constructor(public overlayRef: OverlayRef) {}
+  constructor(
+    public overlayRef: OverlayRef,
+    private _popconfirmContainerRef: MdbPopconfirmContainerComponent
+  ) {}
 
   private readonly onClose$: Subject<any> = new Subject();
   private readonly onConfirm$: Subject<any> = new Subject();
@@ -11,19 +15,27 @@ export class MdbPopconfirmRef<T> {
   readonly onConfirm: Observable<any> = this.onConfirm$.asObservable();
 
   close(message?: any): void {
-    this.onClose$.next(message);
-    this.onClose$.complete();
+    this._popconfirmContainerRef.startCloseAnimation();
 
-    this.overlayRef.detach();
-    this.overlayRef.dispose();
+    this._popconfirmContainerRef._hidden.pipe(first()).subscribe(() => {
+      this.onClose$.next(message);
+      this.onClose$.complete();
+
+      this.overlayRef.detach();
+      this.overlayRef.dispose();
+    });
   }
 
   confirm(message?: any): void {
-    this.onConfirm$.next(message);
-    this.onConfirm$.complete();
+    this._popconfirmContainerRef.startCloseAnimation();
 
-    this.overlayRef.detach();
-    this.overlayRef.dispose();
+    this._popconfirmContainerRef._hidden.pipe(first()).subscribe(() => {
+      this.onConfirm$.next(message);
+      this.onConfirm$.complete();
+
+      this.overlayRef.detach();
+      this.overlayRef.dispose();
+    });
   }
 
   getPosition(): DOMRect {

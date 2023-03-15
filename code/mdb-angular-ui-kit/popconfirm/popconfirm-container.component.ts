@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { MdbPopconfirmConfig } from './popconfirm.config';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger, AnimationEvent } from '@angular/animations';
 
 @Component({
   selector: 'mdb-popconfirm-container',
@@ -17,8 +17,11 @@ import { animate, style, transition, trigger } from '@angular/animations';
   changeDetection: ChangeDetectionStrategy.Default,
   animations: [
     trigger('fade', [
-      transition(':enter', [style({ opacity: 0 }), animate('150ms linear', style({ opacity: 1 }))]),
-      transition(':leave', [style({ opacity: 1 }), animate('150ms linear', style({ opacity: 0 }))]),
+      state('void, hidden', style({ opacity: 0 })),
+      state('visible', style({ opacity: 1 })),
+      state('hidden', style({ opacity: 0 })),
+      transition('visible => hidden', animate('150ms linear')),
+      transition('* => visible', animate('150ms linear')),
     ]),
   ],
 })
@@ -26,6 +29,9 @@ export class MdbPopconfirmContainerComponent {
   @ViewChild(CdkPortalOutlet, { static: true }) _portalOutlet: CdkPortalOutlet;
 
   readonly _destroy$: Subject<void> = new Subject<void>();
+
+  readonly _hidden: Subject<void> = new Subject();
+  animationState = 'visible';
 
   _config: MdbPopconfirmConfig;
 
@@ -37,5 +43,15 @@ export class MdbPopconfirmContainerComponent {
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     return this._portalOutlet.attachTemplatePortal(portal);
+  }
+
+  startCloseAnimation(): void {
+    this.animationState = 'hidden';
+  }
+
+  onAnimationEnd(event: AnimationEvent): void {
+    if (event.toState === 'hidden') {
+      this._hidden.next();
+    }
   }
 }

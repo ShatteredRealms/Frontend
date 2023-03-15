@@ -28,7 +28,6 @@
             [ngClass]="{'timepicker-inline-hour-icons': inline }"
             class="position-relative h-100"
             #focus
-            tabindex="0"
           >
             <button
               *ngIf="!inline"
@@ -88,7 +87,6 @@
             [ngClass]="{'disabled': _minuteDigitalDisabled, 'timepicker-inline-minutes-icons': inline }"
             class="position-relative h-100"
             #digitalMinute
-            tabindex="0"
           >
             <button
               *ngIf="!inline"

@@ -1,7 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {MdbModalRef} from "mdb-angular-ui-kit/modal";
-import {Role} from "../../models/role.model";
-import {Observable} from "rxjs";
+import { Component } from '@angular/core';
+import { MdbModalRef } from "mdb-angular-ui-kit/modal";
 
 @Component({
   selector: 'app-modal-select',

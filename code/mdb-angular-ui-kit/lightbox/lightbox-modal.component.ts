@@ -15,9 +15,10 @@ import {
   HostListener,
   OnDestroy,
   ViewChildren,
+  NgZone,
 } from '@angular/core';
-import { fromEvent } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { MdbLightboxItemDirective } from './lightbox-item.directive';
 import { MdbLightboxComponent } from './lightbox.component';
 
@@ -38,7 +39,6 @@ import { MdbLightboxComponent } from './lightbox.component';
               transform: 'scale3d(1, 1, 1)',
               offset: 0.5,
               easing: 'ease',
-              display: 'block',
             }),
           ])
         ),
@@ -91,11 +91,10 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
   }
 
   lightbox: MdbLightboxComponent;
-  lightboxItems: QueryList<MdbLightboxItemDirective>;
+  lightboxItems: MdbLightboxItemDirective[];
   activeLightboxItem: MdbLightboxItemDirective;
   zoomLevel: number;
   index: number;
-  total: number;
   animationState = '';
   slideRight: boolean;
   activeModalImageIndex = 1;
@@ -119,12 +118,17 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
   private _tapTime = 0;
   private _toolsTimeout = 4000;
   private _doubleTapTimeout = 300;
+  private _pos = { x: 0, y: 0 };
+  private _touchDelta = 0;
+
+  readonly _destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private _renderer: Renderer2,
     private _elementRef: ElementRef,
     private _cdRef: ChangeDetectorRef,
     private _focusTrapFactory: ConfigurableFocusTrapFactory,
+    private _ngZone: NgZone,
     @Inject(DOCUMENT) private _document,
     @Inject(forwardRef(() => MdbLightboxComponent)) _lightbox: MdbLightboxComponent
   ) {
@@ -132,8 +136,7 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.index = this.lightboxItems.toArray().indexOf(this.activeLightboxItem);
-    this.total = this.lightboxItems.toArray().length;
+    this.index = this.lightboxItems.indexOf(this.activeLightboxItem);
     this._setActiveImageData();
 
     this._setToolsToggleTimeout();
@@ -144,12 +147,32 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
 
     this._setDefaultAnimationStyle();
     this._preloadInactiveImages();
+
+    this._ngZone.runOutsideAngular(() => {
+      fromEvent(window, 'resize')
+        .pipe(takeUntil(this._destroy$))
+        .subscribe(() => {
+          this._calculateImgSize();
+        });
+    });
   }
 
   ngOnDestroy(): void {
-    this._previouslyFocusedElement.focus();
-    this._focusTrap.destroy();
+    // there was an error in the ecommerce gallery tests.
+    // this._previouslyFocusedElement and this._focusTrap was null
+    // therefore an if conditions was added
+    if (this._previouslyFocusedElement) {
+      this._previouslyFocusedElement.focus();
+    }
+
+    if (this._focusTrap) {
+      this._focusTrap.destroy();
+    }
+
     this._enableScroll();
+
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   get activeImageElement(): HTMLImageElement {
@@ -222,7 +245,7 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
       this._renderer.setStyle(this.activeImageElement, 'left', `${this._positionX}px`);
       this._renderer.setStyle(this.activeImageElement, 'top', `${this._positionY}px`);
     } else {
-      if (this.total <= 1) return;
+      if (this.lightboxItems.length <= 1) return;
 
       this._positionX = x * (1 / this._scale) - this._mousedownPositionX;
       this._renderer.setStyle(this.activeImageElement, 'left', `${this._positionX}px`);
@@ -235,8 +258,8 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
     this._checkDoubleTap(event);
   }
 
-  zoom(): void {
-    if (this._scale === 1) {
+  toggleZoom(): void {
+    if (this._scale <= 1) {
       this.zoomIn();
     } else {
       this.zoomOut();
@@ -283,18 +306,17 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
   }
 
   private _preloadInactiveImages(): void {
-    const nextIndex = this.index < this.lightboxItems.toArray().length - 1 ? this.index + 1 : 0;
-    const previousIndex = this.index > 0 ? this.index - 1 : this.lightboxItems.toArray().length - 1;
+    const nextIndex = this.index < this.lightboxItems.length - 1 ? this.index + 1 : 0;
+    const previousIndex = this.index > 0 ? this.index - 1 : this.lightboxItems.length - 1;
 
     this.previousImage.src =
-      this.lightboxItems.toArray()[previousIndex].img ||
-      this.lightboxItems.toArray()[previousIndex].el.nativeElement.src;
-    this.previousImage.alt = this.lightboxItems.toArray()[previousIndex].el.nativeElement.alt;
+      this.lightboxItems[previousIndex].img ||
+      this.lightboxItems[previousIndex].el.nativeElement.src;
+    this.previousImage.alt = this.lightboxItems[previousIndex].el.nativeElement.alt;
 
     this.nextImage.src =
-      this.lightboxItems.toArray()[nextIndex].img ||
-      this.lightboxItems.toArray()[nextIndex].el.nativeElement.src;
-    this.nextImage.alt = this.lightboxItems.toArray()[nextIndex].el.nativeElement.alt;
+      this.lightboxItems[nextIndex].img || this.lightboxItems[nextIndex].el.nativeElement.src;
+    this.nextImage.alt = this.lightboxItems[nextIndex].el.nativeElement.alt;
   }
 
   private _onKeyup(event: KeyboardEvent): void {
@@ -347,17 +369,12 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
   }
 
   private _setNewPositionOnZoomIn(event: WheelEvent): void {
-    clearTimeout(this._zoomTimer);
     this._positionX = window.innerWidth / 2 - event.offsetX - 50;
     this._positionY = window.innerHeight / 2 - event.offsetY - 50;
 
     this._renderer.setStyle(this.activeImageElement, 'transition', 'all 0.5s ease-out');
     this._renderer.setStyle(this.activeImageElement, 'left', `${this._positionX}px`);
     this._renderer.setStyle(this.activeImageElement, 'top', `${this._positionY}px`);
-
-    this._zoomTimer = setTimeout(() => {
-      this._renderer.setStyle(this.activeImageElement, 'transition', 'none');
-    }, 500);
   }
 
   private _resetToolsToggler(): void {
@@ -368,6 +385,11 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
 
   toggleToolbar(opacity: number): void {
     this._renderer.setStyle(this.galleryToolbar.nativeElement, 'opacity', opacity);
+
+    if (this.lightboxItems.length <= 1 || !this.leftArrow || !this.rightArrow) {
+      return;
+    }
+
     this._renderer.setStyle(this.leftArrow.nativeElement, 'opacity', opacity);
     this._renderer.setStyle(this.rightArrow.nativeElement, 'opacity', opacity);
   }
@@ -380,24 +402,104 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
   }
 
   onWheel(event: WheelEvent): void {
-    if (event.deltaY > 0) {
+    const delta = Math.max(-1, Math.min(1, event.deltaY));
+    this.zoomOnWheel(event.x, event.y, delta);
+  }
+
+  onTouchMove(touches: TouchList): void {
+    if (touches.length !== 2) {
+      return;
+    }
+
+    const fingersDistanceHypot = Math.hypot(
+      touches[0].pageX - touches[1].pageX,
+      touches[0].pageY - touches[1].pageY
+    );
+
+    if (this._touchDelta > fingersDistanceHypot) {
       this.zoomOut();
-    } else {
-      if (this._scale >= 3) return;
-      this._setNewPositionOnZoomIn(event);
+    }
+
+    if (this._touchDelta < fingersDistanceHypot) {
       this.zoomIn();
     }
   }
 
-  zoomIn(): void {
+  onTouchStart(touches: TouchList): void {
+    if (touches.length !== 2) {
+      return;
+    }
+
+    //get rough estimate of distance between two fingers
+    this._touchDelta = Math.hypot(
+      touches[0].pageX - touches[1].pageX,
+      touches[0].pageY - touches[1].pageY
+    );
+  }
+
+  zoomOnWheel(x, y, delta): void {
+    if (-delta > 0) {
+      this.lightbox.lightboxZoomIn.emit();
+    } else {
+      this.lightbox.lightboxZoomOut.emit();
+    }
+
+    this._renderer.setStyle(this.activeImageElement, 'transition', 'none');
+
+    const activeImageClientRect = this.activeImageElement.getBoundingClientRect();
+
+    const pointerX = (x - activeImageClientRect.left) / this._scale;
+    const pointerY = (y - activeImageClientRect.top) / this._scale;
+
+    const targetX = (pointerX - this._pos.x) / this._scale;
+    const targetY = (pointerY - this._pos.y) / this._scale;
+
+    this._scale += -delta * this.zoomLevel;
+
+    const max_scale = 3;
+    const min_scale = 1;
+
+    this._scale = Math.max(min_scale, Math.min(max_scale, this._scale));
+
+    if (this._scale === 1) {
+      this._pos.x = 0;
+      this._pos.y = 0;
+    } else {
+      this._pos.x = -targetX * this._scale + pointerX;
+      this._pos.y = -targetY * this._scale + pointerY;
+    }
+    this._renderer.setStyle(this.activeImageElement, 'transition', '');
+    this._renderer.setStyle(
+      this.activeImageElement,
+      'transform',
+      `translate(${this._pos.x}px,${this._pos.y}px) scale(${this._scale})`
+    );
+
+    this._updateZoomBtn();
+
+    if (-delta > 0) {
+      this.lightbox.lightboxZoomedIn.emit();
+    } else {
+      this.lightbox.lightboxZoomedOut.emit();
+    }
+  }
+
+  zoomIn(position?: { x: number; y: number }): void {
     if (this._scale >= 3) {
       return;
     }
 
     this.lightbox.lightboxZoomIn.emit();
 
+    this._pos.x = position ? -position.x : -this.activeImageElement.width / 2;
+    this._pos.y = position ? -position.y : -this.activeImageElement.height / 2;
+
     this._scale += this.zoomLevel;
-    this._renderer.setStyle(this.activeImageWrapper, 'transform', `scale(${this._scale})`);
+    this._renderer.setStyle(
+      this.activeImageElement,
+      'transform',
+      `translate(${this._pos.x}px,${this._pos.y}px) scale(${this._scale})`
+    );
     this._updateZoomBtn();
 
     this.lightbox.lightboxZoomedIn.emit();
@@ -410,8 +512,15 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
 
     this.lightbox.lightboxZoomOut.emit();
 
-    this._scale -= this.zoomLevel;
-    this._renderer.setStyle(this.activeImageWrapper, 'transform', `scale(${this._scale})`);
+    this._pos.x = 0;
+    this._pos.y = 0;
+
+    this._scale = 1;
+    this._renderer.setStyle(
+      this.activeImageElement,
+      'transform',
+      `translate(${this._pos.x}px,${this._pos.y}px) scale(${this._scale})`
+    );
 
     this._updateZoomBtn();
     this._updateImgPosition();
@@ -449,13 +558,13 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
 
     switch (target) {
       case 'right':
-        this.index + 1 === this.total ? (this.index = 0) : (this.index += 1);
+        this.index + 1 === this.lightboxItems.length ? (this.index = 0) : (this.index += 1);
         this.activeModalImageIndex + 1 === this.imageWrappers.length
           ? (this.activeModalImageIndex = 0)
           : (this.activeModalImageIndex += 1);
         break;
       case 'left':
-        this.index - 1 < 0 ? (this.index = this.total - 1) : (this.index -= 1);
+        this.index - 1 < 0 ? (this.index = this.lightboxItems.length - 1) : (this.index -= 1);
         this.activeModalImageIndex - 1 < 0
           ? (this.activeModalImageIndex = this.imageWrappers.length - 1)
           : (this.activeModalImageIndex -= 1);
@@ -512,12 +621,7 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
 
   private _restoreDefaultZoom(): void {
     if (this._scale !== 1) {
-      this._scale = 1;
-
-      this._renderer.setStyle(this.activeImageWrapper, 'transform', `scale(${this._scale})`);
-
-      this._updateZoomBtn();
-      this._updateImgPosition();
+      this.zoomOut();
     }
   }
 
@@ -554,7 +658,13 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
     if (this._scale !== 1) {
       this._restoreDefaultZoom();
     } else {
-      this.zoomIn();
+      const activeImageClientRect = this.activeImageElement.getBoundingClientRect();
+      const e = event as MouseEvent;
+
+      const pointerX = (e.x - activeImageClientRect.left) / this._scale;
+      const pointerY = (e.y - activeImageClientRect.top) / this._scale;
+
+      this.zoomIn({ x: pointerX, y: pointerY });
     }
   }
 
@@ -578,17 +688,21 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
     this._calculateImgSize();
 
     setTimeout(() => {
-      this._renderer.setStyle(this.activeImageElement, 'transition', 'none');
+      this._renderer.setStyle(this.activeImageElement, 'transition', '');
     }, 500);
   }
 
   private _updateActiveLightboxItem(): void {
-    this.activeLightboxItem = this.lightboxItems.toArray()[this.index];
+    this.activeLightboxItem = this.lightboxItems[this.index];
     this._setActiveImageData();
     this._cdRef.markForCheck();
   }
 
-  load(): void {
+  load(index: number): void {
+    if (index !== this.activeModalImageIndex) {
+      return;
+    }
+
     this._hideLoader();
 
     if (this.activeImageWrapper.style.transform == 'scale(0.25)') {
@@ -620,34 +734,30 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
 
   private _calculateImgSize(): void {
     if (this.activeImageElement.width >= this.activeImageElement.height) {
-      this._renderer.setStyle(this.activeImageElement, 'width', '100%');
       this._renderer.setStyle(this.activeImageElement, 'maxWidth', '100%');
       this._renderer.setStyle(this.activeImageElement, 'height', 'auto');
 
       const top = `${
         (this.activeImageWrapper.offsetHeight - this.activeImageElement.height) / 2
       }px`;
-
-      this._renderer.setStyle(this.activeImageElement, 'top', top);
-      this._renderer.setStyle(this.activeImageElement, 'left', 0);
-    } else {
-      this._renderer.setStyle(this.activeImageElement, 'height', '100%');
-      this._renderer.setStyle(this.activeImageElement, 'maxHeight', '100%');
-      this._renderer.setStyle(this.activeImageElement, 'width', 'auto');
-
       const left = `${(this.activeImageWrapper.offsetWidth - this.activeImageElement.width) / 2}px`;
 
       this._renderer.setStyle(this.activeImageElement, 'left', left);
-      this._renderer.setStyle(this.activeImageElement, 'top', 0);
+      this._renderer.setStyle(this.activeImageElement, 'top', top);
+    } else {
+      this._renderer.setStyle(this.activeImageElement, 'maxHeight', '100%');
+      this._renderer.setStyle(this.activeImageElement, 'width', 'auto');
+
+      const top = `${
+        (this.activeImageWrapper.offsetHeight - this.activeImageElement.height) / 2
+      }px`;
+      const left = `${(this.activeImageWrapper.offsetWidth - this.activeImageElement.width) / 2}px`;
+
+      this._renderer.setStyle(this.activeImageElement, 'left', left);
+      this._renderer.setStyle(this.activeImageElement, 'top', top);
     }
 
     if (this.activeImageElement.width >= this.activeImageWrapper.offsetWidth) {
-      this._renderer.setStyle(
-        this.activeImageElement,
-        'width',
-        `${this.activeImageWrapper.offsetWidth}px`
-      );
-      this._renderer.setStyle(this.activeImageElement, 'height', 'auto');
       this._renderer.setStyle(this.activeImageElement, 'height', 'auto');
 
       const top = `${
@@ -659,11 +769,6 @@ export class MdbLightboxModalComponent implements AfterViewInit, OnDestroy {
     }
 
     if (this.activeImageElement.height >= this.activeImageWrapper.offsetHeight) {
-      this._renderer.setStyle(
-        this.activeImageElement,
-        'height',
-        `${this.activeImageWrapper.offsetHeight}px`
-      );
       this._renderer.setStyle(this.activeImageElement, 'width', 'auto');
       this._renderer.setStyle(this.activeImageElement, 'top', 0);
 

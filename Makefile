@@ -101,6 +101,7 @@ clean-protos:
 
 protos: clean-protos $(PROTO_FILES)
 
+# Note: Requires `ts-protoc-gen`. Can be installed with npm `npm install -g ts-protoc-gen`
 $(PROTO_FILES):
 	protoc "$@" \
 		-I "$(PROTO_DIR)" \

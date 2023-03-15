@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {ChatChannelService} from "../../../_services/chat-channel.service";
-import {Router} from "@angular/router";
-import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {AlertComponent} from "../../../_components/alert/alert.component";
+import { ChatChannelService } from "../../../_services/chat-channel.service";
+import { Router } from "@angular/router";
+import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
+import { AlertComponent } from "../../../_components/alert/alert.component";
 
 @Component({
   selector: 'app-new-chat-channel',

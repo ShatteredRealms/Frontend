@@ -35,10 +35,12 @@ export class MdbNotificationContainerComponent implements OnInit, OnDestroy {
 
   readonly _destroy$: Subject<void> = new Subject<void>();
   readonly _hidden: Subject<void> = new Subject<void>();
+  readonly _mouseleave: Subject<void> = new Subject<void>();
 
   animationState = 'visible';
+  hover = false;
 
-  _config: MdbNotificationConfig;
+  config: MdbNotificationConfig;
 
   constructor(
     @Inject(DOCUMENT) private _document,
@@ -71,5 +73,14 @@ export class MdbNotificationContainerComponent implements OnInit, OnDestroy {
     if (event.toState === 'hidden') {
       this._hidden.next();
     }
+  }
+
+  onMouseenter(): void {
+    this.hover = true;
+  }
+
+  onMouseleave(): void {
+    this.hover = false;
+    this._mouseleave.next();
   }
 }

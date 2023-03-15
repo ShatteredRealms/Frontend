@@ -11,6 +11,8 @@ import {
   Input,
   Output,
   EventEmitter,
+  Inject,
+  Renderer2,
 } from '@angular/core';
 import { MdbLightboxItemDirective } from './lightbox-item.directive';
 import { OverlayRef, Overlay, OverlayConfig } from '@angular/cdk/overlay';
@@ -18,6 +20,7 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { MdbLightboxModalComponent } from './lightbox-modal.component';
 import { merge, Subject } from 'rxjs';
 import { filter, startWith, switchMap, takeUntil } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'mdb-lightbox',
@@ -49,7 +52,17 @@ export class MdbLightboxComponent implements AfterContentInit, OnDestroy {
   private _overlayRef: OverlayRef | null;
   private _portal: ComponentPortal<MdbLightboxModalComponent>;
 
-  constructor(private _overlay: Overlay, private _vcr: ViewContainerRef) {}
+  // this getter is used by ecommerce gallery
+  get activeSlideIndex(): number {
+    return this._contentRef.instance.index;
+  }
+
+  constructor(
+    @Inject(DOCUMENT) private _document,
+    private _overlay: Overlay,
+    private _vcr: ViewContainerRef,
+    private _renderer: Renderer2
+  ) {}  
 
   ngAfterContentInit(): void {
     this.lightboxItems.changes
@@ -66,9 +79,16 @@ export class MdbLightboxComponent implements AfterContentInit, OnDestroy {
   }
 
   private _patchInputValues(lightboxItem: MdbLightboxItemDirective) {
-    this._contentRef.instance.lightboxItems = this.lightboxItems;
+    this._contentRef.instance.lightboxItems = this.lightboxItems.filter((item) => {
+      return !item.disabled;
+    });
+
     this._contentRef.instance.activeLightboxItem = lightboxItem;
     this._contentRef.instance.zoomLevel = this.zoomLevel;
+  }
+
+  private _hasVerticalScroll(): boolean {
+    return this._document.body.scrollHeight > this._document.documentElement.clientHeight;
   }
 
   open(lightboxItem: MdbLightboxItemDirective): void {
@@ -87,6 +107,20 @@ export class MdbLightboxComponent implements AfterContentInit, OnDestroy {
       this._patchInputValues(lightboxItem);
       this._listenToOutsideClick();
 
+      if (this._hasVerticalScroll) {
+        const widthWithVerticalScroll = this._document.body.offsetWidth;
+
+        this._renderer.setStyle(this._document.body, 'overflow', 'hidden');
+
+        const widthWithoutVerticalScroll = this._document.body.offsetWidth;
+
+        this._renderer.setStyle(
+          this._document.body,
+          'padding-right',
+          `${widthWithoutVerticalScroll - widthWithVerticalScroll}px`
+        );
+      }
+
       this.lightboxOpened.emit();
     }
   }
@@ -100,6 +134,9 @@ export class MdbLightboxComponent implements AfterContentInit, OnDestroy {
 
       setTimeout(() => {
         this._destroyOverlay();
+
+        this._renderer.removeStyle(this._document.body, 'overflow');
+        this._renderer.removeStyle(this._document.body, 'padding-right');
         this.lightboxClosed.emit();
       }, cssTransitionDuration);
     }

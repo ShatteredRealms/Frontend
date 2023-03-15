@@ -28,6 +28,7 @@
 
   .page-item {
     &.active .page-link {
+      color: $onPrimary;
       background-color: $primary;
     }
 

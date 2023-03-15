@@ -8,9 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { merge } from 'lodash-es';
-
-declare var Chart: any;
-declare var ChartDataLabels: any;
+import { Chart, ChartType, Plugin } from 'chart.js';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -19,14 +17,14 @@ declare var ChartDataLabels: any;
 })
 export class MdbChartDirective implements OnInit, OnDestroy {
   @Input()
-  get datasets(): any {
+  get datasets(): any[] {
     return this._datasets;
   }
-  set datasets(datasets: any) {
+  set datasets(datasets: any[]) {
     this._datasets = datasets;
 
-    if (this._chart && this._isInitialized) {
-      this._chart.data.datasets = datasets;
+    if (this.chart && this._isInitialized) {
+      this.chart.data.datasets = datasets;
       this.update();
     }
   }
@@ -39,8 +37,8 @@ export class MdbChartDirective implements OnInit, OnDestroy {
   set labels(labels: string[]) {
     this._labels = labels;
 
-    if (this._chart && this._isInitialized) {
-      this._chart.data.labels = labels;
+    if (this.chart && this._isInitialized) {
+      this.chart.data.labels = labels;
       this.update();
     }
   }
@@ -54,13 +52,22 @@ export class MdbChartDirective implements OnInit, OnDestroy {
     this._options = options;
 
     if (this._isInitialized) {
-      this._chart.options = options;
+      this.chart.options = options;
       this.rebuild();
     }
   }
   private _options: any;
 
-  @Input() type: string;
+  @Input() type: ChartType;
+
+  @Input()
+  get plugins(): Plugin[] {
+    return this._plugins;
+  }
+  set plugins(plugins: Plugin[]) {
+    this._plugins = plugins;
+  }
+  private _plugins: Plugin[] = [];
 
   @Output() chartClick: EventEmitter<any> = new EventEmitter();
   @Output() chartHover: EventEmitter<any> = new EventEmitter();
@@ -307,7 +314,7 @@ export class MdbChartDirective implements OnInit, OnDestroy {
 
   private _canvas: HTMLCanvasElement;
   private _ctx: CanvasRenderingContext2D;
-  private _chart: any;
+  public chart: Chart;
 
   private _isInitialized = false;
 
@@ -316,7 +323,7 @@ export class MdbChartDirective implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._canvas = this._elementRef.nativeElement;
     this._ctx = this._canvas.getContext('2d');
-    this._chart = this._buildChart(this._ctx);
+    this.chart = this._buildChart(this._ctx);
 
     this._isInitialized = true;
   }
@@ -326,9 +333,9 @@ export class MdbChartDirective implements OnInit, OnDestroy {
   }
 
   private _destroyChart(): void {
-    if (this._chart) {
-      this._chart.destroy();
-      this._chart = null;
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = null;
     }
   }
 
@@ -350,40 +357,27 @@ export class MdbChartDirective implements OnInit, OnDestroy {
       };
     }
 
-    let options: any;
-
-    if (chartOptions.plugins && chartOptions.plugins.datalabels && ChartDataLabels) {
-      options = {
-        type: this.type,
-        data: {
-          labels: this.labels,
-          datasets: this.datasets,
-        },
-        options: chartOptions,
-        plugins: [ChartDataLabels],
-      };
-    } else {
-      options = {
-        type: this.type,
-        data: {
-          labels: this.labels,
-          datasets: this.datasets,
-        },
-        options: chartOptions,
-      };
-    }
+    const options = {
+      type: this.type,
+      data: {
+        labels: this.labels,
+        datasets: this.datasets,
+      },
+      options: chartOptions,
+      plugins: this._plugins,
+    };
 
     return new Chart(ctx, options);
   }
 
   update(): void {
-    if (this._chart) {
-      this._chart.update();
+    if (this.chart) {
+      this.chart.update();
     }
   }
 
   rebuild(): void {
     this._destroyChart();
-    this._buildChart(this._ctx);
+    this.chart = this._buildChart(this._ctx);
   }
 }

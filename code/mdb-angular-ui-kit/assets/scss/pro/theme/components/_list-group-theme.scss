@@ -3,6 +3,7 @@
   $surface: map-get($theme, surface);
   $onSurface: map-get($theme, onSurface);
   $secondary: map-get($theme, secondary);
+  $onPrimary: map-get($theme, onPrimary);
   $onSecondary: map-get($theme, onSecondary);
   $divider: map-get($theme, divider);
   $surfaceDisabled: map-get($theme, dropdownDisabled);
@@ -10,10 +11,12 @@
 
   .list-group-item {
     background-color: $surface;
+    color: $onSurface;
     border-color: $divider;
 
     &.active {
       background-color: $primary;
+      color: $onPrimary;
       border-color: $primary;
     }
 

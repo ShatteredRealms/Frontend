@@ -25,7 +25,7 @@ import { dropdownAnimation, dropdownContainerAnimation } from './select-animatio
 import { fromEvent, merge, Observable, Subject } from 'rxjs';
 import { filter, takeUntil, startWith, switchMap, tap, debounceTime } from 'rxjs/operators';
 import { MDB_OPTION_PARENT, MdbOptionComponent } from 'mdb-angular-ui-kit/option';
-import { NgControl, ControlValueAccessor, FormControl } from '@angular/forms';
+import { NgControl, ControlValueAccessor, UntypedFormControl } from '@angular/forms';
 import { MdbOptionGroupComponent } from 'mdb-angular-ui-kit/option';
 import { MdbSelectAllOptionComponent } from './select-all-option';
 import {
@@ -129,15 +129,6 @@ export class MdbSelectComponent
   private _multiple = false;
 
   @Input() notFoundMsg = 'No results found';
-
-  @Input()
-  get outline(): boolean {
-    return this._outline;
-  }
-  set outline(value: boolean) {
-    this._outline = coerceBooleanProperty(value);
-  }
-  private _outline = false;
 
   @Input() optionsSelectedLabel = 'options selected';
   @Input() placeholder = '';
@@ -250,7 +241,7 @@ export class MdbSelectComponent
 
   readonly stateChanges: Subject<void> = new Subject<void>();
 
-  selectFilter: FormControl = new FormControl();
+  selectFilter: UntypedFormControl = new UntypedFormControl();
 
   get activeOption(): MdbOptionComponent | null {
     if (this._keyManager) {
@@ -328,6 +319,11 @@ export class MdbSelectComponent
     return true;
   }
 
+  @HostBinding('class.d-block')
+  get display(): boolean {
+    return true;
+  }
+
   @HostBinding('class.focused')
   get isFocused(): boolean {
     return this._hasFocus || this._isOpen;
@@ -384,6 +380,8 @@ export class MdbSelectComponent
     if (this.selectAllOption) {
       this._listenToSelectAllClick();
     }
+
+    this._listenToSelectedLabelChange();
   }
 
   private _initKeyManager(viewOptions): void {
@@ -434,6 +432,17 @@ export class MdbSelectComponent
       .subscribe((option: MdbSelectAllOptionComponent) => {
         this.onSelectAll(option);
       });
+  }
+
+  private _listenToSelectedLabelChange(): void {
+    this.options.changes.pipe(startWith(null), takeUntil(this._destroy)).subscribe(() => {
+      merge(...this.options.map((option) => option._labelChange))
+        .pipe(takeUntil(merge(this._destroy, this.options.changes)))
+        .subscribe(() => {
+          this.stateChanges.next();
+          this._cdRef.markForCheck();
+        });
+    });
   }
 
   private _updateValue(): void {
@@ -582,7 +591,7 @@ export class MdbSelectComponent
     if (!selectAlloption.selected && !this._selectAllChecked) {
       this._selectAllChecked = true;
       this.options.forEach((option: MdbOptionComponent) => {
-        if (!option.disabled) {
+        if (!option.disabled && !option.hidden) {
           this._selectionModel.select(option);
           option.select();
         }
@@ -594,9 +603,11 @@ export class MdbSelectComponent
       selectAlloption.select();
     } else {
       this._selectAllChecked = false;
-      this._selectionModel.clear();
       this.options.forEach((option: MdbOptionComponent) => {
-        option.deselect();
+        if (!option.hidden) {
+          option.deselect();
+          this._selectionModel.deselect(option);
+        }
       });
       selectAlloption.deselect();
       this._updateValue();
@@ -678,6 +689,14 @@ export class MdbSelectComponent
               }
             });
 
+            this._selectAllChecked = options.every((option) => option.selected);
+
+            if (this.selectAllOption && !this._selectAllChecked) {
+              this.selectAllOption.deselect();
+            } else if (this.selectAllOption && this._selectAllChecked) {
+              this.selectAllOption.select();
+            }
+
             this._showNoResultsMsg = options.length === 0;
             this._keyManager.setActiveItem(null);
             this._initKeyManager(options);
@@ -746,18 +765,23 @@ export class MdbSelectComponent
       .position()
       .flexibleConnectedTo(this.input)
       .withPositions(this._getPositions())
-      .withFlexibleDimensions(false);
+      .withFlexibleDimensions(false)
+      .withPush(false);
 
     return positionStrategy;
   }
 
   private _getPositions(): ConnectionPositionPair[] {
-    const topOffset = this.outline ? -7 : -3;
+    // If labeQl floats we need to add additional offset for top position
+    // Bottom offset is needed because of the box-shadow on input border
+    const bottomOffset = 1;
+    const topOffset = -6;
 
     return [
       {
         originX: 'start',
         originY: 'bottom',
+        offsetY: bottomOffset,
         overlayX: 'start',
         overlayY: 'top',
       },
@@ -1042,7 +1066,6 @@ export class MdbSelectComponent
   static ngAcceptInputType_disabled: BooleanInput;
   static ngAcceptInputType_highlightFirst: BooleanInput;
   static ngAcceptInputType_multiple: BooleanInput;
-  static ngAcceptInputType_outline: BooleanInput;
   static ngAcceptInputType_required: BooleanInput;
   static ngAcceptInputType_filter: BooleanInput;
 }

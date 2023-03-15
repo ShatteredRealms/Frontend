@@ -77,8 +77,10 @@ export class MdbScrollbarDirective implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this._initScrollbar();
-      this._bindEvents();
+      setTimeout(() => {
+        this._initScrollbar();
+        this._bindEvents();
+      }, 0);
     }
   }
 

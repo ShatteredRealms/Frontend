@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from "../../models/user.model";
 import { ActivatedRoute, Router } from "@angular/router";
-import { UsersService } from "../../_services/users.service";
-import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
-import { AlertComponent } from "../../_components/alert/alert.component";
-import { getRoleBadgeClasses, Role } from "../../models/role.model";
+// import { AlertComponent } from "../../_components/alert/alert.component";
+import { getRoleBadgeClasses } from "../../models/role.model";
+import { KeycloakProfile } from 'keycloak-js';
+import { MdbNotificationService } from 'mdb-angular-ui-kit/notification';
+import { KeycloakService } from 'src/app/_services/keycloak.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -12,51 +12,69 @@ import { getRoleBadgeClasses, Role } from "../../models/role.model";
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  user: User;
+  user: KeycloakProfile | null;
   loading: boolean = true;
 
-  constructor(protected route: ActivatedRoute,
+  constructor(
+    protected route: ActivatedRoute,
     protected router: Router,
     protected notificationService: MdbNotificationService,
-    protected usersService: UsersService) {
+    protected keycloak: KeycloakService,
+  ) {
   }
 
   ngOnInit(): void {
-    const username = this.route.snapshot.paramMap.get('user')!;
-    this.usersService.getUser(username).subscribe((user) => {
-      this.user = user;
-    }, (error) => {
-      this.router.navigate(['/']).then(() => {
-        if (error.status == 404) {
-          this.notificationService.open(AlertComponent, {
-            data: {
-              message: 'User not found',
-              color: 'danger',
-            },
-            stacking: true
-          })
-        } else if (error.status == 401) {
-          this.notificationService.open(AlertComponent, {
-            data: {
-              message: 'Unauthorized',
-              color: 'danger',
-            },
-            stacking: true
-          })
-        } else {
-          this.notificationService.open(AlertComponent, {
-            data: {
-              message: 'Unknown server error. Please try again later.',
-              color: 'danger',
-            },
-            stacking: true
-          })
-        }
-      })
-    })
+    // const username = this.route.snapshot.paramMap.get('user')!;
+    // this.keycloakAdmin.getUser(username).subscribe({
+    //   next: (user: KeycloakProfile) => {
+    //     this.user = user;
+    //   },
+    //   error: (error: any) => {
+    //     console.log('error:', error);
+    //     this.router.navigate(['/']).then(() => {
+    //       if (error.status == 404) {
+    //         this.notificationService.open(AlertComponent, {
+    //           data: {
+    //             message: 'User not found',
+    //             color: 'danger',
+    //           },
+    //           stacking: true
+    //         })
+    //       } else if (error.status == 401) {
+    //         this.notificationService.open(AlertComponent, {
+    //           data: {
+    //             message: 'Unauthorized',
+    //             color: 'danger',
+    //           },
+    //           stacking: true
+    //         })
+    //       } else {
+    //         this.notificationService.open(AlertComponent, {
+    //           data: {
+    //             message: 'Unknown server error. Please try again later.',
+    //             color: 'danger',
+    //           },
+    //           stacking: true
+    //         })
+    //       }
+    //     })
+    //   },
+    //   complete: () => { }
+    // })
   }
 
-  getRoleHTMLClass(role: Role): string {
+  getRoleHTMLClass(role: string): string {
     return getRoleBadgeClasses(role);
+  }
+
+  createdDate(): Date | null {
+    if (this.user) {
+      return new Date(this.user.createdTimestamp!);
+    }
+    return new Date();
+  }
+
+  getRoles(): string[] {
+    return [];
   }
 }

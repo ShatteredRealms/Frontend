@@ -1,5 +1,6 @@
 .timepicker {
   &-wrapper {
+    // touch-action: none;
     z-index: $zindex-timepicker;
     opacity: 0;
     right: 0;
@@ -446,6 +447,7 @@
   }
 }
 
+// Additional MDB Angular styles
 .timepicker-canvas-bearing {
   stroke: none;
   fill: $primary;
@@ -468,3 +470,4 @@
 .timepicker-canvas-bg-trans {
   fill: $primary;
 }
+// Additional MDB Angular styles

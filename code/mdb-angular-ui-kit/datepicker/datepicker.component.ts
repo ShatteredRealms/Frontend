@@ -286,8 +286,17 @@ export class MdbDatepickerComponent implements OnInit, OnDestroy {
     }
 
     if (!this.inline && this._hasVerticalScroll()) {
+      const widthWithVerticalScroll = this._document.body.offsetWidth;
+
       this._renderer.setStyle(this._document.body, 'overflow', 'hidden');
-      this._renderer.setStyle(this._document.body, 'padding-right', '15px');
+
+      const widthWithoutVerticalScroll = this._document.body.offsetWidth;
+
+      this._renderer.setStyle(
+        this._document.body,
+        'padding-right',
+        `${widthWithoutVerticalScroll - widthWithVerticalScroll}px`
+      );
     }
 
     this._isOpen = true;

@@ -1,4 +1,4 @@
-// package: sro.accounts
+// package: sro
 // file: health.proto
 
 import * as jspb from "google-protobuf";

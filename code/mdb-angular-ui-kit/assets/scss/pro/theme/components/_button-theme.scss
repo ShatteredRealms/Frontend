@@ -8,16 +8,19 @@
   .btn-primary {
     background-color: $primary;
     color: set-notification-text-color($primary);
+    box-shadow: 0 4px 9px -4px $primary;
 
     &:hover {
       background-color: darken($primary, 7.5%);
       color: set-notification-text-color($primary);
+      box-shadow: 0 8px 9px -4px rgba($primary, 0.3), 0 4px 18px 0 rgba($primary, 0.2);
     }
 
     &:focus,
     &.focus {
       background-color: darken($primary, 7.5%);
       color: set-notification-text-color($primary);
+      box-shadow: 0 8px 9px -4px rgba($primary, 0.3), 0 4px 18px 0 rgba($primary, 0.2);
     }
 
     .btn-check:checked + &,

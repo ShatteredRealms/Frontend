@@ -1,4 +1,4 @@
-// package: sro.accounts
+// package: sro
 // file: health.proto
 
 import * as health_pb from "./health_pb";

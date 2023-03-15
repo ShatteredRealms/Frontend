@@ -13,4 +13,4 @@ import { MdbOptionModule } from 'mdb-angular-ui-kit/option';
   imports: [CommonModule, OverlayModule, ReactiveFormsModule],
   exports: [MdbSelectComponent, MdbSelectAllOptionComponent, MdbFormsModule, MdbOptionModule],
 })
-export class MdbSelectModule {}
+export class MdbSelectModule { }

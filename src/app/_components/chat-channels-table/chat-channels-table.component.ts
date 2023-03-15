@@ -1,13 +1,12 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MdbTableDirective} from "mdb-angular-ui-kit/table";
-import {Router} from "@angular/router";
-import {AuthorizationService} from "../../_services/authorization.service";
-import {MdbModalService} from "mdb-angular-ui-kit/modal";
-import {ModalComponent} from "../modal/modal.component";
-import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {AlertComponent} from "../alert/alert.component";
-import {ChatChannel, getChatChannelBadgeClasses} from "../../models/chat-channel.model";
-import {ChatChannelService} from "../../_services/chat-channel.service";
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MdbTableDirective } from "mdb-angular-ui-kit/table";
+import { Router } from "@angular/router";
+import { MdbModalService } from "mdb-angular-ui-kit/modal";
+import { ModalComponent } from "../modal/modal.component";
+import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
+import { AlertComponent } from "../alert/alert.component";
+import { ChatChannel, getChatChannelBadgeClasses } from "../../models/chat-channel.model";
+import { ChatChannelService } from "../../_services/chat-channel.service";
 
 @Component({
   selector: 'app-chat-channels-table',

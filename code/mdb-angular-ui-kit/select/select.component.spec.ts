@@ -1,6 +1,6 @@
 import { Component, Provider, Type, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { TestBed, ComponentFixture, inject, fakeAsync, flush, tick } from '@angular/core/testing';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
@@ -329,7 +329,7 @@ describe('MDB Select', () => {
     });
 
     it('should use value from Form Control to set default selected value', fakeAsync(() => {
-      fixture.componentInstance.control = new FormControl('one');
+      fixture.componentInstance.control = new UntypedFormControl('one');
       fixture.detectChanges();
 
       flush();
@@ -788,6 +788,80 @@ describe('MDB Select', () => {
       expect(options[1].classList).toContain('active');
     }));
   });
+
+  describe('Filtering and selection', () => {
+    let fixture: ComponentFixture<BasicSelect>;
+    let select: MdbSelectComponent;
+
+    beforeEach(() => {
+      fixture = createComponent(SelectFilterMultiple);
+      fixture.detectChanges();
+      select = fixture.componentInstance.select;
+    });
+
+    it('should select only filtered options when using select all option', fakeAsync(() => {
+      select.open();
+      fixture.detectChanges();
+      flush();
+
+      const filterInput = overlayContainerElement.querySelector(
+        '.select-filter-input'
+      ) as HTMLInputElement;
+
+      filterInput.value = 'One';
+      filterInput.dispatchEvent(new Event('input'));
+      tick(300);
+      fixture.detectChanges();
+
+      let selectAllOption = overlayContainerElement.querySelector(
+        'mdb-select-all-option'
+      ) as HTMLElement;
+
+      selectAllOption.click();
+      fixture.detectChanges();
+      flush();
+
+      const options = fixture.componentInstance.options.toArray();
+      const selectInput = document.querySelector('.select-input') as HTMLInputElement;
+
+      expect(selectAllOption.classList).toContain('selected');
+      expect(selectInput.value).toBe('One');
+      expect(options[0].selected).toBe(true);
+      expect(options[1].selected).toBe(false);
+    }));
+
+    it('should update select all option state when option list change during filtering', fakeAsync(() => {
+      select.open();
+      fixture.detectChanges();
+      flush();
+
+      const filterInput = overlayContainerElement.querySelector(
+        '.select-filter-input'
+      ) as HTMLInputElement;
+
+      filterInput.value = 'One';
+      filterInput.dispatchEvent(new Event('input'));
+      tick(300);
+      fixture.detectChanges();
+
+      let selectAllOption = overlayContainerElement.querySelector(
+        'mdb-select-all-option'
+      ) as HTMLElement;
+
+      selectAllOption.click();
+      fixture.detectChanges();
+      flush();
+
+      expect(selectAllOption.classList).toContain('selected');
+
+      filterInput.value = '';
+      filterInput.dispatchEvent(new Event('input'));
+      tick(300);
+      fixture.detectChanges();
+
+      expect(selectAllOption.classList).not.toContain('selected');
+    }));
+  });
 });
 
 @Component({
@@ -834,6 +908,51 @@ class BasicSelect {
   autoSelect = false;
 }
 
+@Component({
+  selector: 'mdb-select-filter-multiple',
+  template: `
+    <mdb-form-control>
+      <mdb-select
+        [filter]="filter"
+        [notFoundMsg]="notFoundMsg"
+        [multiple]="multiple"
+        [autoSelect]="autoSelect"
+        [(ngModel)]="value"
+      >
+        <mdb-select-all-option></mdb-select-all-option>
+        <mdb-option
+          *ngFor="let number of numbers"
+          [value]="number.value"
+          [disabled]="number.disabled"
+        >
+          {{ number.label }}
+        </mdb-option>
+      </mdb-select>
+    </mdb-form-control>
+  `,
+})
+// eslint-disable-next-line @angular-eslint/component-class-suffix
+class SelectFilterMultiple {
+  numbers: any[] = [
+    { value: 'one', label: 'One', disabled: false },
+    { value: 'two', label: 'Two', disabled: false },
+    { value: 'three', label: 'Three', disabled: false },
+    { value: 'four', label: 'Four', disabled: false },
+    { value: 'five', label: 'Five', disabled: false },
+    { value: 'six', label: 'Six', disabled: false },
+  ];
+
+  value = null;
+
+  filter = true;
+  @ViewChild(MdbSelectComponent, { static: true }) select: MdbSelectComponent;
+  @ViewChildren(MdbOptionComponent) options: QueryList<MdbOptionComponent>;
+
+  multiple = true;
+  notFoundMsg = 'No results found';
+  autoSelect = false;
+}
+
 const SELECT_WITH_FORM_CONTROL_TEMPLATE = `
 <mdb-form-control>
   <mdb-select
@@ -866,7 +985,7 @@ class SelectWithFormControl {
     { value: 'six', label: 'Six', disabled: false },
   ];
 
-  control = new FormControl();
+  control = new UntypedFormControl();
 
   @ViewChild(MdbSelectComponent, { static: true }) select: MdbSelectComponent;
   @ViewChildren(MdbOptionComponent) options: QueryList<MdbOptionComponent>;

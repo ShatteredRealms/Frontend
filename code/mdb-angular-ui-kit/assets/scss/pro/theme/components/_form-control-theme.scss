@@ -59,20 +59,40 @@
       }
       &:focus ~ .form-notch .form-notch-middle {
         border-color: $primary;
+        box-shadow: 0 1px 0 0 $primary;
+        border-top: 1px solid transparent;
       }
       &:focus ~ .form-notch .form-notch-leading {
-        border-top-color: $primary;
-        border-bottom-color: $primary;
-        border-left-color: $primary;
+        border-color: $primary;
+        box-shadow: -1px 0 0 0 $primary, 0 1px 0 0 $primary, 0 -1px 0 0 $primary;
       }
       &:focus ~ .form-notch .form-notch-trailing {
         border-color: $primary;
+        box-shadow: 1px 0 0 0 $primary, 0 -1px 0 0 $primary, 0 1px 0 0 $primary;
       }
       &:disabled,
       &.disabled,
       &[readonly]:not(.select-input) {
         background-color: $inputReadonly;
       }
+    }
+  }
+
+  .select.focused {
+    & ~ .form-notch .form-notch-leading {
+      border-color: $primary;
+      box-shadow: -1px 0 0 0 $primary, 0 1px 0 0 $primary, 0 -1px 0 0 $primary;
+    }
+
+    & ~ .form-notch .form-notch-middle {
+      border-color: $primary;
+      box-shadow: 0 1px 0 0 $primary;
+      border-top: 1px solid transparent;
+    }
+
+    & ~ .form-notch .form-notch-trailing {
+      border-color: $primary;
+      box-shadow: 1px 0 0 0 $primary, 0 -1px 0 0 $primary, 0 1px 0 0 $primary;
     }
   }
 }

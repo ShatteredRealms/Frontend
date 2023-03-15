@@ -99,11 +99,12 @@
       position: absolute;
       left: 0 #{'/*!rtl:ignore*/'};
       top: 0;
-      width: 100%;
       max-width: 100%;
       height: auto;
       cursor: pointer;
       pointer-events: auto;
+      transition: transform .3s;
+      transform-origin: 0 0;
       &.vertical {
         height: 100%;
         max-height: 100%;

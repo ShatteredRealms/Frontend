@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { fromEvent } from "rxjs";
 import { debounceTime, map, startWith } from "rxjs/operators";
-import { KeycloakService } from 'keycloak-angular';
+import { KeycloakService } from 'src/app/_services/keycloak.service';
 
 @Component({
   selector: 'app-nav',
@@ -35,10 +35,6 @@ export class NavComponent implements OnInit {
     this.isScreenSmall$ = screenSizeChanged$.pipe(startWith(checkScreenSize()))
   }
 
-  isUserSignedIn(): Promise<boolean> {
-    return this.keycloak.isLoggedIn();
-  }
-
   signOutUser(): void {
     this.keycloak.logout();
     this.router.navigate(['/']);
@@ -46,7 +42,12 @@ export class NavComponent implements OnInit {
 
   userProfile() {
     this.keycloak.loadUserProfile().then(profile => {
+      console.log('profile:', profile)
       this.router.navigate(['/users', profile.username])
     });
+  }
+
+  isUserSignedIn(): boolean {
+    return !!this.keycloak.instance.authenticated;
   }
 }

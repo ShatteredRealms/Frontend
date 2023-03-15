@@ -568,7 +568,9 @@ export class MdbTimepickerContentComponent implements OnInit, AfterViewInit, OnD
 
   private _to24(time: SelectedTime): SelectedTime {
     let hour = time.ampm === 'PM' ? Number(time.h) + 12 : Number(time.h);
-    hour = hour === 12 ? 0 : hour;
+    if (this.format12 && !this.format24) {
+      hour = hour === 12 ? 0 : hour;
+    }
     hour = hour === 24 ? 12 : hour;
     return {
       ...time,

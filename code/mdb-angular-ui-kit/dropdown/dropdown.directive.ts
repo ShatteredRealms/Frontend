@@ -63,6 +63,7 @@ export class MdbDropdownDirective implements OnDestroy, AfterContentInit {
   @Input() closeOnOutsideClick = true;
   @Input() closeOnItemClick = true;
   @Input() closeOnEsc = true;
+  @Input() withPush = false;
 
   @Output() dropdownShow: EventEmitter<MdbDropdownDirective> = new EventEmitter();
   @Output() dropdownShown: EventEmitter<MdbDropdownDirective> = new EventEmitter();
@@ -136,7 +137,8 @@ export class MdbDropdownDirective implements OnDestroy, AfterContentInit {
     const positionStrategy = this._overlayPositionBuilder
       .flexibleConnectedTo(this._dropdownToggle)
       .withPositions(this._getPosition())
-      .withFlexibleDimensions(false);
+      .withFlexibleDimensions(false)
+      .withPush(this.withPush);
 
     return positionStrategy;
   }

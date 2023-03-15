@@ -227,7 +227,7 @@ export class MdbSidenavComponent implements AfterViewInit {
   private _scrollContainer: string;
   private _slim = false;
   private _slimCollapsed = false;
-  private _slimWidth = 70;
+  private _slimWidth = 77;
   private _position = 'fixed';
   private _right = false;
   private _transitionDuration = 300;

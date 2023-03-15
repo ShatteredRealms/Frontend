@@ -68,7 +68,7 @@ describe('MDB Notification', () => {
     overlayContainer.ngOnDestroy();
   });
 
-  it('should open a modal with a  specified component', () => {
+  it('should open a modal with a specified component', () => {
     let notificationContainer = overlayContainerElement.querySelector('mdb-notification-container');
     expect(notificationContainer).toBe(null);
 
@@ -101,6 +101,34 @@ describe('MDB Notification', () => {
 
     notificationContainer = overlayContainerElement.querySelector('mdb-notification-container');
     expect(notificationContainer).not.toBe(null);
+
+    fixture.detectChanges();
+    flush();
+
+    notificationContainer = overlayContainerElement.querySelector('mdb-notification-container');
+    expect(notificationContainer).toBe(null);
+  }));
+
+  it('should prevent autohide notification on hover, and autohide after mouseleave', fakeAsync(() => {
+    let notificationContainer = overlayContainerElement.querySelector('mdb-notification-container');
+    expect(notificationContainer).toBe(null);
+
+    notification.open(BasicNotificationComponent, {
+      autohide: true,
+    });
+
+    notificationContainer = overlayContainerElement.querySelector('mdb-notification-container');
+    expect(notificationContainer).not.toBe(null);
+
+    notificationContainer.querySelector('div').dispatchEvent(new Event('mouseenter'));
+
+    fixture.detectChanges();
+    flush();
+
+    notificationContainer = overlayContainerElement.querySelector('mdb-notification-container');
+    expect(notificationContainer).not.toBe(null);
+
+    notificationContainer.querySelector('div').dispatchEvent(new Event('mouseleave'));
 
     fixture.detectChanges();
     flush();

@@ -12,9 +12,10 @@ import {
   OnDestroy,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  HostBinding,
 } from '@angular/core';
 import { MdbStepComponent } from './step.component';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { merge, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { horizontalAnimation, verticalAnimation } from './stepper-animations';
@@ -119,6 +120,12 @@ export class MdbStepperComponent implements AfterContentInit, OnDestroy {
   private _markAsCompleted = true;
 
   @Output() stepChange: EventEmitter<MdbStepChangeEvent> = new EventEmitter<MdbStepChangeEvent>();
+  @Output() stepValid: EventEmitter<void> = new EventEmitter<void>();
+  @Output() stepInvalid: EventEmitter<void> = new EventEmitter<void>();
+
+  @HostBinding('class.d-block') display = true;
+  @HostBinding('class.w-100') width = true;
+  @HostBinding('class.position-relative') position = true;
 
   constructor(private _cdRef: ChangeDetectorRef) {}
 
@@ -216,14 +223,12 @@ export class MdbStepperComponent implements AfterContentInit, OnDestroy {
         return;
       }
 
-      this._removeStepValidationClasses(newStep);
-
       if (this.linear && index > this.activeStepIndex) {
         if (this._isStepValid(this._activeStep) || currentStep.optional) {
+          this.stepValid.emit();
           this._markCurrentAsDone();
           this._removeCurrentActiveStep();
           this._setActiveStep(index);
-
           this.stepChange.emit({
             activeStep: newStep,
             activeStepIndex: newStepIndex,
@@ -231,16 +236,20 @@ export class MdbStepperComponent implements AfterContentInit, OnDestroy {
             previousStepIndex: currentStepIndex,
           });
         } else {
+          this.stepInvalid.emit();
           this._markCurrentAsWrong();
           this._markStepControlsAsDirty(this._activeStep);
         }
       } else {
-        if (index < this.activeStepIndex) {
+        if (index < this.activeStepIndex && !this._isStepValid(this._activeStep)) {
           this._removeStepValidationClasses(this._activeStep);
         }
 
+        if (!this.linear) {
+          this._markCurrentAsDone();
+        }
+
         this._removeCurrentActiveStep();
-        this._markCurrentAsDone();
         this._setActiveStep(index);
 
         this.stepChange.emit({
@@ -271,7 +280,7 @@ export class MdbStepperComponent implements AfterContentInit, OnDestroy {
       for (let i = 0; i < keys.length; i++) {
         const control = controls[keys[i]];
 
-        if (control instanceof FormControl) {
+        if (control instanceof UntypedFormControl) {
           control.markAsTouched();
         }
       }
@@ -284,7 +293,28 @@ export class MdbStepperComponent implements AfterContentInit, OnDestroy {
   }
 
   private _isNewStepLinear(newStepIndex: number): boolean {
-    return this.activeStepIndex - newStepIndex === 1 || this.activeStepIndex - newStepIndex === -1;
+    let result: boolean;
+
+    if (this.activeStepIndex - newStepIndex === 1 || this.activeStepIndex - newStepIndex === -1) {
+      result = true;
+    }
+
+    if (this.activeStepIndex < newStepIndex) {
+      this.steps.forEach((el, i) => {
+        if (i > this.activeStepIndex && i < newStepIndex) {
+          result = this._isStepValid(el) || this._getStepByIndex(i).optional;
+        }
+      });
+    }
+
+    if (this.activeStepIndex > newStepIndex) {
+      this.steps.forEach((el, i) => {
+        if (i < this.activeStepIndex && i > newStepIndex) {
+          result = this._isStepValid(el) || this._getStepByIndex(i).optional;
+        }
+      });
+    }
+    return result;
   }
 
   private _setActiveStep(index: number): void {

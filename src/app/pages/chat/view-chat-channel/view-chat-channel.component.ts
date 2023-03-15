@@ -3,13 +3,13 @@ import { ChatChannel, getChatChannelBadgeClasses } from "../../../models/chat-ch
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { ChatChannelService } from "../../../_services/chat-channel.service";
 import { environment } from "../../../../environments/environment";
-import { ChatService } from "../../../generated/chat_pb_service";
-import { ChannelIdMessage, ChatMessage } from "../../../generated/chat_pb";
 import { grpc } from "@improbable-eng/grpc-web";
 import { MdbNotificationRef, MdbNotificationService } from "mdb-angular-ui-kit/notification";
 import { AlertComponent } from "../../../_components/alert/alert.component";
 import Request = grpc.Request;
-import { KeycloakService } from 'keycloak-angular';
+import { ChatChannelTarget, ChatMessage } from 'src/app/generated/sro/chat/chat_pb';
+import { ChatService } from 'src/app/generated/sro/chat/chat_pb_service';
+import { KeycloakService } from 'src/app/_services/keycloak.service';
 
 @Component({
   selector: 'app-view-chat-channel',
@@ -18,7 +18,7 @@ import { KeycloakService } from 'keycloak-angular';
 })
 export class ViewChatChannelComponent implements OnInit {
 
-  chatChannel: ChatChannel;
+  chatChannel: ChatChannel | null;
   chatMessages: ChatMessage[] = [
     // {username: "anthony", message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Gravida rutrum quisque non tellus orci ac"},
     // {username: "ross", message: "Feugiat nibh sed pulvinar proin gravida hendrerit lectus a."},
@@ -66,13 +66,13 @@ export class ViewChatChannelComponent implements OnInit {
   }
 
   connectChat() {
-    const request = new ChannelIdMessage();
-    request.setChannelId(this.chatChannel.id);
+    const request = new ChatChannelTarget();
+    request.setId(this.chatChannel!.id);
     this.chatMessageStream = grpc.invoke(ChatService.ConnectChannel, {
       request: request,
       host: environment.CHAT_API_BASE_URL,
       metadata: {
-        Authorization: `Bearer ${this.keycloak.getToken()}`,
+        Authorization: `Bearer ${this.keycloak.instance.token}`,
       },
       onMessage: (message: ChatMessage) => {
         console.log('msg:', message)
@@ -94,7 +94,7 @@ export class ViewChatChannelComponent implements OnInit {
   }
 
   sendChatMessage() {
-    this.chatChannelService.sendChatMessage(this.chatChannel.id, this.chatMessage).subscribe({
+    this.chatChannelService.sendChatMessage(this.chatChannel!.id, this.chatMessage).subscribe({
       next: (resp) => {
         console.log('send message resp:', resp);
       },

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {ChatChannel} from "../../../models/chat-channel.model";
-import {MdbNotificationService} from "mdb-angular-ui-kit/notification";
-import {ChatChannelService} from "../../../_services/chat-channel.service";
-import {ActivatedRoute} from "@angular/router";
-import {AlertComponent} from "../../../_components/alert/alert.component";
+import { ChatChannel } from "../../../models/chat-channel.model";
+import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
+import { ChatChannelService } from "../../../_services/chat-channel.service";
+import { ActivatedRoute } from "@angular/router";
+import { AlertComponent } from "../../../_components/alert/alert.component";
 
 @Component({
   selector: 'app-edit-chat-channel',
@@ -12,7 +12,7 @@ import {AlertComponent} from "../../../_components/alert/alert.component";
 })
 export class EditChatChannelComponent implements OnInit {
 
-  chatChannel: ChatChannel;
+  chatChannel: ChatChannel | null;
   newName: string = '';
 
   constructor(
@@ -32,9 +32,9 @@ export class EditChatChannelComponent implements OnInit {
   }
 
   submitNameChange() {
-    this.chatChannelService.updateChatChannelName(this.chatChannel.id, this.newName).subscribe({
+    this.chatChannelService.updateChatChannelName(this.chatChannel!.id, this.newName).subscribe({
       next: () => {
-        this.chatChannel.name = this.newName;
+        this.chatChannel!.name = this.newName;
         this.notificationService.open(AlertComponent, {
           data: {
             message: 'Name updated',
@@ -57,6 +57,6 @@ export class EditChatChannelComponent implements OnInit {
   }
 
   cancelNameChange() {
-    this.newName = this.chatChannel.name;
+    this.newName = this.chatChannel!.name;
   }
 }

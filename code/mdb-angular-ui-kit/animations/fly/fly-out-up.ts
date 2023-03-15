@@ -41,18 +41,18 @@ const flyOutUp = (options: MdbAnimationOptions): AnimationReferenceMetadata => {
             offset: 0.2,
           }),
           style({
-            transform: 'transform: translate3d(0, -20px, 0)',
+            transform: 'translate3d(0, -20px, 0)',
             easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
             offset: 0.4,
           }),
           style({
-            transform: 'transform: translate3d(0, -20px, 0)',
+            transform: 'translate3d(0, -20px, 0)',
             easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
             offset: 0.45,
           }),
           style({
             opacity: 1,
-            transform: 'transform: translate3d(0, 2000px, 0)',
+            transform: 'translate3d(0, 2000px, 0)',
             easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
             offset: 1,
           }),

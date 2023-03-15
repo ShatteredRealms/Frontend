@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { KeycloakService } from 'keycloak-angular';
+import { KeycloakService } from 'src/app/_services/keycloak.service';
 
 @Component({
   selector: 'app-footer',
@@ -17,10 +17,6 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  isUserSignedIn(): Promise<boolean> {
-    return this.keycloak.isLoggedIn();
-  }
-
   isAdmin(): boolean {
     return this.keycloak.getUserRoles().some(r => ["SUPER ADMIN", "ADMIN"].includes(r))
   }
@@ -29,5 +25,9 @@ export class FooterComponent implements OnInit {
     this.keycloak.loadUserProfile().then(profile => {
       this.router.navigate(['/users', profile.username]);
     });
+  }
+
+  isUserSignedIn(): boolean {
+    return !!this.keycloak.instance.authenticated;
   }
 }

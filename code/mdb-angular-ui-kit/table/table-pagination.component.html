@@ -2,7 +2,7 @@
   <div class="datatable-select-wrapper">
     <p class="datatable-select-text">{{ rowsPerPageText }}:</p>
     <mdb-form-control>
-      <mdb-select [(ngModel)]="entries" (selected)="updateRowPerPageNumber($event)">
+      <mdb-select [value]="entries" (selected)="updateRowPerPageNumber($event)">
         <mdb-option *ngFor="let entry of entriesOptions" [value]="entry">{{ entry }}</mdb-option>
       </mdb-select>
     </mdb-form-control>

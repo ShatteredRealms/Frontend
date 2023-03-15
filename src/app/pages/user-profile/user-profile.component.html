@@ -9,15 +9,12 @@
             <h4 class="text-light mb-0">{{this.user?.firstName}} {{this.user?.lastName}}</h4>
             <p>
               <span class="badge bg-success mx-1">Online</span>
-              <span
-                *ngFor="let role of user?.roles" class="badge mx-1 mt-1"
-                [className]="getRoleHTMLClass(role)"
-              >
-                  {{ role.name }}
-                </span>
+              <span *ngFor="let role of this.getRoles()" class="badge mx-1 mt-1" [className]="getRoleHTMLClass(role)">
+                {{ role }}
+              </span>
             </p>
             <p class="card-text">
-              <a [routerLink]="['/users', user?.username, 'edit']">
+              <a [routerLink]="['/users', this.user?.username, 'edit']">
                 <span class="btn btn-sm btn-outline-primary">Edit Details</span>
               </a>
             </p>
@@ -39,7 +36,7 @@
             </div>
             <div class="col-4">
               <h5 class="card-title">JOINED</h5>
-              <p class="card-text">{{this.user?.createdAt | date: 'mediumDate'}}</p>
+              <p class="card-text">{{this.createdDate() | date: 'mediumDate'}}</p>
             </div>
           </div>
         </div>

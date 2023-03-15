@@ -97,7 +97,7 @@
         color: $primary;
       }
 
-      &:hover {
+      &:hover:not(:disabled) {
         color: $primary;
       }
     }

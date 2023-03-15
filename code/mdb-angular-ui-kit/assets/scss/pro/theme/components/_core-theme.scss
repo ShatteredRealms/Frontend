@@ -6,4 +6,8 @@
     background-color: $background;
     color: $onBackground;
   }
+
+  .bg-body {
+    background-color: $background !important;
+  }
 }

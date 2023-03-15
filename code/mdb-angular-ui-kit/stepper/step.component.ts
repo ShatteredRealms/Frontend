@@ -13,7 +13,7 @@ import {
   ViewContainerRef,
   AfterContentInit,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { MDB_STEP_ICON } from './step-icon.directive';
 
@@ -49,7 +49,7 @@ export class MdbStepComponent implements OnChanges, AfterContentInit {
   }
   private _optional = false;
 
-  @Input() stepForm: FormGroup;
+  @Input() stepForm: UntypedFormGroup;
 
   _onChanges: Subject<void> = new Subject();
 
