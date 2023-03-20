@@ -10,7 +10,7 @@
             <p>
               <span class="badge bg-success mx-1">Online</span>
               <span *ngFor="let role of this.getRoles()" class="badge mx-1 mt-1" [className]="getRoleHTMLClass(role)">
-                {{ role }}
+                {{ role | titlecase }}
               </span>
             </p>
             <p *ngIf="this.user == this.keycloak.profile" class="card-text">
