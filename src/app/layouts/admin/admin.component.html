@@ -1,0 +1,81 @@
+<div class="min-vh-100 d-flex flex-column justify-content-between">
+  <div class="container-fluid p-0 mw-100">
+    <app-nav></app-nav>
+    <mdb-sidenav-layout>
+      <mdb-sidenav #sidenav="mdbSidenav" [mode]="'side'">
+        <ul class="sidenav-menu">
+          <mdb-sidenav-item>
+            <a class="sidenav-link" tabindex="0">
+              <i class="far fa-smile fa-fw me-3"></i><span>Link 1</span>
+            </a>
+          </mdb-sidenav-item>
+          <mdb-sidenav-item>
+            <a class="sidenav-link" tabindex="0">
+              <i class="fas fa-grin fa-fw me-3"></i><span>Category 1</span>
+            </a>
+            <ul class="sidenav-collapse" mdbCollapse>
+              <li class="sidenav-item">
+                <a class="sidenav-link" tabindex="0">Link 2</a>
+              </li>
+              <li class="sidenav-item">
+                <a class="sidenav-link" tabindex="0">Link 3</a>
+              </li>
+            </ul>
+          </mdb-sidenav-item>
+          <mdb-sidenav-item>
+            <a class="sidenav-link">
+              <i class="fas fa-grin-wink fa-fw me-3"></i><span>Category 2</span>
+            </a>
+            <ul class="sidenav-collapse" mdbCollapse>
+              <li class="sidenav-item">
+                <a class="sidenav-link" tabindex="0">Link 4</a>
+              </li>
+              <li class="sidenav-item">
+                <a class="sidenav-link" tabindex="0">Link 5</a>
+              </li>
+            </ul>
+          </mdb-sidenav-item>
+          <mdb-sidenav-item>
+            <a class="sidenav-link" tabindex="0">
+              <i class="fas fa-grin-wink fa-fw me-3"></i><span>Category 3</span>
+            </a>
+            <ul class="sidenav-collapse" mdbCollapse>
+              <li class="sidenav-item">
+                <a class="sidenav-link" tabindex="0">Link 5</a>
+              </li>
+              <li class="sidenav-item">
+                <a class="sidenav-link" tabindex="0">Link 6</a>
+              </li>
+            </ul>
+          </mdb-sidenav-item>
+          <mdb-sidenav-item>
+            <a class="sidenav-link" tabindex="0">
+              <i class="fas fa-grin-wink fa-fw me-3"></i><span>Category 4</span>
+            </a>
+            <ul class="sidenav-collapse" mdbCollapse>
+              <li class="sidenav-item">
+                <a class="sidenav-link" tabindex="0">Link 7</a>
+              </li>
+              <li class="sidenav-item">
+                <a class="sidenav-link" tabindex="">Link 8</a>
+              </li>
+            </ul>
+          </mdb-sidenav-item>
+        </ul>
+      </mdb-sidenav>
+      <mdb-sidenav-content #sidenavContent>
+        <main>
+          <button #sidenavToggle class="btn btn-primary" (click)="sidenav.toggle()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <router-outlet></router-outlet>
+        </main>
+        <!-- Toggler -->
+        <!-- Toggler -->
+      </mdb-sidenav-content>
+    </mdb-sidenav-layout>
+  </div>
+  <div class="mt-4">
+    <app-footer></app-footer>
+  </div>
+</div>

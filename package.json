@@ -5,11 +5,13 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "buildl": "ng build --configuration=local",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
   "dependencies": {
+    "@angular-builders/custom-webpack": "^15.0.0",
     "@angular/animations": "^15.2.0",
     "@angular/cdk": "15",
     "@angular/common": "^15.2.2",

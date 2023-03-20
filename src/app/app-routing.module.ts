@@ -7,18 +7,29 @@ import { AuthGuard } from "./_helpers/auth.guard";
 import { NewChatChannelComponent } from "./pages/chat/new-chat-channel/new-chat-channel.component";
 import { ViewChatChannelComponent } from "./pages/chat/view-chat-channel/view-chat-channel.component";
 import { EditChatChannelComponent } from "./pages/chat/edit-chat-channel/edit-chat-channel.component";
+import { DefaultComponent } from './layouts/default/default.component';
+import { AdminComponent } from './layouts/admin/admin.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'users/:user', component: UserProfileComponent },
-  { path: 'chat/channels/new', component: NewChatChannelComponent },
-  { path: 'chat/channels/:channel', component: ViewChatChannelComponent },
-  { path: 'chat/channels/:channel/edit', component: EditChatChannelComponent },
   {
-    path: 'admin',
-    component: AdminDashboardComponent,
-    data: { roles: ["SUPER ADMIN", "ADMIN"] },
+    path: '',
+    component: DefaultComponent,
+    children: [
+      { path: '', component: HomeComponent },
+      { path: 'users/:user', component: UserProfileComponent },
+    ]
+  },
+  {
+    path: '',
+    component: AdminComponent,
+    data: { roles: ["super admin", "admin"] },
     canActivate: [AuthGuard],
+    children: [
+      { path: 'chat/channels/new', component: NewChatChannelComponent },
+      { path: 'chat/channels/:channel', component: ViewChatChannelComponent },
+      { path: 'chat/channels/:channel/edit', component: EditChatChannelComponent },
+      { path: 'admin', component: AdminDashboardComponent },
+    ],
   },
 ];
 

@@ -12,13 +12,13 @@
         "@schematics/angular:application": {
           "strict": true
         }
-      },
+      }
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "outputPath": "dist/Frontend",
             "index": "src/index.html",
@@ -35,7 +35,10 @@
             ],
             "scripts": [
               "node_modules/chart.js/dist/chart.js"
-            ]
+            ],
+            "customWebpackConfig": {
+              "path": "./custom-webpack.config.js"
+            }
           },
           "configurations": {
             "production": {
@@ -59,7 +62,7 @@
               ],
               "outputHashing": "all"
             },
-            "qa": {
+            "local": {
               "budgets": [
                 {
                   "type": "initial",
@@ -75,31 +78,16 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.qa.ts"
+                  "with": "src/environments/environment.local.ts"
                 }
               ],
-              "outputHashing": "all"
-            },
-            "dev": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "2mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
-                }
-              ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "buildOptimizer": true,
+              "optimization": true,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": false,
+              "namedChunks": false
             },
             "development": {
               "buildOptimizer": false,
@@ -113,10 +101,13 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
               "browserTarget": "Frontend:build:production"
+            },
+            "local": {
+              "browserTarget": "Frontend:build:local"
             },
             "development": {
               "browserTarget": "Frontend:build:development"

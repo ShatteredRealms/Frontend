@@ -36,6 +36,6 @@ export class AuthGuard implements CanActivate {
     const roles = this.keycloak.getUserRoles();
 
     // Allow the user to proceed if all the required roles are present.
-    return requiredRoles.every((role) => roles.includes(role));
+    return requiredRoles.some((role) => roles.includes(role.toLowerCase()));
   }
 }

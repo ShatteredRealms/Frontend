@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatChannel, getChatChannelBadgeClasses } from "../../../models/chat-channel.model";
+import { ChatChannel } from "../../../models/chat-channel.model";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { ChatChannelService } from "../../../_services/chat-channel.service";
-import { environment } from "../../../../environments/environment";
 import { grpc } from "@improbable-eng/grpc-web";
 import { MdbNotificationRef, MdbNotificationService } from "mdb-angular-ui-kit/notification";
-import { AlertComponent } from "../../../_components/alert/alert.component";
+import { AlertComponent } from "../../../components/alert/alert.component";
 import Request = grpc.Request;
-import { ChatChannelTarget, ChatMessage } from 'src/app/generated/sro/chat/chat_pb';
-import { ChatService } from 'src/app/generated/sro/chat/chat_pb_service';
-import { KeycloakService } from 'src/app/_services/keycloak.service';
+import { ChatMessage } from 'src/app/generated/sro/chat/chat_pb';
+import { ACharactersService } from 'src/app/_services/characters.service';
+import { CharactersResponse, CharacterResponse } from 'src/app/generated/sro/characters/characters_pb';
 
 @Component({
   selector: 'app-view-chat-channel',
@@ -19,31 +18,26 @@ import { KeycloakService } from 'src/app/_services/keycloak.service';
 export class ViewChatChannelComponent implements OnInit {
 
   chatChannel: ChatChannel | null;
-  chatMessages: ChatMessage[] = [
-    // {username: "anthony", message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Gravida rutrum quisque non tellus orci ac"},
-    // {username: "ross", message: "Feugiat nibh sed pulvinar proin gravida hendrerit lectus a."},
-    // {username: "ross", message: "Nunc pulvinar sapien et ligula. Sit amet venenatis urna cursus eget nunc scelerisque. "},
-    // {username: "anthony", message: "Pellentesque habitant morbi tristique senectus et netus et."},
-    // {username: "wil", message: "Laoreet non curabitur gravida arcu ac tortor dignissim. Adipiscing commodo elit at imperdiet dui accumsan sit amet nulla."},
-    // {username: "terry", message: "Cursus metus aliquam eleifend mi in nulla."},
-    // {username: "wil", message: "Mauris in aliquam sem fringilla ut. Aliquet nec ullamcorper sit amet risus nullam"},
-  ];
+  chatMessages: ChatMessage[] = [];
   loadingUsers = true;
 
 
   chatMessageStream: Request | null;
 
   isConnected = false;
-  chatMessage = "";
+  chatMessage: string = "";
 
   chatAlert: MdbNotificationRef<AlertComponent>;
+
+  characters: CharacterResponse[] = [];
+  selectedCharacter: CharacterResponse | undefined;
 
   constructor(
     private chatChannelService: ChatChannelService,
     private notificationService: MdbNotificationService,
     private route: ActivatedRoute,
-    private keycloak: KeycloakService,
     private router: Router,
+    private charactersService: ACharactersService,
   ) {
   }
 
@@ -54,6 +48,12 @@ export class ViewChatChannelComponent implements OnInit {
         this.connectChat();
       }
     );
+
+    this.charactersService.getCharacters().subscribe({
+      next: (characters: CharactersResponse) => {
+        this.characters = characters.getCharactersList();
+      },
+    })
 
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
@@ -66,55 +66,53 @@ export class ViewChatChannelComponent implements OnInit {
   }
 
   connectChat() {
-    const request = new ChatChannelTarget();
-    request.setId(this.chatChannel!.id);
-    this.chatMessageStream = grpc.invoke(ChatService.ConnectChannel, {
-      request: request,
-      host: environment.CHAT_API_BASE_URL,
-      metadata: {
-        Authorization: `Bearer ${this.keycloak.instance.token}`,
-      },
-      onMessage: (message: ChatMessage) => {
-        console.log('msg:', message)
+    this.chatChannelService.connectChat(this.chatChannel!.id).subscribe({
+      next: (message) => {
         this.chatMessages.push(message);
       },
-      onEnd: (code: grpc.Code, msg: string | undefined, trailers: grpc.Metadata) => {
-        console.log('end:', code, msg, trailers);
-        this.isConnected = false;
+      error: (error) => {
+        this.newChatAlert('Error connecting to chat', 'warning')
       },
-
-    });
-  }
-
-  getChatChannelClasses(): string {
-    if (this.chatChannel)
-      return getChatChannelBadgeClasses(this.chatChannel);
-
-    return '';
+      complete: () => {
+        this.isConnected = false;
+      }
+    })
   }
 
   sendChatMessage() {
-    this.chatChannelService.sendChatMessage(this.chatChannel!.id, this.chatMessage).subscribe({
-      next: (resp) => {
-        console.log('send message resp:', resp);
-      },
+    if (this.selectedCharacter === undefined) {
+      this.newChatAlert('Please select a character before sending a message', 'danger');
+      return;
+    }
+    console.log('selectedCharacter:', this.selectedCharacter);
+    this.chatChannelService.sendChatMessage(
+      this.chatChannel!.id,
+      this.selectedCharacter.getName(),
+      this.chatMessage,
+    ).subscribe({
       error: (err) => {
-        console.log('error', err);
-        if (this.chatAlert) {
-          this.chatAlert.close();
-        }
-
-        this.chatAlert = this.notificationService.open(AlertComponent, {
-          data: {
-            message: 'Error sending message',
-            color: 'warning',
-            fade: true,
-          },
-          stacking: true,
-          position: "top-center",
-        });
+        this.newChatAlert(`Error sending message: ${err}`, 'warning')
+        this.chatMessage = "";
+      },
+      complete: () => {
+        this.chatMessage = "";
       }
     });
-    this.chatMessage = "";
+  }
+
+  private newChatAlert(message: string, color: string) {
+    if (this.chatAlert) {
+      this.chatAlert.close();
+    }
+
+    this.chatAlert = this.notificationService.open(AlertComponent, {
+      data: {
+        message: message,
+        color: color,
+        fade: true,
+      },
+      stacking: true,
+      position: "top-center",
+    });
   }
 }

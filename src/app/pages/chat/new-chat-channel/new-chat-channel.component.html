@@ -8,31 +8,19 @@
         <div class="card-header">
           Channel Details
         </div>
-        <div class="card-body row">
-          <mdb-form-control
-            class="col-6"
-          >
-            <input mdbInput type="text" id="name" class="form-control" [(ngModel)]="name"/>
+        <div class="card-body grid-1">
+          <mdb-form-control class="mb-1">
+            <input mdbInput type="text" id="name" class="form-control" [(ngModel)]="name" />
             <label mdbLabel class="form-label" for="name">Name</label>
           </mdb-form-control>
-          <mdb-form-control
-            class="form-check form-switch col-6 d-flex justify-content-center"
-          >
-            <input
-              mdbCheckbox
-              class="form-check-input"
-              type="checkbox"
-              id="public"
-              [(ngModel)]="public"
-            />
-            <label mdbLabel class="form-check-label" for="public">
-              Public
-            </label>
+          <mdb-form-control class="mb-1">
+            <input mdbInput type="text" id="dimension" class="form-control" [(ngModel)]="dimension" />
+            <label mdbLabel class="form-label" for="dimension">Dimension</label>
           </mdb-form-control>
-          <div class="card-footer text-end">
-            <a [routerLink]="['..']" class="btn btn-light mx-2">Cancel</a>
-            <a class="btn btn-primary mx-2" (click)="createChatChannel()">Save Changes</a>
-          </div>
+        </div>
+        <div class="card-footer text-end">
+          <a [routerLink]="['..']" class="btn btn-light mx-2">Cancel</a>
+          <a class="btn btn-primary mx-2" (click)="createChatChannel()">Save Changes</a>
         </div>
       </div>
     </div>

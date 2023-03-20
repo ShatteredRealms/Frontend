@@ -1,4 +1,20 @@
 <section class="container mt-4">
+  <div class="row g-4 mb-4">
+    <div class="col-12">
+      <div class="card text-center">
+        <div class="card-header">
+          All Users
+          <a class="btn btn-sm btn-outline-primary btn-floating mx-2" routerLink="/characters/new">
+            <i class="fas fa-plus"></i>
+          </a>
+        </div>
+        <div class="card-body p-0">
+          <app-users-table [dataSource]="users" [loading]="loadingUsers"></app-users-table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
   <div class="row g-4">
     <div class="col-12 col-lg-6">
       <div class="card text-center">
@@ -11,6 +27,21 @@
         <div class="card-body p-0">
           <app-chat-channels-table [dataSource]="chatChannels" [loading]="loadingChatChannels"
             [showActions]="true"></app-chat-channels-table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="card text-center">
+        <div class="card-header">
+          All Characters
+          <a class="btn btn-sm btn-outline-primary btn-floating mx-2" routerLink="/characters/new">
+            <i class="fas fa-plus"></i>
+          </a>
+        </div>
+        <div class="card-body p-0">
+          <app-characters-table [dataSource]="characters" [loading]="loadingCharacters"
+            [showActions]="true"></app-characters-table>
         </div>
         <div class="card-footer"></div>
       </div>

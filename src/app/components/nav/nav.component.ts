@@ -42,12 +42,19 @@ export class NavComponent implements OnInit {
 
   userProfile() {
     this.keycloak.loadUserProfile().then(profile => {
-      console.log('profile:', profile)
       this.router.navigate(['/users', profile.username])
     });
   }
 
   isUserSignedIn(): boolean {
     return !!this.keycloak.instance.authenticated;
+  }
+
+  toggleDarkMode() {
+    document.body.classList.toggle('dark');
+  }
+
+  isDarkMode() {
+    return document.body.classList.contains('dark');
   }
 }

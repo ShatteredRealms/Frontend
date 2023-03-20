@@ -18,19 +18,31 @@
         </div>
         <div class="card-body">
           <div class="container">
-            <div class="messages" *ngFor="let chatMessage of chatMessages">
-              <div class="message">
-                <span class="username fw-bold">{{chatMessage.getCharacterName()}}</span>
-                <span aria-hidden="true" class="fw-bold">: </span>
-                <span class="message-body text-muted">{{chatMessage.getMessage()}}</span>
+            <div mdbScrollbar style="position: relative; height: 400px;">
+              <div class="messages" *ngFor="let chatMessage of chatMessages">
+                <div class="message">
+                  <span class="username fw-bold">{{chatMessage.getCharacterName()}}</span>
+                  <span aria-hidden="true" class="fw-bold">: </span>
+                  <span class="message-body text-muted">{{chatMessage.getMessage()}}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div class="card-footer">
           <div class="input-group">
-            <input [(ngModel)]="chatMessage" class="form-control" placeholder="Chat message" type="text"
-              (keyup.enter)="sendChatMessage()" />
+            <mdb-form-control>
+              <mdb-select [(ngModel)]="selectedCharacter">
+                <mdb-option *ngFor="let character of characters" [value]="character">
+                  {{ character.getName() }}
+                </mdb-option>
+              </mdb-select>
+              <label mdbLabel class="form-label">Character</label>
+            </mdb-form-control>
+            <mdb-form-control>
+              <input [(ngModel)]="chatMessage" class="form-control" placeholder="Chat message" type="text"
+                (keyup.enter)="sendChatMessage()" />
+            </mdb-form-control>
             <button (click)="sendChatMessage()" type="button" class="btn btn-primary">
               Send
             </button>

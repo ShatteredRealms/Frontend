@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChatChannelService } from "../../../_services/chat-channel.service";
 import { Router } from "@angular/router";
 import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
-import { AlertComponent } from "../../../_components/alert/alert.component";
+import { AlertComponent } from "../../../components/alert/alert.component";
 
 @Component({
   selector: 'app-new-chat-channel',
@@ -11,7 +11,7 @@ import { AlertComponent } from "../../../_components/alert/alert.component";
 })
 export class NewChatChannelComponent implements OnInit {
   name: string = '';
-  public: boolean = true;
+  dimension: string = '';
   loading: boolean = true;
 
   constructor(
@@ -35,7 +35,7 @@ export class NewChatChannelComponent implements OnInit {
       return
     }
 
-    this.chatChannelService.createChatChannel(this.name, this.public).subscribe({
+    this.chatChannelService.createChatChannel(this.name, this.dimension).subscribe({
       next: () => {
         this.router.navigate(['/admin']).then(() => {
           this.notificationService.open(AlertComponent, {

@@ -9,6 +9,9 @@ $primary: #66D0FF;
 $secondary: #F43838;
 
 $my-dark-theme: mdb-dark-theme($primary, $secondary); // create the new dark theme using primary and secondary colors
+$my-light-theme: mdb-light-theme($primary, $secondary);
+
+@include mdb-theme($my-light-theme);
 
 // include theme styles
 .dark {
@@ -17,7 +20,13 @@ $my-dark-theme: mdb-dark-theme($primary, $secondary); // create the new dark the
 
 html,body
 {
-  background-color: $dark;
   overflow-x: hidden;
 }
 
+.darker {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.text-darker {
+  color: rgba(0, 0, 0, 0.1);
+}

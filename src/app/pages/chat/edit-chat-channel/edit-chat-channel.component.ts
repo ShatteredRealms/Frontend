@@ -3,7 +3,7 @@ import { ChatChannel } from "../../../models/chat-channel.model";
 import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
 import { ChatChannelService } from "../../../_services/chat-channel.service";
 import { ActivatedRoute } from "@angular/router";
-import { AlertComponent } from "../../../_components/alert/alert.component";
+import { AlertComponent } from "../../../components/alert/alert.component";
 
 @Component({
   selector: 'app-edit-chat-channel',

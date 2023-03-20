@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg darker">
   <div class="container-fluid">
     <a class="navbar-brand text-primary" [routerLink]="['/']">Shattered Realms</a>
     <button class="navbar-toggler" type="button" (click)="togglerSecondExample.toggle()"
@@ -13,17 +13,17 @@
       </ul>
       <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
         <li *ngIf="!isUserSignedIn()" class="nav-item text-center">
-          <a class="nav-link" (click)="this.keycloak.login()">Login</a>
+          <a class="nav-link" style="cursor: pointer" (click)="this.keycloak.login()">Login</a>
         </li>
         <li *ngIf="!isUserSignedIn()" class="nav-item text-center">
-          <a class="nav-link" (click)="this.keycloak.login()">Register</a>
+          <a class="nav-link" style="cursor: pointer" (click)="this.keycloak.login()">Register</a>
         </li>
         <div *ngIf="isScreenSmall$ | async; then smallScreen else largeScreen"></div>
         <ng-template #largeScreen>
-          <li *ngIf="isUserSignedIn()" class="nav-item dropdown" mdbDropdown>
+          <li *ngIf="isUserSignedIn()" class="nav-item dropdown" style="cursor: pointer" mdbDropdown>
             <a mdbDropdownToggle class="nav-link dropdown-toggle"><i class="far fa-user-circle fa-lg"></i></a>
             <div mdbDropdownMenu class="dropdown-menu dropdown-menu-dark dropdown" role="menu">
-              <a class="dropdown-item col-sm-12" (click)="userProfile()">Profile</a>
+              <a class="dropdown-item col-sm-12" style="cursor: pointer" (click)="userProfile()">Profile</a>
               <a class="dropdown-item col-sm-12" style="cursor: pointer" (click)="signOutUser()">Logout</a>
             </div>
           </li>

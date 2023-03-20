@@ -104,21 +104,34 @@ export class KeycloakService {
 
   getUserRealmRoles(): string[] {
     if (this.instance.realmAccess) {
-      return this.instance.realmAccess['roles'] || [];
+      const roles = this.instance.realmAccess['roles'] || [];
+      return roles.filter(r => ['super admin', 'admin', 'member',].includes(r));
     }
 
     return [];
   }
 
-  async getUser(username: string): Promise<any> {
-    await this.requireAuthentication();
-
-    return this.http.get<KeycloakProfile[]>(`${this.baseUrl()}/users?exact=true&username=${username}&max=1`).pipe(map((resp: KeycloakProfile[]) => {
+  getUser(username: string): Observable<any> {
+    return this.http.get<KeycloakProfile[]>(
+      `${this.baseUrl()}/users?exact=true&username=${username}&max=1`
+    ).pipe(map((resp: KeycloakProfile[]) => {
       if (!(resp instanceof Array) || resp.length != 1) {
         throw new Error('no user found')
       }
 
       return resp[0];
+    }));
+  }
+
+  getAllUsers(): Observable<any> {
+    return this.http.get<any>(
+      `${this.baseUrl()}/users`
+    ).pipe(map((resp: any) => {
+      if (!(resp instanceof Array)) {
+        throw new Error(`unable to find users: ${resp}`)
+      }
+
+      return resp;
     }));
   }
 

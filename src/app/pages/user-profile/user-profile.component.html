@@ -13,8 +13,8 @@
                 {{ role }}
               </span>
             </p>
-            <p class="card-text">
-              <a [routerLink]="['/users', this.user?.username, 'edit']">
+            <p *ngIf="this.user == this.keycloak.profile" class="card-text">
+              <a (click)="this.keycloak.instance.accountManagement()">
                 <span class="btn btn-sm btn-outline-primary">Edit Details</span>
               </a>
             </p>
@@ -36,7 +36,7 @@
             </div>
             <div class="col-4">
               <h5 class="card-title">JOINED</h5>
-              <p class="card-text">{{this.createdDate() | date: 'mediumDate'}}</p>
+              <!-- <p class="card-text">{{this.createdDate() | date: 'mediumDate'}}</p> -->
             </div>
           </div>
         </div>

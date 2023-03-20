@@ -1,7 +1,7 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-const DOMAIN = 'api.shatteredrealmsonline.com';
+const DOMAIN = 'localhost:9090';
 
 const CHAT_API_VERSION = 'v1';
 const CHAT_API_BASE_URL = `https://${DOMAIN}/chat`;
@@ -11,7 +11,7 @@ const CHARACTERS_API_VERSION = 'v1';
 const CHARACTERS_API_BASE_URL = `https://${DOMAIN}/characters`;
 const CHARACTERS_API_URL = `${CHARACTERS_API_BASE_URL}/${CHARACTERS_API_VERSION}`;
 
-const KEYCLOAK_DOMAIN = 'https://sso.shatteredrealmsonline.com';
+const KEYCLOAK_DOMAIN = 'http://localhost:8080';
 const KEYCLOAK_REALM = 'default';
 const KEYCLOAK_CLIENT = 'sro-web';
 

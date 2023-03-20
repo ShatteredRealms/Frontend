@@ -5,18 +5,18 @@ import { MdbModalService } from "mdb-angular-ui-kit/modal";
 import { ModalComponent } from "../modal/modal.component";
 import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
 import { AlertComponent } from "../alert/alert.component";
-import { ChatChannel, getChatChannelBadgeClasses } from "../../models/chat-channel.model";
-import { ChatChannelService } from "../../_services/chat-channel.service";
+import { CharacterResponse } from 'src/app/generated/sro/characters/characters_pb';
+import { ACharactersService } from 'src/app/_services/characters.service';
 
 @Component({
-  selector: 'app-chat-channels-table',
-  templateUrl: './chat-channels-table.component.html',
-  styleUrls: ['./chat-channels-table.component.scss']
+  selector: 'app-characters-table',
+  templateUrl: './characters-table.component.html',
+  styleUrls: ['./characters-table.component.scss']
 })
-export class ChatChannelsTableComponent implements OnInit {
-  @ViewChild('table') table!: MdbTableDirective<ChatChannel>;
+export class CharactersTableComponent implements OnInit {
+  @ViewChild('table') table!: MdbTableDirective<CharacterResponse>;
 
-  @Input() dataSource: ChatChannel[] | null;
+  @Input() dataSource: CharacterResponse[] | null;
   @Input() loading = true;
   @Input() showActions = false;
   @Input() searchable = false;
@@ -24,7 +24,7 @@ export class ChatChannelsTableComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private chatChannelService: ChatChannelService,
+    private charactersService: ACharactersService,
     private modalService: MdbModalService,
     private notificationService: MdbNotificationService,
   ) {
@@ -37,40 +37,36 @@ export class ChatChannelsTableComponent implements OnInit {
     this.table.search(searchTerm);
   }
 
-  chatChannelClicked(chatChannel: ChatChannel) {
+  characterClicked(character: CharacterResponse) {
     if (this.rowSelectable) {
-      this.router.navigate(['/chat/channels', chatChannel.id])
+      this.router.navigate(['/characters/id', character.getId()])
     }
   }
 
-  chatChannelEditClicked(chatChannel: ChatChannel) {
-    this.router.navigate(['/chat/channels', chatChannel.id, 'edit'])
+  characterEditClicked(character: CharacterResponse) {
+    this.router.navigate(['/characters/id', character.getId(), 'edit'])
   }
 
-  getChatChannelBadgeClasses(chatChannel: ChatChannel) {
-    return getChatChannelBadgeClasses(chatChannel);
-  }
-
-  chatChannelDeleteClicked(chatChannel: ChatChannel) {
+  characterDeleteClicked(character: CharacterResponse) {
     this.modalService.open(ModalComponent, {
       data: {
         title: 'Deletion confirmation',
-        message: `Are you sure you want to delete the chatChannel '${chatChannel.name}'`,
+        message: `Are you sure you want to delete the chat channel '${character.getName()}'`,
         submitText: 'Delete',
       }
     }).onClose.subscribe((message) => {
       if (message) {
-        this.chatChannelService.deleteChatChannel(chatChannel.id).subscribe({
+        this.charactersService.deleteCharacter(character.getId()).subscribe({
           next: () => {
             this.notificationService.open(AlertComponent, {
               data: {
-                message: 'Successfully deleted chatChannel',
+                message: 'Successfully deleted character',
                 color: 'info',
               }
             });
             window.location.reload();
           },
-          error: err => {
+          error: (err: any) => {
             this.notificationService.open(AlertComponent, {
               data: {
                 message: `Error: ${err.error.message}`,

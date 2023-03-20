@@ -18,13 +18,8 @@ export class FooterComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-    return this.keycloak.getUserRoles().some(r => ["SUPER ADMIN", "ADMIN"].includes(r))
-  }
-
-  userProfile() {
-    this.keycloak.loadUserProfile().then(profile => {
-      this.router.navigate(['/users', profile.username]);
-    });
+    const roles = this.keycloak.getUserRealmRoles();
+    return roles.some(r => ["SUPER ADMIN", "ADMIN"].includes(r.toUpperCase()))
   }
 
   isUserSignedIn(): boolean {

@@ -32,6 +32,9 @@ endif
 BASE_VERSION := $(shell git describe --tags --always --abbrev=0 --match='v[0-9]*.[0-9]*.[0-9]*' 2> /dev/null | sed 's/^.//')
 COMMIT_HASH=$(shell git rev-parse --short HEAD)
 
+BASE_REGISTRY ?= 779965382548.dkr.ecr.us-east-1.amazonaws.com
+REGISTRY ?= $(BASE_REGISTRY)/sro
+
 # Current time for versioning
 time := $(shell date +%s)
 
@@ -68,6 +71,9 @@ install:
 
 build:
 	docker build -t sro-frontend -f Dockerfile .
+
+buildl:
+	docker build -t sro-frontend -f local.Dockerfile .
 
 pushf:
 	docker tag sro-frontend $(REGISTRY)/frontend:latest
