@@ -1,0 +1,45 @@
+<section class="container mt-4">
+  <div class="row g-4">
+    <div class="col-md-12 col-xl-6 col-xxl-4">
+      <div class="card">
+        <div class="d-flex">
+          <div class="card-body">
+            <h4 class="text-light mb-0">{{ this.character?.getName() }}</h4>
+            <p class="text-muted mb-0">{{this.character?.getOwner() }}</p>
+            <p>
+              <span class="badge bg-success mx-1">Online</span>
+            </p>
+            <!-- <p *ngIf="this.character.getOwner() == this.keycloak.profile.id" class="card-text"> -->
+            <!--   <a (click)="this.keycloak.instance.accountManagement()"> -->
+            <!--     <span class="btn btn-sm btn-outline-primary">Edit Details</span> -->
+            <!--   </a> -->
+            <!-- </p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-group col-md-12 col-xl-6 col-xxl-8">
+      <div class="card text-center">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-4">
+              <h5 class="card-title">PLAY TIME</h5>
+              <p class="card-text">0 Hours</p>
+            </div>
+            <div class="col-4">
+              <h5 class="card-title">Level</h5>
+              <p class="card-text">0</p>
+            </div>
+            <div class="col-4">
+              <h5 class="card-title">CREATED</h5>
+              <!-- <p class="card-text">{{this.character.getCreatedAt() | date: 'mediumDate'}}</p> -->
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">Last updated right now</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
