@@ -12,6 +12,7 @@ export class AppComponent {
     protected router: Router,
     protected keycloak: KeycloakService,
   ) {
+    console.log('app-root');
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {
         if (this.keycloak.instance.isTokenExpired()) {

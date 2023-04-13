@@ -1,4 +1,4 @@
-const DOMAIN = 'localhost:9090';
+const DOMAIN = 'localhost:9091';
 
 const CHAT_API_VERSION = 'v1';
 const CHAT_API_BASE_URL = `https://${DOMAIN}/chat`;

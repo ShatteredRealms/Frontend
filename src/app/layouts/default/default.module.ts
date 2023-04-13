@@ -38,12 +38,16 @@ import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { MdbTimepickerModule } from 'mdb-angular-ui-kit/timepicker';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
+import { ViewCharacterComponent } from 'src/app/pages/characters/view-character/view-character.component';
+import { EditCharacterComponent } from 'src/app/pages/characters/edit-character/edit-character.component';
 
 @NgModule({
   declarations: [
     DefaultComponent,
     HomeComponent,
     UserProfileComponent,
+    ViewCharacterComponent,
+    EditCharacterComponent,
   ],
   imports: [
     CommonModule,

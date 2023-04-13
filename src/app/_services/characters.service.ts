@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { grpc } from '@improbable-eng/grpc-web';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { CharacterResponse, CharactersResponse, CharacterTarget } from '../generated/sro/characters/characters_pb';
 import { CharactersService } from '../generated/sro/characters/characters_pb_service';
@@ -37,6 +37,37 @@ export class ACharactersService {
         },
         onEnd: function(code: grpc.Code, message: string, trailers: grpc.Metadata): void {
           console.log('get characters for other user end:', code, message, trailers);
+          if (code != grpc.Code.OK) {
+            subscriber.error(message);
+          }
+
+          subscriber.complete();
+        }
+      });
+    })
+  }
+
+  getCharacter(id: number): Observable<CharacterResponse> {
+    if (id <= 0) {
+      return throwError(() => {
+        return new Error("invalid character id");
+      });
+    }
+
+    return new Observable((subscriber) => {
+      const request = new CharacterTarget();
+      request.setId(id);
+      grpc.invoke(CharactersService.GetCharacter, {
+        host: environment.CHARACTERS_API_BASE_URL,
+        request: request,
+        metadata: {
+          Authorization: `Bearer ${this.keycloak.instance.token}`,
+        },
+        onMessage: (message: CharacterResponse): void => {
+          subscriber.next(message);
+        },
+        onEnd: function(code: grpc.Code, message: string, trailers: grpc.Metadata): void {
+          console.log('get character for other user end:', code, message, trailers);
           if (code != grpc.Code.OK) {
             subscriber.error(message);
           }

@@ -9,6 +9,8 @@ import { ViewChatChannelComponent } from "./pages/chat/view-chat-channel/view-ch
 import { EditChatChannelComponent } from "./pages/chat/edit-chat-channel/edit-chat-channel.component";
 import { DefaultComponent } from './layouts/default/default.component';
 import { AdminComponent } from './layouts/admin/admin.component';
+import { ViewCharacterComponent } from './pages/characters/view-character/view-character.component';
+import { EditCharacterComponent } from './pages/characters/edit-character/edit-character.component';
 
 const routes: Routes = [
   {
@@ -17,6 +19,8 @@ const routes: Routes = [
     children: [
       { path: '', component: HomeComponent },
       { path: 'users/:user', component: UserProfileComponent },
+      { path: 'characters/id/:id', component: ViewCharacterComponent },
+      { path: 'characters/id/:id/edit', component: EditCharacterComponent },
     ]
   },
   {
@@ -28,6 +32,8 @@ const routes: Routes = [
       { path: 'chat/channels/new', component: NewChatChannelComponent },
       { path: 'chat/channels/:channel', component: ViewChatChannelComponent },
       { path: 'chat/channels/:channel/edit', component: EditChatChannelComponent },
+      { path: 'admin', component: AdminDashboardComponent },
+      { path: 'admin', component: AdminDashboardComponent },
       { path: 'admin', component: AdminDashboardComponent },
     ],
   },
