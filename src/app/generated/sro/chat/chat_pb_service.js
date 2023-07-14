@@ -3,7 +3,7 @@
 
 var sro_chat_chat_pb = require("../../sro/chat/chat_pb");
 var google_protobuf_empty_pb = require("google-protobuf/google/protobuf/empty_pb");
-var sro_characters_characters_pb = require("../../sro/characters/characters_pb");
+var sro_character_character_pb = require("../../sro/character/character_pb");
 var grpc = require("@improbable-eng/grpc-web").grpc;
 
 var ChatService = (function () {
@@ -26,7 +26,7 @@ ChatService.ConnectDirectMessage = {
   service: ChatService,
   requestStream: false,
   responseStream: true,
-  requestType: sro_characters_characters_pb.CharacterTarget,
+  requestType: sro_character_character_pb.CharacterTarget,
   responseType: sro_chat_chat_pb.ChatMessage
 };
 
@@ -98,7 +98,7 @@ ChatService.GetAuthorizedChatChannels = {
   service: ChatService,
   requestStream: false,
   responseStream: false,
-  requestType: sro_characters_characters_pb.CharacterTarget,
+  requestType: sro_character_character_pb.CharacterTarget,
   responseType: sro_chat_chat_pb.ChatChannels
 };
 
@@ -108,6 +108,15 @@ ChatService.UpdateUserChatChannelAuthorizations = {
   requestStream: false,
   responseStream: false,
   requestType: sro_chat_chat_pb.RequestChatChannelAuthChange,
+  responseType: google_protobuf_empty_pb.Empty
+};
+
+ChatService.SetUserChatChannelAuthorizations = {
+  methodName: "SetUserChatChannelAuthorizations",
+  service: ChatService,
+  requestStream: false,
+  responseStream: false,
+  requestType: sro_chat_chat_pb.RequestSetChannelAuth,
   responseType: google_protobuf_empty_pb.Empty
 };
 
@@ -449,6 +458,37 @@ ChatServiceClient.prototype.updateUserChatChannelAuthorizations = function updat
     callback = arguments[1];
   }
   var client = grpc.unary(ChatService.UpdateUserChatChannelAuthorizations, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+ChatServiceClient.prototype.setUserChatChannelAuthorizations = function setUserChatChannelAuthorizations(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(ChatService.SetUserChatChannelAuthorizations, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

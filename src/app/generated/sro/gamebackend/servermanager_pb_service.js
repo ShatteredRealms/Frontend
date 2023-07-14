@@ -1,110 +1,127 @@
-// package: sro.characters
-// file: sro/characters/characters.proto
+// package: sro.gamebackend
+// file: sro/gamebackend/servermanager.proto
 
-var sro_characters_characters_pb = require("../../sro/characters/characters_pb");
-var sro_globals_pb = require("../../sro/globals_pb");
+var sro_gamebackend_servermanager_pb = require("../../sro/gamebackend/servermanager_pb");
 var google_protobuf_empty_pb = require("google-protobuf/google/protobuf/empty_pb");
 var grpc = require("@improbable-eng/grpc-web").grpc;
 
-var CharactersService = (function () {
-  function CharactersService() {}
-  CharactersService.serviceName = "sro.characters.CharactersService";
-  return CharactersService;
+var ServerManagerService = (function () {
+  function ServerManagerService() {}
+  ServerManagerService.serviceName = "sro.gamebackend.ServerManagerService";
+  return ServerManagerService;
 }());
 
-CharactersService.GetGenders = {
-  methodName: "GetGenders",
-  service: CharactersService,
+ServerManagerService.CreateDimension = {
+  methodName: "CreateDimension",
+  service: ServerManagerService,
+  requestStream: false,
+  responseStream: false,
+  requestType: sro_gamebackend_servermanager_pb.CreateDimensionRequest,
+  responseType: sro_gamebackend_servermanager_pb.Dimension
+};
+
+ServerManagerService.DuplicateDimension = {
+  methodName: "DuplicateDimension",
+  service: ServerManagerService,
+  requestStream: false,
+  responseStream: false,
+  requestType: sro_gamebackend_servermanager_pb.DuplicateDimensionRequest,
+  responseType: sro_gamebackend_servermanager_pb.Dimension
+};
+
+ServerManagerService.GetDimension = {
+  methodName: "GetDimension",
+  service: ServerManagerService,
+  requestStream: false,
+  responseStream: false,
+  requestType: sro_gamebackend_servermanager_pb.DimensionTarget,
+  responseType: sro_gamebackend_servermanager_pb.Dimension
+};
+
+ServerManagerService.GetAllDimension = {
+  methodName: "GetAllDimension",
+  service: ServerManagerService,
   requestStream: false,
   responseStream: false,
   requestType: google_protobuf_empty_pb.Empty,
-  responseType: sro_characters_characters_pb.Genders
+  responseType: sro_gamebackend_servermanager_pb.Dimensions
 };
 
-CharactersService.GetRealms = {
-  methodName: "GetRealms",
-  service: CharactersService,
+ServerManagerService.EditDimension = {
+  methodName: "EditDimension",
+  service: ServerManagerService,
   requestStream: false,
   responseStream: false,
-  requestType: google_protobuf_empty_pb.Empty,
-  responseType: sro_characters_characters_pb.Realms
+  requestType: sro_gamebackend_servermanager_pb.EditDimensionRequest,
+  responseType: sro_gamebackend_servermanager_pb.Dimension
 };
 
-CharactersService.GetCharacters = {
-  methodName: "GetCharacters",
-  service: CharactersService,
+ServerManagerService.DeleteDimension = {
+  methodName: "DeleteDimension",
+  service: ServerManagerService,
   requestStream: false,
   responseStream: false,
-  requestType: google_protobuf_empty_pb.Empty,
-  responseType: sro_characters_characters_pb.CharactersResponse
-};
-
-CharactersService.GetCharacter = {
-  methodName: "GetCharacter",
-  service: CharactersService,
-  requestStream: false,
-  responseStream: false,
-  requestType: sro_characters_characters_pb.CharacterTarget,
-  responseType: sro_characters_characters_pb.CharacterResponse
-};
-
-CharactersService.CreateCharacter = {
-  methodName: "CreateCharacter",
-  service: CharactersService,
-  requestStream: false,
-  responseStream: false,
-  requestType: sro_characters_characters_pb.CreateCharacterRequest,
-  responseType: sro_characters_characters_pb.CharacterResponse
-};
-
-CharactersService.DeleteCharacter = {
-  methodName: "DeleteCharacter",
-  service: CharactersService,
-  requestStream: false,
-  responseStream: false,
-  requestType: sro_characters_characters_pb.CharacterTarget,
+  requestType: sro_gamebackend_servermanager_pb.DimensionTarget,
   responseType: google_protobuf_empty_pb.Empty
 };
 
-CharactersService.GetAllCharactersForUser = {
-  methodName: "GetAllCharactersForUser",
-  service: CharactersService,
+ServerManagerService.CreateMap = {
+  methodName: "CreateMap",
+  service: ServerManagerService,
   requestStream: false,
   responseStream: false,
-  requestType: sro_globals_pb.UserTarget,
-  responseType: sro_characters_characters_pb.CharactersResponse
+  requestType: sro_gamebackend_servermanager_pb.CreateMapRequest,
+  responseType: sro_gamebackend_servermanager_pb.Map
 };
 
-CharactersService.EditCharacter = {
-  methodName: "EditCharacter",
-  service: CharactersService,
+ServerManagerService.GetMap = {
+  methodName: "GetMap",
+  service: ServerManagerService,
   requestStream: false,
   responseStream: false,
-  requestType: sro_characters_characters_pb.EditCharacterRequest,
+  requestType: sro_gamebackend_servermanager_pb.MapTarget,
+  responseType: sro_gamebackend_servermanager_pb.Map
+};
+
+ServerManagerService.GetAllMaps = {
+  methodName: "GetAllMaps",
+  service: ServerManagerService,
+  requestStream: false,
+  responseStream: false,
+  requestType: google_protobuf_empty_pb.Empty,
+  responseType: sro_gamebackend_servermanager_pb.Maps
+};
+
+ServerManagerService.EditMap = {
+  methodName: "EditMap",
+  service: ServerManagerService,
+  requestStream: false,
+  responseStream: false,
+  requestType: sro_gamebackend_servermanager_pb.EditMapRequest,
+  responseType: sro_gamebackend_servermanager_pb.Map
+};
+
+ServerManagerService.DeleteMap = {
+  methodName: "DeleteMap",
+  service: ServerManagerService,
+  requestStream: false,
+  responseStream: false,
+  requestType: sro_gamebackend_servermanager_pb.MapTarget,
   responseType: google_protobuf_empty_pb.Empty
 };
 
-CharactersService.AddCharacterPlayTime = {
-  methodName: "AddCharacterPlayTime",
-  service: CharactersService,
-  requestStream: false,
-  responseStream: false,
-  requestType: sro_characters_characters_pb.AddPlayTimeRequest,
-  responseType: sro_characters_characters_pb.PlayTimeResponse
-};
+exports.ServerManagerService = ServerManagerService;
 
-exports.CharactersService = CharactersService;
-
-function CharactersServiceClient(serviceHost, options) {
+function ServerManagerServiceClient(serviceHost, options) {
   this.serviceHost = serviceHost;
   this.options = options || {};
 }
 
-CharactersServiceClient.prototype.getGenders = function getGenders(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.createDimension = function createDimension(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.GetGenders, {
+  var client = grpc.unary(ServerManagerService.CreateDimension, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -131,11 +148,11 @@ CharactersServiceClient.prototype.getGenders = function getGenders(requestMessag
   };
 };
 
-CharactersServiceClient.prototype.getRealms = function getRealms(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.duplicateDimension = function duplicateDimension(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.GetRealms, {
+  var client = grpc.unary(ServerManagerService.DuplicateDimension, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -162,11 +179,11 @@ CharactersServiceClient.prototype.getRealms = function getRealms(requestMessage,
   };
 };
 
-CharactersServiceClient.prototype.getCharacters = function getCharacters(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.getDimension = function getDimension(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.GetCharacters, {
+  var client = grpc.unary(ServerManagerService.GetDimension, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -193,11 +210,11 @@ CharactersServiceClient.prototype.getCharacters = function getCharacters(request
   };
 };
 
-CharactersServiceClient.prototype.getCharacter = function getCharacter(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.getAllDimension = function getAllDimension(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.GetCharacter, {
+  var client = grpc.unary(ServerManagerService.GetAllDimension, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -224,11 +241,11 @@ CharactersServiceClient.prototype.getCharacter = function getCharacter(requestMe
   };
 };
 
-CharactersServiceClient.prototype.createCharacter = function createCharacter(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.editDimension = function editDimension(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.CreateCharacter, {
+  var client = grpc.unary(ServerManagerService.EditDimension, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -255,11 +272,11 @@ CharactersServiceClient.prototype.createCharacter = function createCharacter(req
   };
 };
 
-CharactersServiceClient.prototype.deleteCharacter = function deleteCharacter(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.deleteDimension = function deleteDimension(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.DeleteCharacter, {
+  var client = grpc.unary(ServerManagerService.DeleteDimension, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -286,11 +303,11 @@ CharactersServiceClient.prototype.deleteCharacter = function deleteCharacter(req
   };
 };
 
-CharactersServiceClient.prototype.getAllCharactersForUser = function getAllCharactersForUser(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.createMap = function createMap(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.GetAllCharactersForUser, {
+  var client = grpc.unary(ServerManagerService.CreateMap, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -317,11 +334,11 @@ CharactersServiceClient.prototype.getAllCharactersForUser = function getAllChara
   };
 };
 
-CharactersServiceClient.prototype.editCharacter = function editCharacter(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.getMap = function getMap(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.EditCharacter, {
+  var client = grpc.unary(ServerManagerService.GetMap, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -348,11 +365,11 @@ CharactersServiceClient.prototype.editCharacter = function editCharacter(request
   };
 };
 
-CharactersServiceClient.prototype.addCharacterPlayTime = function addCharacterPlayTime(requestMessage, metadata, callback) {
+ServerManagerServiceClient.prototype.getAllMaps = function getAllMaps(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(CharactersService.AddCharacterPlayTime, {
+  var client = grpc.unary(ServerManagerService.GetAllMaps, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -379,5 +396,67 @@ CharactersServiceClient.prototype.addCharacterPlayTime = function addCharacterPl
   };
 };
 
-exports.CharactersServiceClient = CharactersServiceClient;
+ServerManagerServiceClient.prototype.editMap = function editMap(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(ServerManagerService.EditMap, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+ServerManagerServiceClient.prototype.deleteMap = function deleteMap(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(ServerManagerService.DeleteMap, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+exports.ServerManagerServiceClient = ServerManagerServiceClient;
 

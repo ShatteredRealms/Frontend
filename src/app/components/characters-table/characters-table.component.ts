@@ -5,8 +5,8 @@ import { MdbModalService } from "mdb-angular-ui-kit/modal";
 import { ModalComponent } from "../modal/modal.component";
 import { MdbNotificationService } from "mdb-angular-ui-kit/notification";
 import { AlertComponent } from "../alert/alert.component";
-import { CharacterResponse } from 'src/app/generated/sro/characters/characters_pb';
-import { ACharactersService } from 'src/app/_services/characters.service';
+import { CharacterDetails } from 'src/app/generated/sro/character/character_pb';
+import { ACharacterService } from 'src/app/_services/character.service';
 
 @Component({
   selector: 'app-characters-table',
@@ -14,9 +14,9 @@ import { ACharactersService } from 'src/app/_services/characters.service';
   styleUrls: ['./characters-table.component.scss']
 })
 export class CharactersTableComponent implements OnInit {
-  @ViewChild('table') table!: MdbTableDirective<CharacterResponse>;
+  @ViewChild('table') table!: MdbTableDirective<CharacterDetails>;
 
-  @Input() dataSource: CharacterResponse[] | null;
+  @Input() dataSource: CharacterDetails[] | null;
   @Input() loading = true;
   @Input() showActions = false;
   @Input() searchable = false;
@@ -24,7 +24,7 @@ export class CharactersTableComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private charactersService: ACharactersService,
+    private characterService: ACharacterService,
     private modalService: MdbModalService,
     private notificationService: MdbNotificationService,
   ) {
@@ -37,17 +37,17 @@ export class CharactersTableComponent implements OnInit {
     this.table.search(searchTerm);
   }
 
-  characterClicked(character: CharacterResponse) {
+  characterClicked(character: CharacterDetails) {
     if (this.rowSelectable) {
       this.router.navigate(['/characters/id', character.getId()])
     }
   }
 
-  characterEditClicked(character: CharacterResponse) {
+  characterEditClicked(character: CharacterDetails) {
     this.router.navigate(['/characters/id', character.getId(), 'edit'])
   }
 
-  characterDeleteClicked(character: CharacterResponse) {
+  characterDeleteClicked(character: CharacterDetails) {
     this.modalService.open(ModalComponent, {
       data: {
         title: 'Deletion confirmation',
@@ -56,7 +56,7 @@ export class CharactersTableComponent implements OnInit {
       }
     }).onClose.subscribe((message) => {
       if (message) {
-        this.charactersService.deleteCharacter(character.getId()).subscribe({
+        this.characterService.deleteCharacter(character.getId()).subscribe({
           next: () => {
             this.notificationService.open(AlertComponent, {
               data: {

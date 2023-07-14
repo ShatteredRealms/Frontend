@@ -4,13 +4,41 @@
 import * as jspb from "google-protobuf";
 import * as google_api_annotations_pb from "../../google/api/annotations_pb";
 import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
-import * as sro_characters_characters_pb from "../../sro/characters/characters_pb";
+import * as sro_character_character_pb from "../../sro/character/character_pb";
+
+export class RequestSetChannelAuth extends jspb.Message {
+  hasCharacter(): boolean;
+  clearCharacter(): void;
+  getCharacter(): sro_character_character_pb.CharacterTarget | undefined;
+  setCharacter(value?: sro_character_character_pb.CharacterTarget): void;
+
+  clearIdsList(): void;
+  getIdsList(): Array<number>;
+  setIdsList(value: Array<number>): void;
+  addIds(value: number, index?: number): number;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): RequestSetChannelAuth.AsObject;
+  static toObject(includeInstance: boolean, msg: RequestSetChannelAuth): RequestSetChannelAuth.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: RequestSetChannelAuth, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RequestSetChannelAuth;
+  static deserializeBinaryFromReader(message: RequestSetChannelAuth, reader: jspb.BinaryReader): RequestSetChannelAuth;
+}
+
+export namespace RequestSetChannelAuth {
+  export type AsObject = {
+    character?: sro_character_character_pb.CharacterTarget.AsObject,
+    idsList: Array<number>,
+  }
+}
 
 export class RequestChatChannelAuthChange extends jspb.Message {
   hasCharacter(): boolean;
   clearCharacter(): void;
-  getCharacter(): sro_characters_characters_pb.CharacterTarget | undefined;
-  setCharacter(value?: sro_characters_characters_pb.CharacterTarget): void;
+  getCharacter(): sro_character_character_pb.CharacterTarget | undefined;
+  setCharacter(value?: sro_character_character_pb.CharacterTarget): void;
 
   getAdd(): boolean;
   setAdd(value: boolean): void;
@@ -32,7 +60,7 @@ export class RequestChatChannelAuthChange extends jspb.Message {
 
 export namespace RequestChatChannelAuthChange {
   export type AsObject = {
-    character?: sro_characters_characters_pb.CharacterTarget.AsObject,
+    character?: sro_character_character_pb.CharacterTarget.AsObject,
     add: boolean,
     idsList: Array<number>,
   }
@@ -185,8 +213,8 @@ export namespace SendChatMessageRequest {
 export class SendDirectMessageRequest extends jspb.Message {
   hasTarget(): boolean;
   clearTarget(): void;
-  getTarget(): sro_characters_characters_pb.CharacterTarget | undefined;
-  setTarget(value?: sro_characters_characters_pb.CharacterTarget): void;
+  getTarget(): sro_character_character_pb.CharacterTarget | undefined;
+  setTarget(value?: sro_character_character_pb.CharacterTarget): void;
 
   hasChatMessage(): boolean;
   clearChatMessage(): void;
@@ -205,7 +233,7 @@ export class SendDirectMessageRequest extends jspb.Message {
 
 export namespace SendDirectMessageRequest {
   export type AsObject = {
-    target?: sro_characters_characters_pb.CharacterTarget.AsObject,
+    target?: sro_character_character_pb.CharacterTarget.AsObject,
     chatMessage?: ChatMessage.AsObject,
   }
 }
@@ -224,6 +252,8 @@ export class UpdateChatChannelRequest extends jspb.Message {
   getDimension(): string;
   setDimension(value: string): void;
 
+  getOptionalNameCase(): UpdateChatChannelRequest.OptionalNameCase;
+  getOptionalDimensionCase(): UpdateChatChannelRequest.OptionalDimensionCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UpdateChatChannelRequest.AsObject;
   static toObject(includeInstance: boolean, msg: UpdateChatChannelRequest): UpdateChatChannelRequest.AsObject;
@@ -239,6 +269,16 @@ export namespace UpdateChatChannelRequest {
     channelId: number,
     name: string,
     dimension: string,
+  }
+
+  export enum OptionalNameCase {
+    OPTIONAL_NAME_NOT_SET = 0,
+    NAME = 2,
+  }
+
+  export enum OptionalDimensionCase {
+    OPTIONAL_DIMENSION_NOT_SET = 0,
+    DIMENSION = 3,
   }
 }
 

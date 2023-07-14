@@ -3,7 +3,7 @@
 
 import * as sro_chat_chat_pb from "../../sro/chat/chat_pb";
 import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
-import * as sro_characters_characters_pb from "../../sro/characters/characters_pb";
+import * as sro_character_character_pb from "../../sro/character/character_pb";
 import {grpc} from "@improbable-eng/grpc-web";
 
 type ChatServiceConnectChannel = {
@@ -20,7 +20,7 @@ type ChatServiceConnectDirectMessage = {
   readonly service: typeof ChatService;
   readonly requestStream: false;
   readonly responseStream: true;
-  readonly requestType: typeof sro_characters_characters_pb.CharacterTarget;
+  readonly requestType: typeof sro_character_character_pb.CharacterTarget;
   readonly responseType: typeof sro_chat_chat_pb.ChatMessage;
 };
 
@@ -92,7 +92,7 @@ type ChatServiceGetAuthorizedChatChannels = {
   readonly service: typeof ChatService;
   readonly requestStream: false;
   readonly responseStream: false;
-  readonly requestType: typeof sro_characters_characters_pb.CharacterTarget;
+  readonly requestType: typeof sro_character_character_pb.CharacterTarget;
   readonly responseType: typeof sro_chat_chat_pb.ChatChannels;
 };
 
@@ -102,6 +102,15 @@ type ChatServiceUpdateUserChatChannelAuthorizations = {
   readonly requestStream: false;
   readonly responseStream: false;
   readonly requestType: typeof sro_chat_chat_pb.RequestChatChannelAuthChange;
+  readonly responseType: typeof google_protobuf_empty_pb.Empty;
+};
+
+type ChatServiceSetUserChatChannelAuthorizations = {
+  readonly methodName: string;
+  readonly service: typeof ChatService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof sro_chat_chat_pb.RequestSetChannelAuth;
   readonly responseType: typeof google_protobuf_empty_pb.Empty;
 };
 
@@ -118,6 +127,7 @@ export class ChatService {
   static readonly EditChannel: ChatServiceEditChannel;
   static readonly GetAuthorizedChatChannels: ChatServiceGetAuthorizedChatChannels;
   static readonly UpdateUserChatChannelAuthorizations: ChatServiceUpdateUserChatChannelAuthorizations;
+  static readonly SetUserChatChannelAuthorizations: ChatServiceSetUserChatChannelAuthorizations;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -153,7 +163,7 @@ export class ChatServiceClient {
 
   constructor(serviceHost: string, options?: grpc.RpcOptions);
   connectChannel(requestMessage: sro_chat_chat_pb.ChatChannelTarget, metadata?: grpc.Metadata): ResponseStream<sro_chat_chat_pb.ChatMessage>;
-  connectDirectMessage(requestMessage: sro_characters_characters_pb.CharacterTarget, metadata?: grpc.Metadata): ResponseStream<sro_chat_chat_pb.ChatMessage>;
+  connectDirectMessage(requestMessage: sro_character_character_pb.CharacterTarget, metadata?: grpc.Metadata): ResponseStream<sro_chat_chat_pb.ChatMessage>;
   sendChatMessage(
     requestMessage: sro_chat_chat_pb.SendChatMessageRequest,
     metadata: grpc.Metadata,
@@ -218,12 +228,12 @@ export class ChatServiceClient {
     callback: (error: ServiceError|null, responseMessage: google_protobuf_empty_pb.Empty|null) => void
   ): UnaryResponse;
   getAuthorizedChatChannels(
-    requestMessage: sro_characters_characters_pb.CharacterTarget,
+    requestMessage: sro_character_character_pb.CharacterTarget,
     metadata: grpc.Metadata,
     callback: (error: ServiceError|null, responseMessage: sro_chat_chat_pb.ChatChannels|null) => void
   ): UnaryResponse;
   getAuthorizedChatChannels(
-    requestMessage: sro_characters_characters_pb.CharacterTarget,
+    requestMessage: sro_character_character_pb.CharacterTarget,
     callback: (error: ServiceError|null, responseMessage: sro_chat_chat_pb.ChatChannels|null) => void
   ): UnaryResponse;
   updateUserChatChannelAuthorizations(
@@ -233,6 +243,15 @@ export class ChatServiceClient {
   ): UnaryResponse;
   updateUserChatChannelAuthorizations(
     requestMessage: sro_chat_chat_pb.RequestChatChannelAuthChange,
+    callback: (error: ServiceError|null, responseMessage: google_protobuf_empty_pb.Empty|null) => void
+  ): UnaryResponse;
+  setUserChatChannelAuthorizations(
+    requestMessage: sro_chat_chat_pb.RequestSetChannelAuth,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: google_protobuf_empty_pb.Empty|null) => void
+  ): UnaryResponse;
+  setUserChatChannelAuthorizations(
+    requestMessage: sro_chat_chat_pb.RequestSetChannelAuth,
     callback: (error: ServiceError|null, responseMessage: google_protobuf_empty_pb.Empty|null) => void
   ): UnaryResponse;
 }

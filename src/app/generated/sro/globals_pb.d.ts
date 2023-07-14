@@ -38,3 +38,35 @@ export namespace UserTarget {
   }
 }
 
+export class Location extends jspb.Message {
+  getWorld(): string;
+  setWorld(value: string): void;
+
+  getX(): number;
+  setX(value: number): void;
+
+  getY(): number;
+  setY(value: number): void;
+
+  getZ(): number;
+  setZ(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): Location.AsObject;
+  static toObject(includeInstance: boolean, msg: Location): Location.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: Location, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Location;
+  static deserializeBinaryFromReader(message: Location, reader: jspb.BinaryReader): Location;
+}
+
+export namespace Location {
+  export type AsObject = {
+    world: string,
+    x: number,
+    y: number,
+    z: number,
+  }
+}
+

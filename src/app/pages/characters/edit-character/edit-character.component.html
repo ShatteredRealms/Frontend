@@ -1,1 +1,29 @@
-<p>edit-character works!</p>
+<section class="container mt-4">
+  <div class="row g-4">
+    <h2 class="col-12 text-center">
+      Editing {{ character?.getName() }}
+    </h2>
+    <div class="col-md-6 col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          Change Details
+        </div>
+        <div class="card-body text-center">
+          <mdb-form-control class="mb-4">
+            <input mdbInput type="text" id="name" class="form-control" [(ngModel)]="newName" />
+            <label mdbLabel class="form-label" for="name">Name</label>
+          </mdb-form-control>
+
+          <app-select-user [(selectedUser)]="newOwnerId"></app-select-user>
+
+          <button class="btn btn-secondary m-4" type="button" mdbRipple (click)="cancelChanges()">
+            Cancel
+          </button>
+          <button class="btn btn-primary m-4" type="button" id="save-name-btn" mdbRipple (click)="updateCharacter()">
+            Update Character
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

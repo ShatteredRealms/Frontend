@@ -112,5 +112,6 @@ $(PROTO_FILES):
 	protoc "$@" \
 		-I "$(PROTO_DIR)" \
 		-I "$(PROTO_THIRD_PARTY_DIR)" \
+        --plugin="./node_modules/.bin/protoc-gen-ts" \
 		--js_out="import_style=commonjs:$(PROTO_GENERATED_DIR)" \
 		--ts_out="service=grpc-web:$(PROTO_GENERATED_DIR)"

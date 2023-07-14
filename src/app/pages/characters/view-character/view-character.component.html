@@ -43,3 +43,26 @@
     </div>
   </div>
 </section>
+
+<section class="container mt-4" *ngIf="isAdmin()">
+  <div class="row g-4">
+    <div class="col-12 col-lg-6">
+      <div class="card text-center">
+        <div class="card-header">
+          Allowed Chat Channels
+          <a class="btn btn-sm btn-outline-primary btn-floating mx-2" (click)="modifyChannels(true)">
+            <i class="fas fa-plus"></i>
+          </a>
+          <a class="btn btn-sm btn-outline-danger btn-floating mx-2" (click)="modifyChannels(false)">
+            <i class="fas fa-minus"></i>
+          </a>
+        </div>
+        <div class="card-body p-0">
+          <app-chat-channels-table [dataSource]="chatChannels"
+            [loading]="loadingChatChannels"></app-chat-channels-table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+</section>

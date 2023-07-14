@@ -7,8 +7,8 @@ import { MdbNotificationRef, MdbNotificationService } from "mdb-angular-ui-kit/n
 import { AlertComponent } from "../../../components/alert/alert.component";
 import Request = grpc.Request;
 import { ChatMessage } from 'src/app/generated/sro/chat/chat_pb';
-import { ACharactersService } from 'src/app/_services/characters.service';
-import { CharactersResponse, CharacterResponse } from 'src/app/generated/sro/characters/characters_pb';
+import { CharactersDetails, CharacterDetails } from 'src/app/generated/sro/character/character_pb';
+import { ACharacterService } from 'src/app/_services/character.service';
 
 @Component({
   selector: 'app-view-chat-channel',
@@ -29,15 +29,15 @@ export class ViewChatChannelComponent implements OnInit {
 
   chatAlert: MdbNotificationRef<AlertComponent>;
 
-  characters: CharacterResponse[] = [];
-  selectedCharacter: CharacterResponse | undefined;
+  characters: CharacterDetails[] = [];
+  selectedCharacter: CharacterDetails | undefined;
 
   constructor(
     private chatChannelService: ChatChannelService,
     private notificationService: MdbNotificationService,
     private route: ActivatedRoute,
     private router: Router,
-    private charactersService: ACharactersService,
+    private characterService: ACharacterService,
   ) {
   }
 
@@ -49,8 +49,8 @@ export class ViewChatChannelComponent implements OnInit {
       }
     );
 
-    this.charactersService.getCharacters().subscribe({
-      next: (characters: CharactersResponse) => {
+    this.characterService.getCharacters().subscribe({
+      next: (characters: CharactersDetails) => {
         this.characters = characters.getCharactersList();
       },
     })
@@ -71,7 +71,7 @@ export class ViewChatChannelComponent implements OnInit {
         this.chatMessages.push(message);
       },
       error: (error) => {
-        this.newChatAlert('Error connecting to chat', 'warning')
+        this.newChatAlert('Error connecting to chat: '+error, 'warning')
       },
       complete: () => {
         this.isConnected = false;

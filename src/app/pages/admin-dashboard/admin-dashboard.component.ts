@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { KeycloakProfile } from 'keycloak-js';
-import { CharacterResponse } from 'src/app/generated/sro/characters/characters_pb';
-import { ACharactersService } from 'src/app/_services/characters.service';
+import { CharacterDetails } from 'src/app/generated/sro/character/character_pb';
+import { ACharacterService } from 'src/app/_services/character.service';
 import { KeycloakService } from 'src/app/_services/keycloak.service';
 import { ChatChannel } from "../../models/chat-channel.model";
 import { ChatChannelService } from "../../_services/chat-channel.service";
@@ -17,12 +17,12 @@ export class AdminDashboardComponent implements OnInit {
   loadingUsers = true;
 
   chatChannels: ChatChannel[] = [];
-  characters: CharacterResponse[] = [];
+  characters: CharacterDetails[] = [];
   users: KeycloakProfile[] = [];
 
   constructor(
     private _chatChannelService: ChatChannelService,
-    private _charactersService: ACharactersService,
+    private _characterService: ACharacterService,
     private _keycloak: KeycloakService,
   ) {
   }
@@ -41,7 +41,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   getAllCharacters() {
-    this._charactersService.getAllCharacters().subscribe((resp) => {
+    this._characterService.getAllCharacters().subscribe((resp) => {
       this.loadingCharacters = false;
       this.characters = resp;
     })

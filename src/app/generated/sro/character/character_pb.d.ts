@@ -1,10 +1,10 @@
-// package: sro.characters
-// file: sro/characters/characters.proto
+// package: sro.character
+// file: sro/character/character.proto
 
 import * as jspb from "google-protobuf";
-import * as sro_globals_pb from "../../sro/globals_pb";
 import * as google_api_annotations_pb from "../../google/api/annotations_pb";
 import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
+import * as sro_globals_pb from "../../sro/globals_pb";
 
 export class PlayTimeResponse extends jspb.Message {
   getTime(): number;
@@ -97,7 +97,7 @@ export class CharacterTarget extends jspb.Message {
   getName(): string;
   setName(value: string): void;
 
-  getTargetCase(): CharacterTarget.TargetCase;
+  getTypeCase(): CharacterTarget.TypeCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CharacterTarget.AsObject;
   static toObject(includeInstance: boolean, msg: CharacterTarget): CharacterTarget.AsObject;
@@ -114,8 +114,8 @@ export namespace CharacterTarget {
     name: string,
   }
 
-  export enum TargetCase {
-    TARGET_NOT_SET = 0,
+  export enum TypeCase {
+    TYPE_NOT_SET = 0,
     ID = 1,
     NAME = 2,
   }
@@ -154,9 +154,15 @@ export class EditCharacterRequest extends jspb.Message {
 
   hasLocation(): boolean;
   clearLocation(): void;
-  getLocation(): Location | undefined;
-  setLocation(value?: Location): void;
+  getLocation(): sro_globals_pb.Location | undefined;
+  setLocation(value?: sro_globals_pb.Location): void;
 
+  getOptionalOwnerIdCase(): EditCharacterRequest.OptionalOwnerIdCase;
+  getOptionalNewNameCase(): EditCharacterRequest.OptionalNewNameCase;
+  getOptionalGenderCase(): EditCharacterRequest.OptionalGenderCase;
+  getOptionalRealmCase(): EditCharacterRequest.OptionalRealmCase;
+  getOptionalPlayTimeCase(): EditCharacterRequest.OptionalPlayTimeCase;
+  getOptionalLocationCase(): EditCharacterRequest.OptionalLocationCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): EditCharacterRequest.AsObject;
   static toObject(includeInstance: boolean, msg: EditCharacterRequest): EditCharacterRequest.AsObject;
@@ -175,11 +181,41 @@ export namespace EditCharacterRequest {
     gender: string,
     realm: string,
     playTime: number,
-    location?: Location.AsObject,
+    location?: sro_globals_pb.Location.AsObject,
+  }
+
+  export enum OptionalOwnerIdCase {
+    OPTIONAL_OWNER_ID_NOT_SET = 0,
+    OWNER_ID = 3,
+  }
+
+  export enum OptionalNewNameCase {
+    OPTIONAL_NEW_NAME_NOT_SET = 0,
+    NEW_NAME = 4,
+  }
+
+  export enum OptionalGenderCase {
+    OPTIONAL_GENDER_NOT_SET = 0,
+    GENDER = 5,
+  }
+
+  export enum OptionalRealmCase {
+    OPTIONAL_REALM_NOT_SET = 0,
+    REALM = 6,
+  }
+
+  export enum OptionalPlayTimeCase {
+    OPTIONAL_PLAY_TIME_NOT_SET = 0,
+    PLAY_TIME = 7,
+  }
+
+  export enum OptionalLocationCase {
+    OPTIONAL_LOCATION_NOT_SET = 0,
+    LOCATION = 8,
   }
 }
 
-export class CharacterResponse extends jspb.Message {
+export class CharacterDetails extends jspb.Message {
   getId(): number;
   setId(value: number): void;
 
@@ -200,20 +236,20 @@ export class CharacterResponse extends jspb.Message {
 
   hasLocation(): boolean;
   clearLocation(): void;
-  getLocation(): Location | undefined;
-  setLocation(value?: Location): void;
+  getLocation(): sro_globals_pb.Location | undefined;
+  setLocation(value?: sro_globals_pb.Location): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CharacterResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: CharacterResponse): CharacterResponse.AsObject;
+  toObject(includeInstance?: boolean): CharacterDetails.AsObject;
+  static toObject(includeInstance: boolean, msg: CharacterDetails): CharacterDetails.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: CharacterResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CharacterResponse;
-  static deserializeBinaryFromReader(message: CharacterResponse, reader: jspb.BinaryReader): CharacterResponse;
+  static serializeBinaryToWriter(message: CharacterDetails, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CharacterDetails;
+  static deserializeBinaryFromReader(message: CharacterDetails, reader: jspb.BinaryReader): CharacterDetails;
 }
 
-export namespace CharacterResponse {
+export namespace CharacterDetails {
   export type AsObject = {
     id: number,
     owner: string,
@@ -221,145 +257,119 @@ export namespace CharacterResponse {
     gender: string,
     realm: string,
     playTime: number,
-    location?: Location.AsObject,
+    location?: sro_globals_pb.Location.AsObject,
   }
 }
 
-export class Location extends jspb.Message {
-  getWorld(): string;
-  setWorld(value: string): void;
-
-  getX(): number;
-  setX(value: number): void;
-
-  getY(): number;
-  setY(value: number): void;
-
-  getZ(): number;
-  setZ(value: number): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Location.AsObject;
-  static toObject(includeInstance: boolean, msg: Location): Location.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Location, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Location;
-  static deserializeBinaryFromReader(message: Location, reader: jspb.BinaryReader): Location;
-}
-
-export namespace Location {
-  export type AsObject = {
-    world: string,
-    x: number,
-    y: number,
-    z: number,
-  }
-}
-
-export class CharactersResponse extends jspb.Message {
+export class CharactersDetails extends jspb.Message {
   clearCharactersList(): void;
-  getCharactersList(): Array<CharacterResponse>;
-  setCharactersList(value: Array<CharacterResponse>): void;
-  addCharacters(value?: CharacterResponse, index?: number): CharacterResponse;
+  getCharactersList(): Array<CharacterDetails>;
+  setCharactersList(value: Array<CharacterDetails>): void;
+  addCharacters(value?: CharacterDetails, index?: number): CharacterDetails;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): CharactersResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: CharactersResponse): CharactersResponse.AsObject;
+  toObject(includeInstance?: boolean): CharactersDetails.AsObject;
+  static toObject(includeInstance: boolean, msg: CharactersDetails): CharactersDetails.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: CharactersResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): CharactersResponse;
-  static deserializeBinaryFromReader(message: CharactersResponse, reader: jspb.BinaryReader): CharactersResponse;
+  static serializeBinaryToWriter(message: CharactersDetails, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): CharactersDetails;
+  static deserializeBinaryFromReader(message: CharactersDetails, reader: jspb.BinaryReader): CharactersDetails;
 }
 
-export namespace CharactersResponse {
+export namespace CharactersDetails {
   export type AsObject = {
-    charactersList: Array<CharacterResponse.AsObject>,
+    charactersList: Array<CharacterDetails.AsObject>,
   }
 }
 
-export class Gender extends jspb.Message {
-  getName(): string;
-  setName(value: string): void;
+export class InventoryItem extends jspb.Message {
+  getId(): string;
+  setId(value: string): void;
+
+  getSlot(): number;
+  setSlot(value: number): void;
+
+  getQuantity(): number;
+  setQuantity(value: number): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Gender.AsObject;
-  static toObject(includeInstance: boolean, msg: Gender): Gender.AsObject;
+  toObject(includeInstance?: boolean): InventoryItem.AsObject;
+  static toObject(includeInstance: boolean, msg: InventoryItem): InventoryItem.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Gender, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Gender;
-  static deserializeBinaryFromReader(message: Gender, reader: jspb.BinaryReader): Gender;
+  static serializeBinaryToWriter(message: InventoryItem, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): InventoryItem;
+  static deserializeBinaryFromReader(message: InventoryItem, reader: jspb.BinaryReader): InventoryItem;
 }
 
-export namespace Gender {
+export namespace InventoryItem {
   export type AsObject = {
-    name: string,
+    id: string,
+    slot: number,
+    quantity: number,
   }
 }
 
-export class Realm extends jspb.Message {
-  getName(): string;
-  setName(value: string): void;
+export class Inventory extends jspb.Message {
+  clearInventoryItemsList(): void;
+  getInventoryItemsList(): Array<InventoryItem>;
+  setInventoryItemsList(value: Array<InventoryItem>): void;
+  addInventoryItems(value?: InventoryItem, index?: number): InventoryItem;
+
+  clearBankItemsList(): void;
+  getBankItemsList(): Array<InventoryItem>;
+  setBankItemsList(value: Array<InventoryItem>): void;
+  addBankItems(value?: InventoryItem, index?: number): InventoryItem;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Realm.AsObject;
-  static toObject(includeInstance: boolean, msg: Realm): Realm.AsObject;
+  toObject(includeInstance?: boolean): Inventory.AsObject;
+  static toObject(includeInstance: boolean, msg: Inventory): Inventory.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Realm, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Realm;
-  static deserializeBinaryFromReader(message: Realm, reader: jspb.BinaryReader): Realm;
+  static serializeBinaryToWriter(message: Inventory, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): Inventory;
+  static deserializeBinaryFromReader(message: Inventory, reader: jspb.BinaryReader): Inventory;
 }
 
-export namespace Realm {
+export namespace Inventory {
   export type AsObject = {
-    name: string,
+    inventoryItemsList: Array<InventoryItem.AsObject>,
+    bankItemsList: Array<InventoryItem.AsObject>,
   }
 }
 
-export class Genders extends jspb.Message {
-  clearGendersList(): void;
-  getGendersList(): Array<Gender>;
-  setGendersList(value: Array<Gender>): void;
-  addGenders(value?: Gender, index?: number): Gender;
+export class UpdateInventoryRequest extends jspb.Message {
+  hasTarget(): boolean;
+  clearTarget(): void;
+  getTarget(): CharacterTarget | undefined;
+  setTarget(value?: CharacterTarget): void;
+
+  clearInventoryItemsList(): void;
+  getInventoryItemsList(): Array<InventoryItem>;
+  setInventoryItemsList(value: Array<InventoryItem>): void;
+  addInventoryItems(value?: InventoryItem, index?: number): InventoryItem;
+
+  clearBankItemsList(): void;
+  getBankItemsList(): Array<InventoryItem>;
+  setBankItemsList(value: Array<InventoryItem>): void;
+  addBankItems(value?: InventoryItem, index?: number): InventoryItem;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Genders.AsObject;
-  static toObject(includeInstance: boolean, msg: Genders): Genders.AsObject;
+  toObject(includeInstance?: boolean): UpdateInventoryRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateInventoryRequest): UpdateInventoryRequest.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Genders, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Genders;
-  static deserializeBinaryFromReader(message: Genders, reader: jspb.BinaryReader): Genders;
+  static serializeBinaryToWriter(message: UpdateInventoryRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateInventoryRequest;
+  static deserializeBinaryFromReader(message: UpdateInventoryRequest, reader: jspb.BinaryReader): UpdateInventoryRequest;
 }
 
-export namespace Genders {
+export namespace UpdateInventoryRequest {
   export type AsObject = {
-    gendersList: Array<Gender.AsObject>,
-  }
-}
-
-export class Realms extends jspb.Message {
-  clearRealmsList(): void;
-  getRealmsList(): Array<Realm>;
-  setRealmsList(value: Array<Realm>): void;
-  addRealms(value?: Realm, index?: number): Realm;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Realms.AsObject;
-  static toObject(includeInstance: boolean, msg: Realms): Realms.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Realms, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Realms;
-  static deserializeBinaryFromReader(message: Realms, reader: jspb.BinaryReader): Realms;
-}
-
-export namespace Realms {
-  export type AsObject = {
-    realmsList: Array<Realm.AsObject>,
+    target?: CharacterTarget.AsObject,
+    inventoryItemsList: Array<InventoryItem.AsObject>,
+    bankItemsList: Array<InventoryItem.AsObject>,
   }
 }
 

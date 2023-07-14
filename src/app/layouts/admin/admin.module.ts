@@ -41,6 +41,8 @@ import { MdbTimepickerModule } from 'mdb-angular-ui-kit/timepicker';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import { FormsModule } from '@angular/forms';
+import { EditCharacterComponent } from 'src/app/pages/characters/edit-character/edit-character.component';
+import { SelectUserComponent } from 'src/app/components/select/select-user/select-user.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { FormsModule } from '@angular/forms';
     NewChatChannelComponent,
     EditChatChannelComponent,
     ViewChatChannelComponent,
+    SelectUserComponent,
+    EditCharacterComponent,
   ],
   imports: [
     CommonModule,

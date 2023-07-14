@@ -1,0 +1,8 @@
+<mdb-form-control>
+  <mdb-select (ngModelChange)="selectedUserChange.emit($event)" [ngModel]="selectedUser" [filter]="true">
+    <mdb-option *ngFor="let user of users" [value]="user.id">
+      {{ user.username }}
+    </mdb-option>
+  </mdb-select>
+  <label mdbLabel class="form-label">Users</label>
+</mdb-form-control>

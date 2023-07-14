@@ -6,18 +6,30 @@ import { MdbModalRef } from "mdb-angular-ui-kit/modal";
   templateUrl: './modal-select.component.html',
   styleUrls: ['./modal-select.component.scss']
 })
-export class ModalSelectComponent {
-  ignoreOptions: any[];
-  options: any[];
-  selectedOptions: any[] = [];
+export class ModalSelectComponent<T> {
+  ignoreOptions: T[] = [];
+  options: T[] = [];
+  selectedOptions: T[] = [];
 
   title: string | null;
   message: string | null;
 
-  constructor(public modalRef: MdbModalRef<ModalSelectComponent>) {
+  itemViewProperty: keyof T;
+
+  constructor(
+    public modalRef: MdbModalRef<ModalSelectComponent<T>>
+  ) {
   }
 
-  closeWithRoles() {
+  closeWithSelection() {
     this.modalRef.close(this.selectedOptions);
+  }
+
+  getDisplayName(option: any): any {
+    if (this.itemViewProperty) {
+      return option[this.itemViewProperty];
+    }
+
+    return Object.values(option)[0];
   }
 }

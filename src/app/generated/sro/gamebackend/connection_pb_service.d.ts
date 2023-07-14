@@ -2,7 +2,7 @@
 // file: sro/gamebackend/connection.proto
 
 import * as sro_gamebackend_connection_pb from "../../sro/gamebackend/connection_pb";
-import * as sro_characters_characters_pb from "../../sro/characters/characters_pb";
+import * as sro_character_character_pb from "../../sro/character/character_pb";
 import {grpc} from "@improbable-eng/grpc-web";
 
 type ConnectionServiceConnectGameServer = {
@@ -10,13 +10,43 @@ type ConnectionServiceConnectGameServer = {
   readonly service: typeof ConnectionService;
   readonly requestStream: false;
   readonly responseStream: false;
-  readonly requestType: typeof sro_characters_characters_pb.CharacterTarget;
+  readonly requestType: typeof sro_character_character_pb.CharacterTarget;
   readonly responseType: typeof sro_gamebackend_connection_pb.ConnectGameServerResponse;
+};
+
+type ConnectionServiceVerifyConnect = {
+  readonly methodName: string;
+  readonly service: typeof ConnectionService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof sro_gamebackend_connection_pb.VerifyConnectRequest;
+  readonly responseType: typeof sro_character_character_pb.CharacterDetails;
+};
+
+type ConnectionServiceTransferPlayer = {
+  readonly methodName: string;
+  readonly service: typeof ConnectionService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof sro_gamebackend_connection_pb.TransferPlayerRequest;
+  readonly responseType: typeof sro_gamebackend_connection_pb.ConnectGameServerResponse;
+};
+
+type ConnectionServiceIsPlaying = {
+  readonly methodName: string;
+  readonly service: typeof ConnectionService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof sro_character_character_pb.CharacterTarget;
+  readonly responseType: typeof sro_gamebackend_connection_pb.ConnectionStatus;
 };
 
 export class ConnectionService {
   static readonly serviceName: string;
   static readonly ConnectGameServer: ConnectionServiceConnectGameServer;
+  static readonly VerifyConnect: ConnectionServiceVerifyConnect;
+  static readonly TransferPlayer: ConnectionServiceTransferPlayer;
+  static readonly IsPlaying: ConnectionServiceIsPlaying;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -52,13 +82,40 @@ export class ConnectionServiceClient {
 
   constructor(serviceHost: string, options?: grpc.RpcOptions);
   connectGameServer(
-    requestMessage: sro_characters_characters_pb.CharacterTarget,
+    requestMessage: sro_character_character_pb.CharacterTarget,
     metadata: grpc.Metadata,
     callback: (error: ServiceError|null, responseMessage: sro_gamebackend_connection_pb.ConnectGameServerResponse|null) => void
   ): UnaryResponse;
   connectGameServer(
-    requestMessage: sro_characters_characters_pb.CharacterTarget,
+    requestMessage: sro_character_character_pb.CharacterTarget,
     callback: (error: ServiceError|null, responseMessage: sro_gamebackend_connection_pb.ConnectGameServerResponse|null) => void
+  ): UnaryResponse;
+  verifyConnect(
+    requestMessage: sro_gamebackend_connection_pb.VerifyConnectRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: sro_character_character_pb.CharacterDetails|null) => void
+  ): UnaryResponse;
+  verifyConnect(
+    requestMessage: sro_gamebackend_connection_pb.VerifyConnectRequest,
+    callback: (error: ServiceError|null, responseMessage: sro_character_character_pb.CharacterDetails|null) => void
+  ): UnaryResponse;
+  transferPlayer(
+    requestMessage: sro_gamebackend_connection_pb.TransferPlayerRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: sro_gamebackend_connection_pb.ConnectGameServerResponse|null) => void
+  ): UnaryResponse;
+  transferPlayer(
+    requestMessage: sro_gamebackend_connection_pb.TransferPlayerRequest,
+    callback: (error: ServiceError|null, responseMessage: sro_gamebackend_connection_pb.ConnectGameServerResponse|null) => void
+  ): UnaryResponse;
+  isPlaying(
+    requestMessage: sro_character_character_pb.CharacterTarget,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: sro_gamebackend_connection_pb.ConnectionStatus|null) => void
+  ): UnaryResponse;
+  isPlaying(
+    requestMessage: sro_character_character_pb.CharacterTarget,
+    callback: (error: ServiceError|null, responseMessage: sro_gamebackend_connection_pb.ConnectionStatus|null) => void
   ): UnaryResponse;
 }
 

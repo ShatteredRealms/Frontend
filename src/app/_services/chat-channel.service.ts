@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 import { ChatChannel } from "../models/chat-channel.model";
 import { environment } from "../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { map } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 import { KeycloakService } from './keycloak.service';
 import { grpc } from '@improbable-eng/grpc-web';
 import { ChatService } from '../generated/sro/chat/chat_pb_service';
@@ -33,6 +33,33 @@ export class ChatChannelService {
     return this.http.get<any>(`${environment.CHAT_API_URL}/channels`)
       .pipe(map(resp => {
         localStorage.setItem(CHAT_CHANNELS_KEY, JSON.stringify(resp.channels));
+        return resp.channels;
+      }));
+  }
+
+  public updateCharacterAuthorization(characterId: number, channels: number[], add: boolean): Observable<string> {
+    return this.http.put<any>(
+      `${environment.CHAT_API_URL}/channels/characters/id/${characterId}`,
+      {
+        ids: channels,
+        add: add,
+      }
+    ).pipe(map((resp) => {
+      return resp;
+    }));
+  }
+
+  public getAllChatChannelsForCharacter(id: number, forceRefresh: boolean = true): Observable<ChatChannel[]> {
+    if (!forceRefresh) {
+      let chatChannelsString = localStorage.getItem(`${CHAT_CHANNELS_KEY}-${id}`);
+      if (chatChannelsString) {
+        return of(JSON.parse(chatChannelsString));
+      }
+    }
+
+    return this.http.get<any>(`${environment.CHAT_API_URL}/channels/character/id/${id}`)
+      .pipe(map(resp => {
+        localStorage.setItem(`${CHAT_CHANNELS_KEY}-${id}`, JSON.stringify(resp.channels));
         return resp.channels;
       }));
   }

@@ -3,22 +3,22 @@ import { grpc } from '@improbable-eng/grpc-web';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CharacterResponse, CharactersResponse, CharacterTarget } from '../generated/sro/characters/characters_pb';
-import { CharactersService } from '../generated/sro/characters/characters_pb_service';
+import { CharacterDetails, CharactersDetails, CharacterTarget, EditCharacterRequest } from '../generated/sro/character/character_pb';
+import { CharacterService } from '../generated/sro/character/character_pb_service';
 import { UserTarget } from '../generated/sro/globals_pb';
 import { KeycloakService } from './keycloak.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ACharactersService {
+export class ACharacterService {
 
   constructor(
     protected keycloak: KeycloakService,
   ) {
   }
 
-  getCharacters(user?: string): Observable<CharactersResponse> {
+  getCharacters(user?: string): Observable<CharactersDetails> {
     if (user == null) {
       user = this.keycloak.profile?.username
     }
@@ -26,13 +26,13 @@ export class ACharactersService {
     return new Observable((subscriber) => {
       const request = new UserTarget();
       request.setUsername(user!)
-      grpc.invoke(CharactersService.GetAllCharactersForUser, {
+      grpc.invoke(CharacterService.GetAllCharactersForUser, {
         host: environment.CHARACTERS_API_BASE_URL,
         request: request,
         metadata: {
           Authorization: `Bearer ${this.keycloak.instance.token}`,
         },
-        onMessage: (message: CharactersResponse): void => {
+        onMessage: (message: CharactersDetails): void => {
           subscriber.next(message);
         },
         onEnd: function(code: grpc.Code, message: string, trailers: grpc.Metadata): void {
@@ -47,7 +47,7 @@ export class ACharactersService {
     })
   }
 
-  getCharacter(id: number): Observable<CharacterResponse> {
+  getCharacter(id: number): Observable<CharacterDetails> {
     if (id <= 0) {
       return throwError(() => {
         return new Error("invalid character id");
@@ -57,13 +57,13 @@ export class ACharactersService {
     return new Observable((subscriber) => {
       const request = new CharacterTarget();
       request.setId(id);
-      grpc.invoke(CharactersService.GetCharacter, {
+      grpc.invoke(CharacterService.GetCharacter, {
         host: environment.CHARACTERS_API_BASE_URL,
         request: request,
         metadata: {
           Authorization: `Bearer ${this.keycloak.instance.token}`,
         },
-        onMessage: (message: CharacterResponse): void => {
+        onMessage: (message: CharacterDetails): void => {
           subscriber.next(message);
         },
         onEnd: function(code: grpc.Code, message: string, trailers: grpc.Metadata): void {
@@ -78,15 +78,15 @@ export class ACharactersService {
     })
   }
 
-  getAllCharacters(): Observable<CharacterResponse[]> {
+  getAllCharacters(): Observable<CharacterDetails[]> {
     return new Observable((subscriber) => {
-      grpc.invoke(CharactersService.GetCharacters, {
+      grpc.invoke(CharacterService.GetCharacters, {
         host: environment.CHARACTERS_API_BASE_URL,
         request: new Empty(),
         metadata: {
           Authorization: `Bearer ${this.keycloak.instance.token}`,
         },
-        onMessage: (message: CharactersResponse): void => {
+        onMessage: (message: CharactersDetails): void => {
           subscriber.next(message.getCharactersList());
         },
         onEnd: function(code: grpc.Code, message: string, trailers: grpc.Metadata): void {
@@ -105,7 +105,7 @@ export class ACharactersService {
     const request = new CharacterTarget();
     request.setId(id);
     return new Observable((subscriber) => {
-      grpc.invoke(CharactersService.DeleteCharacter, {
+      grpc.invoke(CharacterService.DeleteCharacter, {
         host: environment.CHARACTERS_API_BASE_URL,
         request: request,
         metadata: {
@@ -123,6 +123,36 @@ export class ACharactersService {
           subscriber.complete();
         }
       })
+    });
+  }
+
+  updateCharacter(characterId: number, newName: string | null, newOwnerId: string | null): Observable<any> {
+    const request = new EditCharacterRequest();
+    const target = new CharacterTarget();
+    target.setId(characterId);
+    request.setTarget(target);
+    if (newName != null && newName != "") request.setNewName(newName);
+    if (newOwnerId != null && newOwnerId != "") request.setOwnerId(newOwnerId);
+
+    return new Observable((subscriber) => {
+      grpc.invoke(CharacterService.EditCharacter, {
+        host: environment.CHARACTERS_API_BASE_URL,
+        request: request,
+        metadata: {
+          Authorization: `Bearer ${this.keycloak.instance.token}`,
+        },
+        onMessage: (message: Empty): void => {
+          subscriber.next(message);
+        },
+        onEnd: function(code: grpc.Code, message: string, trailers: grpc.Metadata): void {
+          console.log('update characters for other user end:', code, message, trailers);
+          if (code != grpc.Code.OK) {
+            subscriber.error(message);
+          }
+
+          subscriber.complete();
+        },
+      });
     });
   }
 }
