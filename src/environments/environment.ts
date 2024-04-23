@@ -5,7 +5,7 @@ const CHAT_API_BASE_URL = `https://${DOMAIN}/chat`;
 const CHAT_API_URL = `${CHAT_API_BASE_URL}/${CHAT_API_VERSION}`
 
 const CHARACTERS_API_VERSION = 'v1';
-const CHARACTERS_API_BASE_URL = `https://${DOMAIN}/characters`;
+const CHARACTERS_API_BASE_URL = `https://${DOMAIN}/character`;
 const CHARACTERS_API_URL = `${CHARACTERS_API_BASE_URL}/${CHARACTERS_API_VERSION}`;
 
 const KEYCLOAK_DOMAIN = 'http://localhost:8080';

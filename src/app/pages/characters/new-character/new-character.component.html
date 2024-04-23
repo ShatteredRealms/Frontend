@@ -1,0 +1,28 @@
+<section class="container mt-4">
+  <div class="row g-4">
+    <h2 class="col-12 text-center">
+      New Character
+    </h2>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          Character Details
+        </div>
+        <div class="card-body grid-1">
+          <mdb-form-control class="mb-1">
+            <!-- <input mdbInput type="text" id="name" class="form-control" [(ngModel)]="name" /> -->
+            <label mdbLabel class="form-label" for="name">Name</label>
+          </mdb-form-control>
+          <mdb-form-control class="mb-1">
+            <!-- <input mdbInput type="text" id="dimension" class="form-control" [(ngModel)]="dimension" /> -->
+            <label mdbLabel class="form-label" for="dimension">Dimension</label>
+          </mdb-form-control>
+        </div>
+        <div class="card-footer text-end">
+          <a [routerLink]="['..']" class="btn btn-light mx-2">Cancel</a>
+          <a class="btn btn-primary mx-2" (click)="createCharacter()">Save Changes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

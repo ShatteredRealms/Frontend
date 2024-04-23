@@ -317,7 +317,10 @@ proto.sro.Location.toObject = function(includeInstance, msg) {
     world: jspb.Message.getFieldWithDefault(msg, 1, ""),
     x: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0),
     y: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0),
-    z: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0)
+    z: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0),
+    roll: jspb.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0),
+    pitch: jspb.Message.getFloatingPointFieldWithDefault(msg, 6, 0.0),
+    yaw: jspb.Message.getFloatingPointFieldWithDefault(msg, 7, 0.0)
   };
 
   if (includeInstance) {
@@ -369,6 +372,18 @@ proto.sro.Location.deserializeBinaryFromReader = function(msg, reader) {
     case 4:
       var value = /** @type {number} */ (reader.readFloat());
       msg.setZ(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setRoll(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setPitch(value);
+      break;
+    case 7:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setYaw(value);
       break;
     default:
       reader.skipField();
@@ -424,6 +439,27 @@ proto.sro.Location.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0.0) {
     writer.writeFloat(
       4,
+      f
+    );
+  }
+  f = message.getRoll();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      5,
+      f
+    );
+  }
+  f = message.getPitch();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      6,
+      f
+    );
+  }
+  f = message.getYaw();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      7,
       f
     );
   }
@@ -499,6 +535,60 @@ proto.sro.Location.prototype.getZ = function() {
  */
 proto.sro.Location.prototype.setZ = function(value) {
   return jspb.Message.setProto3FloatField(this, 4, value);
+};
+
+
+/**
+ * optional float roll = 5;
+ * @return {number}
+ */
+proto.sro.Location.prototype.getRoll = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 5, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.sro.Location} returns this
+ */
+proto.sro.Location.prototype.setRoll = function(value) {
+  return jspb.Message.setProto3FloatField(this, 5, value);
+};
+
+
+/**
+ * optional float pitch = 6;
+ * @return {number}
+ */
+proto.sro.Location.prototype.getPitch = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 6, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.sro.Location} returns this
+ */
+proto.sro.Location.prototype.setPitch = function(value) {
+  return jspb.Message.setProto3FloatField(this, 6, value);
+};
+
+
+/**
+ * optional float yaw = 7;
+ * @return {number}
+ */
+proto.sro.Location.prototype.getYaw = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 7, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.sro.Location} returns this
+ */
+proto.sro.Location.prototype.setYaw = function(value) {
+  return jspb.Message.setProto3FloatField(this, 7, value);
 };
 
 

@@ -19,6 +19,7 @@ export class KeycloakService {
       realm: environment.KEYCLOAK_REALM,
       clientId: environment.KEYCLOAK_CLIENT,
     });
+    console.log('url', environment.KEYCLOAK_DOMAIN);
   }
 
   async init(): Promise<boolean> {

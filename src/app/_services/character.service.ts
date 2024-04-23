@@ -3,7 +3,7 @@ import { grpc } from '@improbable-eng/grpc-web';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CharacterDetails, CharactersDetails, CharacterTarget, EditCharacterRequest } from '../generated/sro/character/character_pb';
+import { CharacterDetails, CharactersDetails, CharacterTarget, EditCharacterRequest } from 'src/app/generated/sro/character/character_pb';
 import { CharacterService } from '../generated/sro/character/character_pb_service';
 import { UserTarget } from '../generated/sro/globals_pb';
 import { KeycloakService } from './keycloak.service';

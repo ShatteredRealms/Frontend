@@ -11,6 +11,7 @@ import { DefaultComponent } from './layouts/default/default.component';
 import { AdminComponent } from './layouts/admin/admin.component';
 import { ViewCharacterComponent } from './pages/characters/view-character/view-character.component';
 import { EditCharacterComponent } from './pages/characters/edit-character/edit-character.component';
+import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'users/:user', component: UserProfileComponent },
       { path: 'characters/id/:id', component: ViewCharacterComponent },
       { path: 'characters/id/:id/edit', component: EditCharacterComponent },
+      { path: 'privacy-policy', component: PrivacyPolicyComponent },
     ]
   },
   {

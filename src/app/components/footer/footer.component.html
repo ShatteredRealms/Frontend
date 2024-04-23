@@ -13,6 +13,8 @@
         <li><a *ngIf="isUserSignedIn()" class="text-muted"
             [routerLink]="['/users', this.keycloak.profile?.username]">Profile</a>
         </li>
+        <li><a class="text-muted" [routerLink]="['/privacy-policy']">Privacy Policy</a>
+        </li>
       </ul>
     </div>
     <div class="col-12 col-sm" *ngIf="isAdmin()">

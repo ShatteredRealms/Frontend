@@ -51,6 +51,15 @@ export class Location extends jspb.Message {
   getZ(): number;
   setZ(value: number): void;
 
+  getRoll(): number;
+  setRoll(value: number): void;
+
+  getPitch(): number;
+  setPitch(value: number): void;
+
+  getYaw(): number;
+  setYaw(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Location.AsObject;
   static toObject(includeInstance: boolean, msg: Location): Location.AsObject;
@@ -67,6 +76,9 @@ export namespace Location {
     x: number,
     y: number,
     z: number,
+    roll: number,
+    pitch: number,
+    yaw: number,
   }
 }
 

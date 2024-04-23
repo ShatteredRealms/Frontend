@@ -21,6 +21,8 @@ var google_protobuf_empty_pb = require('google-protobuf/google/protobuf/empty_pb
 goog.object.extend(proto, google_protobuf_empty_pb);
 var sro_globals_pb = require('../../sro/globals_pb.js');
 goog.object.extend(proto, sro_globals_pb);
+var sro_gamebackend_servermanager_pb = require('../../sro/gamebackend/servermanager_pb.js');
+goog.object.extend(proto, sro_gamebackend_servermanager_pb);
 goog.exportSymbol('proto.sro.character.AddPlayTimeRequest', null, global);
 goog.exportSymbol('proto.sro.character.CharacterDetails', null, global);
 goog.exportSymbol('proto.sro.character.CharacterTarget', null, global);
@@ -28,6 +30,7 @@ goog.exportSymbol('proto.sro.character.CharacterTarget.TypeCase', null, global);
 goog.exportSymbol('proto.sro.character.CharactersDetails', null, global);
 goog.exportSymbol('proto.sro.character.CreateCharacterRequest', null, global);
 goog.exportSymbol('proto.sro.character.EditCharacterRequest', null, global);
+goog.exportSymbol('proto.sro.character.EditCharacterRequest.OptionalDimensionCase', null, global);
 goog.exportSymbol('proto.sro.character.EditCharacterRequest.OptionalGenderCase', null, global);
 goog.exportSymbol('proto.sro.character.EditCharacterRequest.OptionalLocationCase', null, global);
 goog.exportSymbol('proto.sro.character.EditCharacterRequest.OptionalNewNameCase', null, global);
@@ -594,7 +597,8 @@ proto.sro.character.CreateCharacterRequest.toObject = function(includeInstance, 
     owner: (f = msg.getOwner()) && sro_globals_pb.UserTarget.toObject(includeInstance, f),
     name: jspb.Message.getFieldWithDefault(msg, 2, ""),
     gender: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    realm: jspb.Message.getFieldWithDefault(msg, 4, "")
+    realm: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    dimension: (f = msg.getDimension()) && sro_gamebackend_servermanager_pb.DimensionTarget.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -647,6 +651,11 @@ proto.sro.character.CreateCharacterRequest.deserializeBinaryFromReader = functio
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setRealm(value);
+      break;
+    case 5:
+      var value = new sro_gamebackend_servermanager_pb.DimensionTarget;
+      reader.readMessage(value,sro_gamebackend_servermanager_pb.DimensionTarget.deserializeBinaryFromReader);
+      msg.setDimension(value);
       break;
     default:
       reader.skipField();
@@ -704,6 +713,14 @@ proto.sro.character.CreateCharacterRequest.serializeBinaryToWriter = function(me
     writer.writeString(
       4,
       f
+    );
+  }
+  f = message.getDimension();
+  if (f != null) {
+    writer.writeMessage(
+      5,
+      f,
+      sro_gamebackend_servermanager_pb.DimensionTarget.serializeBinaryToWriter
     );
   }
 };
@@ -797,6 +814,43 @@ proto.sro.character.CreateCharacterRequest.prototype.getRealm = function() {
  */
 proto.sro.character.CreateCharacterRequest.prototype.setRealm = function(value) {
   return jspb.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional sro.gamebackend.DimensionTarget dimension = 5;
+ * @return {?proto.sro.gamebackend.DimensionTarget}
+ */
+proto.sro.character.CreateCharacterRequest.prototype.getDimension = function() {
+  return /** @type{?proto.sro.gamebackend.DimensionTarget} */ (
+    jspb.Message.getWrapperField(this, sro_gamebackend_servermanager_pb.DimensionTarget, 5));
+};
+
+
+/**
+ * @param {?proto.sro.gamebackend.DimensionTarget|undefined} value
+ * @return {!proto.sro.character.CreateCharacterRequest} returns this
+*/
+proto.sro.character.CreateCharacterRequest.prototype.setDimension = function(value) {
+  return jspb.Message.setWrapperField(this, 5, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.sro.character.CreateCharacterRequest} returns this
+ */
+proto.sro.character.CreateCharacterRequest.prototype.clearDimension = function() {
+  return this.setDimension(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.sro.character.CreateCharacterRequest.prototype.hasDimension = function() {
+  return jspb.Message.getField(this, 5) != null;
 };
 
 
@@ -1031,7 +1085,7 @@ proto.sro.character.CharacterTarget.prototype.hasName = function() {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.sro.character.EditCharacterRequest.oneofGroups_ = [[3],[4],[5],[6],[7],[8]];
+proto.sro.character.EditCharacterRequest.oneofGroups_ = [[3],[4],[5],[6],[7],[8],[9]];
 
 /**
  * @enum {number}
@@ -1123,6 +1177,21 @@ proto.sro.character.EditCharacterRequest.prototype.getOptionalLocationCase = fun
   return /** @type {proto.sro.character.EditCharacterRequest.OptionalLocationCase} */(jspb.Message.computeOneofCase(this, proto.sro.character.EditCharacterRequest.oneofGroups_[5]));
 };
 
+/**
+ * @enum {number}
+ */
+proto.sro.character.EditCharacterRequest.OptionalDimensionCase = {
+  OPTIONAL_DIMENSION_NOT_SET: 0,
+  DIMENSION: 9
+};
+
+/**
+ * @return {proto.sro.character.EditCharacterRequest.OptionalDimensionCase}
+ */
+proto.sro.character.EditCharacterRequest.prototype.getOptionalDimensionCase = function() {
+  return /** @type {proto.sro.character.EditCharacterRequest.OptionalDimensionCase} */(jspb.Message.computeOneofCase(this, proto.sro.character.EditCharacterRequest.oneofGroups_[6]));
+};
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -1160,7 +1229,8 @@ proto.sro.character.EditCharacterRequest.toObject = function(includeInstance, ms
     gender: jspb.Message.getFieldWithDefault(msg, 5, ""),
     realm: jspb.Message.getFieldWithDefault(msg, 6, ""),
     playTime: jspb.Message.getFieldWithDefault(msg, 7, 0),
-    location: (f = msg.getLocation()) && sro_globals_pb.Location.toObject(includeInstance, f)
+    location: (f = msg.getLocation()) && sro_globals_pb.Location.toObject(includeInstance, f),
+    dimension: (f = msg.getDimension()) && sro_gamebackend_servermanager_pb.DimensionTarget.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1226,6 +1296,11 @@ proto.sro.character.EditCharacterRequest.deserializeBinaryFromReader = function(
       var value = new sro_globals_pb.Location;
       reader.readMessage(value,sro_globals_pb.Location.deserializeBinaryFromReader);
       msg.setLocation(value);
+      break;
+    case 9:
+      var value = new sro_gamebackend_servermanager_pb.DimensionTarget;
+      reader.readMessage(value,sro_gamebackend_servermanager_pb.DimensionTarget.deserializeBinaryFromReader);
+      msg.setDimension(value);
       break;
     default:
       reader.skipField();
@@ -1305,6 +1380,14 @@ proto.sro.character.EditCharacterRequest.serializeBinaryToWriter = function(mess
       8,
       f,
       sro_globals_pb.Location.serializeBinaryToWriter
+    );
+  }
+  f = message.getDimension();
+  if (f != null) {
+    writer.writeMessage(
+      9,
+      f,
+      sro_gamebackend_servermanager_pb.DimensionTarget.serializeBinaryToWriter
     );
   }
 };
@@ -1564,6 +1647,43 @@ proto.sro.character.EditCharacterRequest.prototype.hasLocation = function() {
 };
 
 
+/**
+ * optional sro.gamebackend.DimensionTarget dimension = 9;
+ * @return {?proto.sro.gamebackend.DimensionTarget}
+ */
+proto.sro.character.EditCharacterRequest.prototype.getDimension = function() {
+  return /** @type{?proto.sro.gamebackend.DimensionTarget} */ (
+    jspb.Message.getWrapperField(this, sro_gamebackend_servermanager_pb.DimensionTarget, 9));
+};
+
+
+/**
+ * @param {?proto.sro.gamebackend.DimensionTarget|undefined} value
+ * @return {!proto.sro.character.EditCharacterRequest} returns this
+*/
+proto.sro.character.EditCharacterRequest.prototype.setDimension = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 9, proto.sro.character.EditCharacterRequest.oneofGroups_[6], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.sro.character.EditCharacterRequest} returns this
+ */
+proto.sro.character.EditCharacterRequest.prototype.clearDimension = function() {
+  return this.setDimension(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.sro.character.EditCharacterRequest.prototype.hasDimension = function() {
+  return jspb.Message.getField(this, 9) != null;
+};
+
+
 
 
 
@@ -1602,7 +1722,8 @@ proto.sro.character.CharacterDetails.toObject = function(includeInstance, msg) {
     gender: jspb.Message.getFieldWithDefault(msg, 4, ""),
     realm: jspb.Message.getFieldWithDefault(msg, 5, ""),
     playTime: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    location: (f = msg.getLocation()) && sro_globals_pb.Location.toObject(includeInstance, f)
+    location: (f = msg.getLocation()) && sro_globals_pb.Location.toObject(includeInstance, f),
+    dimension: jspb.Message.getFieldWithDefault(msg, 9, "")
   };
 
   if (includeInstance) {
@@ -1667,6 +1788,10 @@ proto.sro.character.CharacterDetails.deserializeBinaryFromReader = function(msg,
       var value = new sro_globals_pb.Location;
       reader.readMessage(value,sro_globals_pb.Location.deserializeBinaryFromReader);
       msg.setLocation(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setDimension(value);
       break;
     default:
       reader.skipField();
@@ -1745,6 +1870,13 @@ proto.sro.character.CharacterDetails.serializeBinaryToWriter = function(message,
       8,
       f,
       sro_globals_pb.Location.serializeBinaryToWriter
+    );
+  }
+  f = message.getDimension();
+  if (f.length > 0) {
+    writer.writeString(
+      9,
+      f
     );
   }
 };
@@ -1892,6 +2024,24 @@ proto.sro.character.CharacterDetails.prototype.clearLocation = function() {
  */
 proto.sro.character.CharacterDetails.prototype.hasLocation = function() {
   return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional string dimension = 9;
+ * @return {string}
+ */
+proto.sro.character.CharacterDetails.prototype.getDimension = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.sro.character.CharacterDetails} returns this
+ */
+proto.sro.character.CharacterDetails.prototype.setDimension = function(value) {
+  return jspb.Message.setProto3StringField(this, 9, value);
 };
 
 

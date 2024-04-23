@@ -5,6 +5,7 @@ import * as jspb from "google-protobuf";
 import * as google_api_annotations_pb from "../../google/api/annotations_pb";
 import * as google_protobuf_empty_pb from "google-protobuf/google/protobuf/empty_pb";
 import * as sro_globals_pb from "../../sro/globals_pb";
+import * as sro_gamebackend_servermanager_pb from "../../sro/gamebackend/servermanager_pb";
 
 export class PlayTimeResponse extends jspb.Message {
   getTime(): number;
@@ -67,6 +68,11 @@ export class CreateCharacterRequest extends jspb.Message {
   getRealm(): string;
   setRealm(value: string): void;
 
+  hasDimension(): boolean;
+  clearDimension(): void;
+  getDimension(): sro_gamebackend_servermanager_pb.DimensionTarget | undefined;
+  setDimension(value?: sro_gamebackend_servermanager_pb.DimensionTarget): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CreateCharacterRequest.AsObject;
   static toObject(includeInstance: boolean, msg: CreateCharacterRequest): CreateCharacterRequest.AsObject;
@@ -83,6 +89,7 @@ export namespace CreateCharacterRequest {
     name: string,
     gender: string,
     realm: string,
+    dimension?: sro_gamebackend_servermanager_pb.DimensionTarget.AsObject,
   }
 }
 
@@ -157,12 +164,18 @@ export class EditCharacterRequest extends jspb.Message {
   getLocation(): sro_globals_pb.Location | undefined;
   setLocation(value?: sro_globals_pb.Location): void;
 
+  hasDimension(): boolean;
+  clearDimension(): void;
+  getDimension(): sro_gamebackend_servermanager_pb.DimensionTarget | undefined;
+  setDimension(value?: sro_gamebackend_servermanager_pb.DimensionTarget): void;
+
   getOptionalOwnerIdCase(): EditCharacterRequest.OptionalOwnerIdCase;
   getOptionalNewNameCase(): EditCharacterRequest.OptionalNewNameCase;
   getOptionalGenderCase(): EditCharacterRequest.OptionalGenderCase;
   getOptionalRealmCase(): EditCharacterRequest.OptionalRealmCase;
   getOptionalPlayTimeCase(): EditCharacterRequest.OptionalPlayTimeCase;
   getOptionalLocationCase(): EditCharacterRequest.OptionalLocationCase;
+  getOptionalDimensionCase(): EditCharacterRequest.OptionalDimensionCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): EditCharacterRequest.AsObject;
   static toObject(includeInstance: boolean, msg: EditCharacterRequest): EditCharacterRequest.AsObject;
@@ -182,6 +195,7 @@ export namespace EditCharacterRequest {
     realm: string,
     playTime: number,
     location?: sro_globals_pb.Location.AsObject,
+    dimension?: sro_gamebackend_servermanager_pb.DimensionTarget.AsObject,
   }
 
   export enum OptionalOwnerIdCase {
@@ -213,6 +227,11 @@ export namespace EditCharacterRequest {
     OPTIONAL_LOCATION_NOT_SET = 0,
     LOCATION = 8,
   }
+
+  export enum OptionalDimensionCase {
+    OPTIONAL_DIMENSION_NOT_SET = 0,
+    DIMENSION = 9,
+  }
 }
 
 export class CharacterDetails extends jspb.Message {
@@ -239,6 +258,9 @@ export class CharacterDetails extends jspb.Message {
   getLocation(): sro_globals_pb.Location | undefined;
   setLocation(value?: sro_globals_pb.Location): void;
 
+  getDimension(): string;
+  setDimension(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): CharacterDetails.AsObject;
   static toObject(includeInstance: boolean, msg: CharacterDetails): CharacterDetails.AsObject;
@@ -258,6 +280,7 @@ export namespace CharacterDetails {
     realm: string,
     playTime: number,
     location?: sro_globals_pb.Location.AsObject,
+    dimension: string,
   }
 }
 

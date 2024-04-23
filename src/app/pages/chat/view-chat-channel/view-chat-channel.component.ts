@@ -7,8 +7,8 @@ import { MdbNotificationRef, MdbNotificationService } from "mdb-angular-ui-kit/n
 import { AlertComponent } from "../../../components/alert/alert.component";
 import Request = grpc.Request;
 import { ChatMessage } from 'src/app/generated/sro/chat/chat_pb';
-import { CharactersDetails, CharacterDetails } from 'src/app/generated/sro/character/character_pb';
 import { ACharacterService } from 'src/app/_services/character.service';
+import { CharactersDetails, CharacterDetails } from 'src/app/generated/sro/character/character_pb';
 
 @Component({
   selector: 'app-view-chat-channel',
